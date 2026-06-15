@@ -45,7 +45,7 @@ export function DeskScreen() {
       window.setTimeout(() => {
         setStamping(null);
         setPending(a);
-      }, 520);
+      }, 500);
     } else {
       playClick();
       setPending(a);
@@ -65,15 +65,16 @@ export function DeskScreen() {
     <div className="h-full w-full flex flex-col relative">
       <Booth game={game} dayDef={dayDef} caseDef={caseDef} />
 
-      <div className="rds-counter" />
+      {/* bancone */}
+      <div className="h-2 bg-env-0 border-y-2 border-black shadow-[0_5px_10px_rgba(0,0,0,0.6)] relative z-[3]" />
 
       <div className={`flex-1 min-h-0 flex ${stamping ? "animate-deskShake" : ""}`}>
-        {/* scrivania */}
-        <div className="rds-desk-felt tex-felt flex-1 relative overflow-hidden">
+        {/* scrivania (legno) */}
+        <div className="tex-wood flex-1 relative overflow-hidden">
           <DeskProps />
           {!caseDef && (
-            <div className="h-full flex items-center justify-center text-paper/50 font-stencil uppercase tracking-widest">
-              La coda è esaurita. Chiusura della giornata…
+            <div className="h-full flex items-center justify-center text-paper/60 font-pixel uppercase tracking-widest text-sm">
+              Coda esaurita. Chiusura giornata…
             </div>
           )}
           {caseDef && <Dossier caseDef={caseDef} />}
@@ -85,22 +86,19 @@ export function DeskScreen() {
               </div>
             </div>
           )}
-
-          <div className="rds-desk-edge h-3 absolute bottom-0 left-0 right-0" />
         </div>
 
         {/* console destra */}
-        <aside className="w-[326px] shrink-0 tex-metal border-l-2 border-black p-2 flex flex-col gap-2 overflow-auto thin-scroll">
-          {caseDef && <ActionBar caseDef={caseDef} onAction={handleAction} disabled={!!pending || !!stamping || eventActive} />}
+        <aside className="w-[320px] shrink-0 tex-panel border-l-4 border-black p-2 flex flex-col gap-2 overflow-auto thin-scroll">
+          {caseDef && (
+            <ActionBar caseDef={caseDef} onAction={handleAction} disabled={!!pending || !!stamping || eventActive} />
+          )}
           <Rulebook dayDef={dayDef} />
           <StatePanel />
         </aside>
       </div>
 
-      {pending && (
-        <OutcomeOverlay title={caseDef?.subject} text={pending.consequence.text} onContinue={confirmPending} />
-      )}
-
+      {pending && <OutcomeOverlay title={caseDef?.subject} text={pending.consequence.text} onContinue={confirmPending} />}
       {eventActive && <EventModal />}
     </div>
   );

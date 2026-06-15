@@ -11,16 +11,16 @@ const DEFAULT_STAMP: Record<string, string> = {
 
 function stampColor(a: CaseAction): string {
   const l = (a.stampLabel ?? a.kind).toUpperCase();
-  if (a.kind === "approva" || l.includes("APPROV")) return "#4a6b43";
+  if (a.kind === "approva" || l.includes("APPROV")) return "#86b42b";
   if (a.kind === "respingi" || a.kind === "distruggi" || l.includes("RESPINT") || l.includes("NON ESIB"))
-    return "#b03a2c";
-  if (a.kind === "segnala" || l.includes("SEGNAL")) return "#9a6b30";
-  return "#3a536e";
+    return "#b42b2b";
+  if (a.kind === "segnala" || l.includes("SEGNAL")) return "#ca9038";
+  return "#9aa6c4";
 }
 
 function btnMod(kind: string): string {
   if (kind === "trasmetti" || kind === "proteggi" || kind === "verifica") return "rds-btn--neon";
-  if (kind === "distruggi" || kind === "incastra") return "rds-btn--rosso";
+  if (kind === "distruggi" || kind === "incastra") return "rds-btn--respinto";
   if (kind === "segnala") return "rds-btn--ochre";
   return "";
 }
@@ -38,29 +38,26 @@ export function ActionBar({
   const others = caseDef.actions.filter((a) => !a.needsStamp);
 
   return (
-    <div className="rds-panel p-2.5">
-      <div className="rds-label text-[9px] border-b border-black/40 pb-1 mb-2">
-        Quadro decisioni
-      </div>
+    <div className="rds-panel p-2">
+      <div className="rds-label text-[8px] border-b-2 border-black/50 pb-1 mb-2">Quadro decisioni</div>
 
-      {/* portatimbri */}
       {stamps.length > 0 && (
-        <div className="tex-wood rounded-sm p-2 mb-2 flex flex-wrap gap-2 justify-center border border-black/50">
+        <div className="tex-wood p-2 mb-2 flex flex-wrap gap-1.5 justify-center border-2 border-wood-lo">
           {stamps.map((a) => (
             <button
               key={a.id}
               disabled={disabled}
               onClick={() => onAction(a)}
-              className="rds-stamp-tool w-[88px] px-1 py-1.5 disabled:opacity-40 disabled:cursor-not-allowed"
+              className="rds-stamp-tool w-[84px] px-1 py-1.5"
               title={a.hint}
             >
               <span
-                className="rds-stamp-tool__cap block text-center text-[12px] leading-tight"
+                className="block text-center font-pixel text-[10px] leading-tight"
                 style={{ color: stampColor(a) }}
               >
                 {a.stampLabel ?? DEFAULT_STAMP[a.kind] ?? a.label}
               </span>
-              <span className="block text-center font-pixel text-[6.5px] uppercase tracking-wider text-paper/60 mt-0.5 leading-none">
+              <span className="block text-center font-read text-[8px] uppercase text-paper/70 mt-0.5 leading-none">
                 {a.label}
               </span>
             </button>
@@ -68,7 +65,6 @@ export function ActionBar({
         </div>
       )}
 
-      {/* azioni d'ufficio */}
       {others.length > 0 && (
         <div className="space-y-1.5">
           {others.map((a) => (
@@ -76,13 +72,11 @@ export function ActionBar({
               key={a.id}
               disabled={disabled}
               onClick={() => onAction(a)}
-              className={`rds-btn w-full text-left px-2.5 py-1.5 ${btnMod(a.kind)}`}
+              className={`rds-btn w-full text-left px-2 py-1.5 ${btnMod(a.kind)}`}
             >
-              <span className="block text-[12px] leading-tight">{a.label}</span>
+              <span className="block text-[10px] leading-tight">{a.label}</span>
               {a.hint && (
-                <span className="block font-type text-[10.5px] normal-case tracking-normal opacity-70 mt-0.5">
-                  {a.hint}
-                </span>
+                <span className="block font-read text-[11px] normal-case opacity-75 mt-0.5">{a.hint}</span>
               )}
             </button>
           ))}

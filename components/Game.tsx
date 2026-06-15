@@ -10,13 +10,6 @@ import { DaySummaryScreen } from "./screens/DaySummaryScreen";
 import { EndingScreen } from "./screens/EndingScreen";
 import { DebugPanel } from "./debug/DebugPanel";
 
-const CORNERS = [
-  "top-1.5 left-1.5",
-  "top-1.5 right-1.5",
-  "bottom-1.5 left-1.5",
-  "bottom-1.5 right-1.5",
-];
-
 export default function Game() {
   const hydrated = useGameStore((s) => s.hydrated);
   const phase = useGameStore((s) => s.game.phase);
@@ -35,39 +28,30 @@ export default function Game() {
 
   return (
     <div className="rds-stage">
-      <div className="rds-console">
-        {CORNERS.map((c) => (
-          <span key={c} className={`rds-bolt ${c}`} />
-        ))}
-
-        <div className="rds-screen">
-          {!hydrated ? (
-            <div className="h-full w-full tex-felt flex items-center justify-center">
-              <div className="font-stencil uppercase tracking-[0.4em] text-paper/40 animate-flicker">
-                Archivio Centrale…
-              </div>
-            </div>
-          ) : (
-            <>
-              {phase === "title" && <TitleScreen />}
-              {phase === "briefing" && <BriefingScreen />}
-              {phase === "directives" && <DirectivesScreen />}
-              {(phase === "desk" || phase === "event") && <DeskScreen />}
-              {phase === "daySummary" && <DaySummaryScreen />}
-              {phase === "ending" && <EndingScreen />}
-            </>
-          )}
+      {!hydrated ? (
+        <div className="h-full w-full tex-wall flex items-center justify-center">
+          <div className="font-pixel uppercase tracking-[0.3em] text-olive-hi animate-flicker text-sm">
+            Archivio Centrale…
+          </div>
         </div>
+      ) : (
+        <>
+          {phase === "title" && <TitleScreen />}
+          {phase === "briefing" && <BriefingScreen />}
+          {phase === "directives" && <DirectivesScreen />}
+          {(phase === "desk" || phase === "event") && <DeskScreen />}
+          {phase === "daySummary" && <DaySummaryScreen />}
+          {phase === "ending" && <EndingScreen />}
+        </>
+      )}
 
-        {/* interruttore debug (non diegetico) */}
-        <button
-          onClick={() => setDebugOpen((v) => !v)}
-          title="Debug (`)"
-          className="absolute -bottom-0.5 right-7 rds-label text-[7px] px-1.5 py-0.5 bg-black/60 hover:text-neon"
-        >
-          DBG
-        </button>
-      </div>
+      <button
+        onClick={() => setDebugOpen((v) => !v)}
+        title="Debug (`)"
+        className="fixed bottom-1 right-1 z-[65] font-pixel text-[7px] uppercase px-1.5 py-0.5 bg-black/70 text-olive-hi hover:text-neon border border-black"
+      >
+        DBG
+      </button>
 
       <DebugPanel open={debugOpen} onClose={() => setDebugOpen(false)} />
     </div>

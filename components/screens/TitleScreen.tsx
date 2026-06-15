@@ -18,57 +18,43 @@ export function TitleScreen() {
   }
 
   return (
-    <div className="h-full w-full tex-felt flex items-center justify-center p-6 relative">
-      <div className="rds-lamp" />
+    <div className="h-full w-full tex-wood flex items-center justify-center p-6 relative">
       <div className="max-w-xl w-full">
-        {/* cartellina */}
-        <div className="rds-paper p-7 relative animate-slideUp">
-          <div className="absolute -top-3 -right-2">
-            <Stamp label="RISERVATO" rotate={7} />
-          </div>
-          <div className="absolute -top-3 left-8 h-6 w-24 bg-paper-lo border border-paper-edge rounded-t-md" />
+        <div className="rds-paper p-6 relative animate-slideUp">
+          <div className="absolute -top-3 -right-2"><Stamp label="RISERVATO" rotate={7} /></div>
+          <div className="absolute -top-3 left-7 h-5 w-24 bg-paper-edge border-2 border-paper-edge" />
 
-          <div className="flex items-center justify-center gap-3 mb-1">
-            <Emblem size={34} color="#7c241c" />
+          <div className="flex items-center justify-center mb-1"><Emblem size={30} color="#701b1b" /></div>
+          <div className="text-center font-pixel uppercase tracking-[0.05em] text-stamp-red text-4xl md:text-5xl leading-[1.05]">
+            Ragion<br />di Stato
           </div>
-          <div className="text-center font-stencil uppercase tracking-[0.18em] text-rosso text-5xl md:text-6xl leading-[0.95]">
-            Ragion
-            <br />
-            di Stato
-          </div>
-          <div className="text-center font-pixel text-[9px] uppercase tracking-[0.2em] text-ink-soft/70 mt-3">
+          <div className="text-center font-pixel text-[8px] uppercase tracking-[0.18em] text-ink/70 mt-3">
             Ufficio Validazione · Archivio Centrale
           </div>
 
-          <div className="my-5 rds-rule border-b border-ink/20 py-4">
-            <p className="font-type text-ink text-[16px] leading-relaxed text-center">
+          <div className="my-5 border-y-2 border-ink/20 py-4">
+            <p className="font-read text-ink text-[15px] leading-relaxed text-center">
               «Sei un burocrate in un sistema opaco. Ogni giorno decidi quale
               verità entra negli archivi dello Stato, quale viene nascosta, quale
               manipolata e quale distrutta.»
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-end gap-3 justify-center">
-            <label className="font-pixel text-[8px] uppercase tracking-wider text-ink-soft/70">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-end gap-2 justify-center">
+            <label className="font-pixel text-[7px] uppercase tracking-wider text-ink/70">
               Seed pratica
               <input
                 value={seed}
                 onChange={(e) => setSeed(e.target.value.replace(/[^0-9]/g, ""))}
-                className="block mt-1 w-44 bg-black/5 border-b-2 border-ink/40 px-2 py-1 font-type text-[15px] text-ink focus:outline-none focus:border-rosso"
+                className="block mt-1 w-40 bg-black/5 border-b-2 border-ink/40 px-2 py-1 font-term text-[16px] text-ink focus:outline-none focus:border-stamp-red"
               />
             </label>
-            <button onClick={() => setSeed(String(randomSeed()))} className="rds-btn px-3 py-2 text-xs">
-              ↻ Seed
-            </button>
-            <button onClick={start} className="rds-btn rds-btn--rosso px-6 py-3 text-sm">
-              Prendi servizio »
-            </button>
+            <button onClick={() => setSeed(String(randomSeed()))} className="rds-btn px-3 py-2 text-[9px]">↻ Seed</button>
+            <button onClick={start} className="rds-btn rds-btn--respinto px-5 py-3 text-[11px]">Prendi servizio »</button>
           </div>
 
-          <div className="mt-6 text-center font-pixel text-[7px] uppercase tracking-wider text-ink-soft/50 leading-relaxed">
-            Liberamente ispirato a Papers, Please.
-            <br />
-            Partiti, sigle, organizzazioni e persone sono finzione.
+          <div className="mt-5 text-center font-pixel text-[6px] uppercase tracking-wider text-ink/50 leading-relaxed">
+            Liberamente ispirato a Papers, Please.<br />Partiti, sigle e persone sono finzione.
           </div>
         </div>
       </div>
