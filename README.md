@@ -59,7 +59,19 @@ scripts/      sim.ts — simulazione headless del motore
 Documentazione di design completa in [`docs/`](./docs):
 [GDD](./docs/GDD.md) · [Core loop](./docs/CORE_LOOP.md) ·
 [Architettura](./docs/ARCHITECTURE.md) · [Data model](./docs/DATA_MODEL.md) ·
-[Roadmap](./docs/ROADMAP.md).
+[Roadmap](./docs/ROADMAP.md) ·
+**[Direzione artistica](./docs/VISUAL_DIRECTION.md)**.
+
+## Estetica (design system)
+
+La UI è **diegetica**: console metallica, sportello con il richiedente, scrivania
+in feltro/legno, documenti di carta trascinabili, timbri in gomma che colpiscono.
+Palette desaturata da archivio (carta, grigio ministeriale, verde militare,
+rosso timbro, blu notte, nero inchiostro) e font istituzionali (pixel, terminale
+LCD, dattiloscritto, stencil). I token sono in `app/globals.css` (`--rds-*`) con
+classi di sistema riusabili (`.rds-*`, `.tex-*`). Le regole sono in
+[`docs/VISUAL_DIRECTION.md`](./docs/VISUAL_DIRECTION.md) e ogni nuova feature deve
+rispettarle.
 
 ## Estendere i contenuti (senza toccare il motore)
 

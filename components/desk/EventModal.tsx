@@ -8,11 +8,11 @@ import { OutcomeOverlay } from "@/components/ui/OutcomeOverlay";
 import { playRing, playThud, playClick } from "@/lib/sfx";
 
 const CHANNEL_LABEL: Record<string, string> = {
-  telefono: "☎ Telefono",
-  telex: "⌨ Telex",
-  busta: "✉ Busta",
-  ispezione: "⚑ Ispezione",
-  voce: "● Voce",
+  telefono: "TELEFONO",
+  telex: "TELEX",
+  busta: "BUSTA",
+  ispezione: "ISPEZIONE",
+  voce: "VOCE",
 };
 
 export function EventModal() {
@@ -30,40 +30,35 @@ export function EventModal() {
   if (!ev) return null;
 
   return (
-    <div className="absolute inset-0 z-30 flex items-center justify-center bg-black/75 p-6">
+    <div className="absolute inset-0 z-30 flex items-center justify-center bg-black/80 p-6">
       <div
-        className={`paper paper-edge max-w-lg w-full p-6 animate-slideIn ${
-          ev.channel === "telefono" ? "animate-flickr" : ""
+        className={`rds-panel max-w-lg w-full p-1.5 animate-slideUp ${
+          ev.channel === "telefono" ? "animate-flicker" : ""
         }`}
       >
-        <div className="flex items-center justify-between border-b border-black/30 pb-1 mb-3">
-          <span className="font-stencil uppercase tracking-widest text-rossomin text-sm">
+        <div className="flex items-center justify-between px-2 py-1">
+          <span className="font-stencil uppercase tracking-widest text-rosso-hi text-sm">
             {ev.title}
           </span>
-          <span className="font-typewriter text-xs text-inchiostro/60">
-            {CHANNEL_LABEL[ev.channel] ?? ev.channel}
-          </span>
+          <span className="rds-label text-[8px]">▸ {CHANNEL_LABEL[ev.channel] ?? ev.channel}</span>
         </div>
 
-        <Typewriter
-          lines={ev.body}
-          speed={14}
-          className="font-doc text-[16px] text-inchiostro mb-4"
-        />
-
-        <div className="space-y-2">
-          {ev.options.map((o, i) => (
-            <button
-              key={i}
-              onClick={() => {
-                playClick();
-                setPending(i);
-              }}
-              className="w-full text-left font-stencil uppercase tracking-wide text-sm border border-inchiostro/40 px-3 py-2 text-inchiostro hover:bg-inchiostro hover:text-carta transition-colors"
-            >
-              {o.label}
-            </button>
-          ))}
+        <div className="rds-paper p-4">
+          <Typewriter lines={ev.body} speed={14} className="font-type text-[15px] text-ink mb-4" />
+          <div className="space-y-2">
+            {ev.options.map((o, i) => (
+              <button
+                key={i}
+                onClick={() => {
+                  playClick();
+                  setPending(i);
+                }}
+                className="rds-btn w-full text-left px-3 py-2 text-[13px]"
+              >
+                {o.label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 

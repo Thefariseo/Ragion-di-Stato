@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { CaseDef } from "@/types";
 import { DocumentCard } from "./DocumentCard";
-import { Typewriter } from "@/components/ui/Typewriter";
+import { Draggable } from "./Draggable";
 import { playClick } from "@/lib/sfx";
 
 type Pick = { docId: string; label: string; value: string };
@@ -14,40 +14,34 @@ export function Dossier({ caseDef }: { caseDef: CaseDef }) {
   const [second, setSecond] = useState<Pick | null>(null);
   const [result, setResult] = useState<{ note: string; hit: boolean } | null>(null);
   const [found, setFound] = useState<Set<string>>(new Set());
+  const [resetKey, setResetKey] = useState(0);
+  const zCounter = useRef(10);
 
-  // reset quando cambia il caso
   useEffect(() => {
     setCompareMode(false);
     setFirst(null);
     setSecond(null);
     setResult(null);
     setFound(new Set());
+    setResetKey((k) => k + 1);
+    zCounter.current = 10;
   }, [caseDef.id]);
 
-  const totalDiscrepancies = caseDef.discrepancies?.length ?? 0;
+  const total = caseDef.discrepancies?.length ?? 0;
 
   function evaluate(a: Pick, b: Pick) {
     const disc = (caseDef.discrepancies ?? []).find((d) => {
       const m1 =
-        d.aDocId === a.docId &&
-        d.aField === a.label &&
-        d.bDocId === b.docId &&
-        d.bField === b.label;
+        d.aDocId === a.docId && d.aField === a.label && d.bDocId === b.docId && d.bField === b.label;
       const m2 =
-        d.aDocId === b.docId &&
-        d.aField === b.label &&
-        d.bDocId === a.docId &&
-        d.bField === a.label;
+        d.aDocId === b.docId && d.aField === b.label && d.bDocId === a.docId && d.bField === a.label;
       return m1 || m2;
     });
     if (disc) {
       setResult({ note: disc.note, hit: true });
-      setFound((prev) => new Set(prev).add(`${disc.aField}|${disc.bField}`));
+      setFound((p) => new Set(p).add(`${disc.aField}|${disc.bField}`));
     } else {
-      setResult({
-        note: "Nessuna contraddizione evidente tra questi due campi.",
-        hit: false,
-      });
+      setResult({ note: "Nessuna contraddizione evidente tra questi due campi.", hit: false });
     }
   }
 
@@ -76,90 +70,69 @@ export function Dossier({ caseDef }: { caseDef: CaseDef }) {
   }
 
   return (
-    <div className="h-full flex flex-col">
-      {/* intestazione pratica */}
-      <div className="mb-3 shrink-0">
-        <div className="font-stencil uppercase tracking-widest text-carta text-lg">
-          {caseDef.subject}
-        </div>
-        <div className="text-carta/70 text-sm">{caseDef.summary}</div>
-        {caseDef.intro && (
-          <div className="paper paper-edge mt-2 p-3 max-w-2xl">
-            <Typewriter
-              lines={caseDef.intro}
-              speed={14}
-              className="font-doc text-[15px] text-inchiostro"
-            />
-          </div>
-        )}
-      </div>
-
-      {/* barra lente */}
-      <div className="flex items-center gap-3 mb-2 shrink-0">
+    <div className="absolute inset-0 overflow-hidden">
+      {/* barra lente (ottone) */}
+      <div className="absolute top-2 left-2 right-2 z-30 flex items-center gap-2 flex-wrap">
         <button
           onClick={() => {
             playClick();
             setCompareMode((v) => !v);
             clearCompare();
           }}
-          className={`font-stencil uppercase tracking-wider text-xs px-3 py-1 border ${
-            compareMode
-              ? "bg-ocra text-inchiostro border-ocra"
-              : "bg-black/30 text-carta border-carta/30 hover:bg-black/50"
-          }`}
+          className={`rds-btn ${compareMode ? "rds-btn--neon" : ""} text-[11px] px-3 py-1`}
         >
-          {compareMode ? "Lente attiva" : "Confronta (lente)"}
+          {compareMode ? "◉ Lente attiva" : "⌕ Confronta"}
+        </button>
+        <button
+          onClick={() => {
+            playClick();
+            setResetKey((k) => k + 1);
+          }}
+          className="rds-btn text-[11px] px-3 py-1"
+        >
+          ⤺ Riordina
         </button>
         {compareMode && (
-          <>
-            <span className="text-carta/60 text-xs">
-              Seleziona due campi per confrontarli.
-            </span>
-            {totalDiscrepancies > 0 && (
-              <span className="text-ocra text-xs">
-                Contraddizioni trovate: {found.size}/{totalDiscrepancies}
-              </span>
-            )}
-          </>
+          <span className="font-pixel text-[8px] uppercase tracking-wider text-paper/70 bg-black/40 px-2 py-1">
+            seleziona due campi
+            {total > 0 ? ` · contraddizioni ${found.size}/${total}` : ""}
+          </span>
+        )}
+        {result && (
+          <span
+            className={`font-type text-[12px] px-2 py-1 max-w-[60%] ${
+              result.hit ? "bg-rosso/30 text-paper-hi border border-rosso" : "bg-black/40 text-paper/70"
+            }`}
+          >
+            {result.hit ? "⚠ " : ""}
+            {result.note}
+            <button onClick={clearCompare} className="ml-2 underline text-[10px] opacity-70">
+              pulisci
+            </button>
+          </span>
         )}
       </div>
 
-      {/* esito confronto */}
-      {result && (
-        <div
-          className={`mb-2 p-2 text-sm font-doc border shrink-0 ${
-            result.hit
-              ? "bg-rossomin/20 border-rossomin text-carta"
-              : "bg-black/30 border-carta/20 text-carta/70"
-          }`}
+      {/* documenti trascinabili */}
+      {caseDef.documents.map((doc, i) => (
+        <Draggable
+          key={`${doc.id}-${resetKey}`}
+          initialX={28 + i * 52}
+          initialY={44 + i * 30}
+          rotate={i % 2 === 0 ? -1.4 : 1.6}
+          bringToFront={() => ++zCounter.current}
         >
-          {result.hit ? "⚠ " : ""}
-          {result.note}
-          <button
-            onClick={clearCompare}
-            className="ml-3 underline text-xs text-carta/60"
-          >
-            pulisci
-          </button>
-        </div>
-      )}
-
-      {/* documenti */}
-      <div className="flex-1 overflow-auto thin-scroll">
-        <div className="flex flex-wrap gap-5 pb-6">
-          {caseDef.documents.map((doc, i) => (
+          <div className="animate-slideUp" style={{ animationDelay: `${i * 70}ms` }}>
             <DocumentCard
-              key={doc.id}
               doc={doc}
               compareMode={compareMode}
               selected={first ? { docId: first.docId, label: first.label } : null}
               selectedPair={second ? { docId: second.docId, label: second.label } : null}
               onSelectField={onSelectField}
-              rotate={i % 2 === 0 ? -0.8 : 0.9}
             />
-          ))}
-        </div>
-      </div>
+          </div>
+        </Draggable>
+      ))}
     </div>
   );
 }

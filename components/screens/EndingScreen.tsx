@@ -15,87 +15,49 @@ export function EndingScreen() {
   const ending = game.endingId ? getEnding(game.endingId) : undefined;
   if (!ending) return null;
 
-  const allies = CORE_FACTIONS.filter((id) => game.factions[id].reputation >= 20).map(
-    (id) => FACTIONS[id].name,
-  );
+  const allies = CORE_FACTIONS.filter((id) => game.factions[id].reputation >= 20).map((id) => FACTIONS[id].name);
   const hostiles = CORE_FACTIONS.filter(
     (id) => game.factions[id].reputation <= -20 || game.factions[id].suspicion >= 50,
   ).map((id) => FACTIONS[id].name);
 
   return (
-    <div className="scrivania h-full w-full flex items-center justify-center p-6 overflow-auto thin-scroll">
-      <div className="max-w-2xl w-full my-6">
-        <div className="paper paper-edge p-8 relative animate-slideIn">
+    <div className="h-full w-full tex-felt flex items-center justify-center p-6 overflow-auto thin-scroll relative">
+      <div className="absolute inset-0 bg-black/45 pointer-events-none" />
+      <div className="max-w-2xl w-full my-6 relative">
+        <div className="rds-paper p-8 relative animate-slideUp">
           <div className="absolute -top-3 -right-2">
             <Stamp label="ARCHIVIATO" rotate={7} />
           </div>
 
-          <div className="text-center mb-2 text-[11px] uppercase tracking-[0.3em] text-inchiostro/50">
+          <div className="text-center font-pixel text-[8px] uppercase tracking-[0.3em] text-ink-soft/50 mb-2">
             Esito della pratica
           </div>
-          <h1 className="font-stencil uppercase tracking-wide text-4xl text-rossomin text-center leading-none mb-5">
+          <h1 className="font-stencil uppercase tracking-wide text-4xl text-rosso text-center leading-none mb-5">
             {ending.title}
           </h1>
 
-          <Typewriter
-            lines={ending.epitaph}
-            speed={22}
-            className="font-doc text-[17px] text-inchiostro leading-relaxed mb-6"
-          />
+          <Typewriter lines={ending.epitaph} speed={22} className="font-type text-[16px] text-ink leading-relaxed mb-6" />
 
-          <div className="border-t border-black/20 pt-4 grid grid-cols-2 gap-3 font-typewriter text-[12px] text-inchiostro/80">
-            <div>
-              <div className="text-[10px] uppercase tracking-wider text-inchiostro/50">
-                Giorni in servizio
-              </div>
-              <div>{game.day}</div>
-            </div>
-            <div>
-              <div className="text-[10px] uppercase tracking-wider text-inchiostro/50">
-                Sospetto finale
-              </div>
-              <div>{Math.round(game.player.sospetto)}/100</div>
-            </div>
-            <div>
-              <div className="text-[10px] uppercase tracking-wider text-inchiostro/50">
-                Verità pubblica
-              </div>
-              <div>{Math.round(game.country.verita)}/100</div>
-            </div>
-            <div>
-              <div className="text-[10px] uppercase tracking-wider text-inchiostro/50">
-                Seed della run
-              </div>
-              <div>{game.seed}</div>
-            </div>
+          <div className="border-t border-ink/20 pt-4 grid grid-cols-2 gap-3 font-type text-[12px] text-ink/80">
+            <Stat label="Giorni in servizio" value={String(game.day)} />
+            <Stat label="Sospetto finale" value={`${Math.round(game.player.sospetto)}/100`} />
+            <Stat label="Verità pubblica" value={`${Math.round(game.country.verita)}/100`} />
+            <Stat label="Seed della run" value={String(game.seed)} />
             <div className="col-span-2">
-              <div className="text-[10px] uppercase tracking-wider text-inchiostro/50">
-                Chi ti era vicino
-              </div>
+              <Lab>Chi ti era vicino</Lab>
               <div>{allies.length ? allies.join(", ") : "nessuno"}</div>
             </div>
             <div className="col-span-2">
-              <div className="text-[10px] uppercase tracking-wider text-inchiostro/50">
-                Chi ti voleva fermo
-              </div>
+              <Lab>Chi ti voleva fermo</Lab>
               <div>{hostiles.length ? hostiles.join(", ") : "nessuno"}</div>
             </div>
           </div>
 
           <div className="mt-7 flex flex-col sm:flex-row gap-3 justify-center">
-            <button
-              onClick={() => {
-                playStamp();
-                startNewGame();
-              }}
-              className="font-stencil uppercase tracking-widest text-sm bg-inchiostro text-carta px-6 py-3 hover:bg-rossomin transition-colors"
-            >
+            <button onClick={() => { playStamp(); startNewGame(); }} className="rds-btn rds-btn--rosso px-6 py-3 text-sm">
               Nuova pratica »
             </button>
-            <button
-              onClick={() => backToTitle()}
-              className="font-stencil uppercase tracking-widest text-sm border border-inchiostro/40 text-inchiostro px-6 py-3 hover:bg-black/10"
-            >
+            <button onClick={() => backToTitle()} className="rds-btn px-6 py-3 text-sm">
               Torna al titolo
             </button>
           </div>
@@ -103,4 +65,16 @@ export function EndingScreen() {
       </div>
     </div>
   );
+}
+
+function Stat({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <Lab>{label}</Lab>
+      <div>{value}</div>
+    </div>
+  );
+}
+function Lab({ children }: { children: React.ReactNode }) {
+  return <div className="font-pixel text-[7.5px] uppercase tracking-wider text-ink-soft/50">{children}</div>;
 }

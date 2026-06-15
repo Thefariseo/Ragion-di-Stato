@@ -5,11 +5,12 @@ import type { CaseAction } from "@/types";
 import { useGameStore } from "@/store/gameStore";
 import { getDay } from "@/data/days";
 import { getCase } from "@/data/cases";
-import { StatusBar } from "@/components/hud/StatusBar";
-import { StatePanel } from "@/components/hud/StatePanel";
+import { Booth } from "@/components/desk/Booth";
+import { DeskProps } from "@/components/desk/DeskProps";
 import { Dossier } from "@/components/desk/Dossier";
 import { ActionBar } from "@/components/desk/ActionBar";
 import { Rulebook } from "@/components/desk/Rulebook";
+import { StatePanel } from "@/components/hud/StatePanel";
 import { EventModal } from "@/components/desk/EventModal";
 import { Stamp } from "@/components/ui/Stamp";
 import { OutcomeOverlay } from "@/components/ui/OutcomeOverlay";
@@ -22,7 +23,7 @@ const DEFAULT_STAMP: Record<string, string> = {
   archivia: "ARCHIVIATO",
 };
 
-export function DeskScreen({ onToggleDebug }: { onToggleDebug: () => void }) {
+export function DeskScreen() {
   const game = useGameStore((s) => s.game);
   const chooseAction = useGameStore((s) => s.chooseAction);
 
@@ -30,9 +31,7 @@ export function DeskScreen({ onToggleDebug }: { onToggleDebug: () => void }) {
   const caseId = game.queue[game.currentCaseIndex];
   const caseDef = caseId ? getCase(caseId) : undefined;
 
-  const [stamping, setStamping] = useState<{ label: string; kind: string } | null>(
-    null,
-  );
+  const [stamping, setStamping] = useState<{ label: string; kind: CaseAction["kind"] } | null>(null);
   const [pending, setPending] = useState<CaseAction | null>(null);
 
   if (!dayDef) return null;
@@ -46,7 +45,7 @@ export function DeskScreen({ onToggleDebug }: { onToggleDebug: () => void }) {
       window.setTimeout(() => {
         setStamping(null);
         setPending(a);
-      }, 720);
+      }, 520);
     } else {
       playClick();
       setPending(a);
@@ -63,54 +62,45 @@ export function DeskScreen({ onToggleDebug }: { onToggleDebug: () => void }) {
   const eventActive = game.phase === "event";
 
   return (
-    <div className="scrivania h-full w-full flex flex-col relative">
-      <StatusBar dayDef={dayDef} onToggleDebug={onToggleDebug} />
+    <div className="h-full w-full flex flex-col relative">
+      <Booth game={game} dayDef={dayDef} caseDef={caseDef} />
 
-      <div className="flex-1 flex overflow-hidden">
-        {/* area documenti */}
-        <main className="flex-1 p-5 overflow-hidden">
-          {caseDef ? (
-            <Dossier caseDef={caseDef} />
-          ) : (
-            <div className="h-full flex items-center justify-center text-carta/50 font-doc text-xl">
+      <div className="rds-counter" />
+
+      <div className={`flex-1 min-h-0 flex ${stamping ? "animate-deskShake" : ""}`}>
+        {/* scrivania */}
+        <div className="rds-desk-felt tex-felt flex-1 relative overflow-hidden">
+          <DeskProps />
+          {!caseDef && (
+            <div className="h-full flex items-center justify-center text-paper/50 font-stencil uppercase tracking-widest">
               La coda è esaurita. Chiusura della giornata…
             </div>
           )}
-        </main>
+          {caseDef && <Dossier caseDef={caseDef} />}
 
-        {/* colonna laterale */}
-        <aside className="w-[380px] shrink-0 feltro border-l border-black/60 p-3 flex flex-col gap-3 overflow-auto thin-scroll">
-          {caseDef && (
-            <ActionBar
-              caseDef={caseDef}
-              onAction={handleAction}
-              disabled={!!pending || !!stamping || eventActive}
-            />
+          {stamping && (
+            <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
+              <div className="animate-stampSlam">
+                <Stamp label={stamping.label} kind={stamping.kind} big rotate={-9} solid />
+              </div>
+            </div>
           )}
+
+          <div className="rds-desk-edge h-3 absolute bottom-0 left-0 right-0" />
+        </div>
+
+        {/* console destra */}
+        <aside className="w-[326px] shrink-0 tex-metal border-l-2 border-black p-2 flex flex-col gap-2 overflow-auto thin-scroll">
+          {caseDef && <ActionBar caseDef={caseDef} onAction={handleAction} disabled={!!pending || !!stamping || eventActive} />}
           <Rulebook dayDef={dayDef} />
           <StatePanel />
         </aside>
       </div>
 
-      {/* animazione timbro */}
-      {stamping && (
-        <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
-          <div className="animate-stampDown">
-            <Stamp label={stamping.label} big rotate={-9} />
-          </div>
-        </div>
-      )}
-
-      {/* esito della decisione */}
       {pending && (
-        <OutcomeOverlay
-          title={caseDef?.subject}
-          text={pending.consequence.text}
-          onContinue={confirmPending}
-        />
+        <OutcomeOverlay title={caseDef?.subject} text={pending.consequence.text} onContinue={confirmPending} />
       )}
 
-      {/* evento */}
       {eventActive && <EventModal />}
     </div>
   );

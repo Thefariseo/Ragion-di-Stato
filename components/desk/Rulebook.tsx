@@ -9,33 +9,33 @@ export function Rulebook({ dayDef }: { dayDef: DayDef }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="border border-carta/20">
+    <div className="rds-panel">
       <button
         onClick={() => {
           playClick();
           setOpen((v) => !v);
         }}
-        className="w-full flex items-center justify-between px-3 py-2 bg-black/40 hover:bg-black/60"
+        className="w-full flex items-center justify-between px-2.5 py-1.5"
       >
-        <span className="font-stencil uppercase tracking-widest text-carta/80 text-[11px]">
-          Regolamento — Giorno {dayDef.day}
-        </span>
-        <span className="text-carta/60 text-xs">{open ? "▾" : "▸"}</span>
+        <span className="rds-label text-[9px]">Regolamento · Giorno {dayDef.day}</span>
+        <span className="font-pixel text-[8px] text-paper/60">{open ? "▾ chiudi" : "▸ apri"}</span>
       </button>
       {open && (
-        <div className="p-3 bg-black/20 max-h-64 overflow-auto thin-scroll">
-          <div className="text-[10px] uppercase tracking-wider text-ocra mb-1">
+        <div className="rds-paper m-1.5 mt-0 p-3 max-h-72 overflow-auto thin-scroll">
+          <div className="font-pixel text-[8px] uppercase tracking-wider text-rosso mb-1">
             Direttive del giorno
           </div>
-          <ul className="font-doc text-[14px] text-carta/90 space-y-1 mb-3 list-disc list-inside">
+          <ul className="font-type text-[12.5px] text-ink space-y-1 mb-3 list-disc list-inside">
             {dayDef.directives.map((d, i) => (
-              <li key={i}>{d}</li>
+              <li key={i} className={d.startsWith("NUOVO") ? "text-rosso" : ""}>
+                {d}
+              </li>
             ))}
           </ul>
-          <div className="text-[10px] uppercase tracking-wider text-ocra mb-1">
+          <div className="font-pixel text-[8px] uppercase tracking-wider text-rosso mb-1">
             Regole di validazione attive
           </div>
-          <ul className="font-typewriter text-[12px] text-carta/70 space-y-1">
+          <ul className="font-type text-[11.5px] text-ink/80 space-y-1">
             {dayDef.ruleIds.map((id) => (
               <li key={id}>— {RULES[id]?.text ?? id}</li>
             ))}

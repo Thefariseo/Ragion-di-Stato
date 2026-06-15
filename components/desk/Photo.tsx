@@ -75,7 +75,7 @@ export function Photo({
         style={{ width: size, height: Math.round(size * 1.2) }}
       />
       {label && (
-        <div className="text-center text-[8px] uppercase tracking-wider text-inchiostro/70 mt-0.5">
+        <div className="text-center font-pixel text-[7px] uppercase tracking-wider text-ink-soft/70 mt-0.5">
           fototessera
         </div>
       )}
