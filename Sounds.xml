@@ -1,0 +1,134 @@
+<sounds>
+	
+	<!-- Freesound: 71850__ludvique__battery-click -->
+	<sound id="button-down"/> 
+	<sound id="button-up"/>
+
+	<!-- http://www.soundsnap.com/efx_ext_metal_roll_down_door_04 -->
+	<sound id="shutter-drop"/> 
+	<sound id="shutter-rise"/>
+
+	<!-- http://www.soundsnap.com/node/28347 -->
+	<!-- http://www.soundsnap.com/node/96863 -->
+	<sound id="stampbar-open"/>
+	<sound id="stampbar-close"/>
+
+	<!-- http://www.soundsnap.com/node/50111 -->
+	<sound id="stamp-down"/>
+	<sound id="stamp-up"/>
+
+	<!-- http://www.soundsnap.com/air_tone_in_an_urban_courtyard_with_distant_traffic -->
+	<!-- http://www.soundsnap.com/node/100401 -->
+	<!-- http://www.soundsnap.com/node/48403 -->
+	<sound id="border-ambient" loop="true" fade="1" vol="0.5"/>
+
+	<!-- http://freesound.org/people/Omar Alvarado/sounds/118450/ -->
+	<sound id="border-gunshot"/>
+	
+	<!-- http://freesound.org/people/shaynecantly/sounds/131555/ -->
+	<!-- http://freesound.org/people/poolotronix/sounds/120816/ -->
+	<!-- http://freesound.org/people/dobroide/sounds/40968/ -->
+	<sound id="border-boom"/>
+	
+	<!-- http://freesound.org/people/carlnorthcore/sounds/155654/ -->
+	<sound id="border-guardshot" file="border-guardshot0.wav border-guardshot1.wav border-guardshot2.wav"/>
+
+	<!-- http://www.soundsnap.com/room_tone_in_an_office_with_computer_fans -->
+	<sound id="booth-ambient" loop="true" fade="1" vol="0.5"/>
+
+	<!-- http://freesound.org/people/davidou/sounds/88445/ -->
+	<sound id="border-alarm"/>
+
+	<!-- http://freesound.org/people/alienistcog/sounds/125939/ -->
+	<!-- http://freesound.org/people/Klerrp/sounds/120940/ -->
+	<sound id="booth-intro"/>
+
+	<sound id="speech-announce"/>
+
+	<!-- say [[pbas 45]]ehua?[[slnc 500]] -->
+	<sound id="speech-inspector" vol="0.5"/>
+
+	<!-- say [[rate 200]][[pbas 50]]ihe[[slnc 500]] -->
+	<sound id="speech-entrant" vol="0.5"/>
+
+	<!-- http://freesound.org/people/123jorre456/sounds/46625/ -->
+	<!-- http://freesound.org/people/stijn/sounds/43672/ -->
+	<sound id="paper-dragstart" file="paper-dragstart0.wav paper-dragstart1.wav paper-dragstart2.wav"/>
+	<sound id="paper-totop" vol="0.25" file="paper-dragstart0.wav paper-dragstart1.wav paper-dragstart2.wav"/>
+
+	<!-- http://freesound.org/people/stijn/sounds/43672/ -->
+	<!-- http://freesound.org/people/swidmark/sounds/171320/ ?? -->
+	<sound id="paper-dragstop" file="paper-dragstop0.wav paper-dragstop1.wav paper-dragstop2.wav"/>
+
+	<!-- http://freesound.org/people/swidmark/sounds/171320/ -->
+	<sound id="paper-turnpage" file="paper-turnpage0.wav paper-turnpage1.wav paper-turnpage2.wav"/>
+
+	<!-- http://freesound.org/people/mikaelfernstrom/sounds/68669/ -->
+	<sound id="coin-drop"/>
+	<!-- http://freesound.org/people/jfreem3/sounds/108530/ -->
+	<sound id="coin-dragstart"/>
+	<!-- http://freesound.org/people/jfreem3/sounds/108530/ -->
+	<sound id="coin-dragstop"/>
+
+	<!-- http://freesound.org/people/reg7783/sounds/131304/ -->
+	<!-- http://freesound.org/people/reg7783/sounds/131302/ -->
+	<!-- http://freesound.org/people/swelk/sounds/12900/ -->
+	<sound id="paper-spit"/>
+
+	<!-- http://freesound.org/people/Tomlija/sounds/97286/ -->
+	<sound id="printer-line"/>
+	<!-- http://freesound.org/people/jppi_Stu/sounds/117647/ -->
+	<sound id="printer-feed"/>
+	<!-- http://www.soundsnap.com/tearing_a_paper_check_or_check_out_of_a_checkbook_with_perforation -->
+	<sound id="printer-tear"/>
+
+	<!-- http://freesound.org/people/MrAuralization/sounds/176782/ -->
+	<sound id="photo-print"/>
+
+	<!-- http://freesound.org/people/qubodup/sounds/171592/ -->
+	<sound id="clothes-shuffle"/>
+
+	<!-- http://freesound.org/people/j1987/sounds/106132/ -->
+	<sound id="curtain-open" vol="0.5"/>
+
+	<!-- http://www.youtube.com/watch?v=ejtWIzR6rsc -->
+	<sound id="camera-flash"/>
+
+	<!-- http://freesound.org/people/alienistcog/sounds/125939/ -->
+	<sound id="button-drop"/>
+
+	<!-- http://freesound.org/people/DJ%20Chronos/sounds/123098/ "Dan Oberbauer" -->
+	<sound id="inspect-highlight"/>
+	<!-- http://freesound.org/people/DJ%20Chronos/sounds/123099/ "Dan Oberbauer" -->
+	<sound id="inspect-unhighlight"/>
+
+	<!-- http://freesound.org/people/tec%20studios/sounds/125647/ -->
+	<!-- http://freesound.org/people/sidadrumbum/sounds/42977/ -->
+	<!-- http://freesound.org/people/DJ%20Chronos/sounds/123101/ "Dan Oberbauer" -->
+	<sound id="inspect-diagramon"/>
+	<sound id="inspect-interrogateon"/>
+
+	<!-- http://www.soundsnap.com/node/12874 -->
+	<!-- Freesound: 125646__tec-studios__insects-noise-009.wav -->
+	<!-- http://freesound.org/people/sidadrumbum/sounds/42977/ -->
+	<sound id="inspect-open"/>
+
+	<!-- http://www.soundsnap.com/node/12874 -->
+	<!-- http://freesound.org/people/sidadrumbum/sounds/42977/ -->
+	<sound id="inspect-close"/>
+
+	<!-- http://freesound.org/people/conleec/sounds/149232/ -->
+	<sound id="traveler-walkin"/>
+	<sound id="traveler-walkout"/>
+
+	<!-- http://freesound.org/people/nickrave/sounds/112555/ -->
+	<sound id="traveler-breathein"/>
+	<sound id="traveler-breatheout"/>
+
+	<!-- http://freesound.org/people/fastson/sounds/99692/ -->
+	<sound id="text-reveal" file="text-reveal0.wav text-reveal1.wav text-reveal2.wav text-reveal3.wav"/>
+
+	<!-- http://freesound.org/people/j1987/sounds/94986/ -->
+	<sound id="filer-open"/>
+	<sound id="filer-close"/>
+</sounds>
