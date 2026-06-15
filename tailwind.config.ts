@@ -72,6 +72,29 @@ const config: Config = {
           "20%,24%,55%": { opacity: "0.6" },
         },
         blink: { "50%": { opacity: "0.25" } },
+        npcEnter: {
+          "0%": { transform: "translateX(60px)", opacity: "0" },
+          "60%": { transform: "translateX(-4px)", opacity: "1" },
+          "100%": { transform: "translateX(0)", opacity: "1" },
+        },
+        idleBob: {
+          "0%,100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-2px)" },
+        },
+        walkby: {
+          "0%": { transform: "translateX(-40px)", opacity: "0" },
+          "10%,90%": { opacity: "0.85" },
+          "100%": { transform: "translateX(420px)", opacity: "0" },
+        },
+        lampFlick: {
+          "0%,95%,100%": { opacity: "1" },
+          "96%,98%": { opacity: "0.35" },
+          "97%,99%": { opacity: "0.85" },
+        },
+        telexFeed: {
+          "0%": { transform: "translateY(-100%)" },
+          "100%": { transform: "translateY(0)" },
+        },
       },
       animation: {
         stampSlam: "stampSlam 220ms steps(5,end) forwards",
@@ -79,6 +102,11 @@ const config: Config = {
         slideUp: "slideUp 260ms steps(6,end) forwards",
         flicker: "flicker 7s linear infinite",
         blink: "blink 1.1s steps(1) infinite",
+        npcEnter: "npcEnter 460ms steps(7,end) forwards",
+        idleBob: "idleBob 3.2s steps(2,end) infinite",
+        walkby: "walkby 14s linear infinite",
+        lampFlick: "lampFlick 9s steps(1,end) infinite",
+        telexFeed: "telexFeed 500ms steps(8,end) forwards",
       },
     },
   },

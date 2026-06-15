@@ -5,7 +5,7 @@ import { useGameStore } from "@/store/gameStore";
 import { getEvent } from "@/data/events";
 import { Typewriter } from "@/components/ui/Typewriter";
 import { OutcomeOverlay } from "@/components/ui/OutcomeOverlay";
-import { playRing, playThud, playClick } from "@/lib/sfx";
+import { playRing, playThud, playClick, playTelex } from "@/lib/sfx";
 
 const CHANNEL_LABEL: Record<string, string> = {
   telefono: "TELEFONO",
@@ -24,6 +24,7 @@ export function EventModal() {
   useEffect(() => {
     if (!ev) return;
     if (ev.channel === "telefono") playRing();
+    else if (ev.channel === "telex") playTelex();
     else playThud();
   }, [ev]);
 

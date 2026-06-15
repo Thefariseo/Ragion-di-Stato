@@ -2,8 +2,19 @@
 
 import { useGameStore } from "@/store/gameStore";
 import { formatLire } from "@/lib/format";
+import { FACTIONS, CORE_FACTIONS } from "@/data/factions";
+import { FactionEmblem } from "@/components/desk/FactionEmblem";
 import { Typewriter } from "@/components/ui/Typewriter";
 import { playClick } from "@/lib/sfx";
+import type { GameState } from "@/types";
+
+function superiorNote(g: GameState, cits: number): string {
+  if (g.player.sospetto >= 70) return "«Il suo nome ricorre troppo spesso, funzionario. Gli Affari Interni la cercano.»";
+  if (cits >= 2) return "«Troppi errori. Un'altra giornata così e parleremo del suo trasferimento.»";
+  if (g.player.sospetto >= 45) return "«Qualcuno ai piani alti ha chiesto di lei. Stia attento a cosa firma.»";
+  if (g.country.verita >= 60) return "«C'è troppa luce su certe pratiche. Non mi faccia pensare che venga da questo ufficio.»";
+  return "«Niente di eclatante oggi. È così che si fa carriera: senza farsi notare.»";
+}
 
 export function DaySummaryScreen() {
   const game = useGameStore((s) => s.game);
@@ -51,8 +62,32 @@ export function DaySummaryScreen() {
             </div>
           )}
 
-          <div className="mb-4">
+          <div className="mb-3">
             {summary.notes.map((n, i) => (<p key={i} className="font-read text-[14px] text-ink/90 italic leading-snug">{n}</p>))}
+          </div>
+
+          {/* scheda fazioni */}
+          <div className="bg-black/[0.05] border-2 border-ink/20 p-2 mb-3">
+            <div className="font-pixel text-[7px] uppercase tracking-widest text-ink/60 mb-1.5">Rapporti con le fazioni</div>
+            <div className="grid grid-cols-3 gap-x-3 gap-y-1">
+              {CORE_FACTIONS.map((id) => {
+                const rep = game.factions[id].reputation;
+                const c = rep >= 20 ? "text-stamp-green" : rep <= -20 ? "text-stamp-red" : "text-ink/60";
+                return (
+                  <div key={id} className="flex items-center gap-1.5">
+                    <FactionEmblem faction={id} size={16} />
+                    <span className="font-read text-[10px] text-ink/80 truncate flex-1">{FACTIONS[id].sigla}</span>
+                    <span className={`font-term text-[12px] ${c}`}>{rep > 0 ? `+${rep}` : rep}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* nota del superiore */}
+          <div className="border-l-4 border-stamp-red/60 bg-ink/[0.04] pl-3 py-2 mb-4">
+            <div className="font-pixel text-[7px] uppercase tracking-widest text-stamp-red mb-0.5">Nota a margine — il superiore</div>
+            <p className="font-read text-[13px] text-ink/90 italic leading-snug">{superiorNote(game, todayCitations.length)}</p>
           </div>
 
           {dayLog.length > 0 && (

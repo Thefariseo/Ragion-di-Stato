@@ -1,8 +1,9 @@
 "use client";
 
-import type { DocKind, GameDocument } from "@/types";
+import type { DocKind, FactionId, GameDocument } from "@/types";
 import { Photo } from "./Photo";
 import { Emblem } from "./Emblem";
+import { FactionEmblem } from "./FactionEmblem";
 import { Stamp } from "@/components/ui/Stamp";
 
 const KIND_LABEL: Record<string, string> = {
@@ -51,6 +52,7 @@ const BAND: Partial<Record<DocKind, string>> = {
 
 interface Props {
   doc: GameDocument;
+  faction?: FactionId;
   compareMode: boolean;
   selected: { docId: string; label: string } | null;
   selectedPair: { docId: string; label: string } | null;
@@ -60,6 +62,7 @@ interface Props {
 
 export function DocumentCard({
   doc,
+  faction,
   compareMode,
   selected,
   selectedPair,
@@ -89,7 +92,7 @@ export function DocumentCard({
 
       {/* carta intestata */}
       <div className="px-1.5 py-1 flex items-center gap-1.5" style={{ backgroundColor: band }}>
-        <Emblem size={18} color="#efeddc" />
+        {faction ? <FactionEmblem faction={faction} size={18} /> : <Emblem size={18} color="#efeddc" />}
         <div className="min-w-0">
           <div className="font-pixel uppercase text-[10px] leading-none text-paper-cream truncate">{doc.title}</div>
           <div className="font-read text-[9px] uppercase tracking-wide text-paper-cream/70 leading-tight truncate">

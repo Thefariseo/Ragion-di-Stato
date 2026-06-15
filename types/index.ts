@@ -306,7 +306,10 @@ export interface NewspaperView {
   masthead: string;
   date: string;
   lead: string;
+  leadBody: string;
+  photoSeed: number;
   items: { headline: string; body?: string }[];
+  sidebar: { title: string; body: string };
 }
 
 /* --------------------------------------------------------------------- NPC */

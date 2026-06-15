@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type { CaseDef } from "@/types";
 import { DocumentCard } from "./DocumentCard";
 import { Draggable } from "./Draggable";
-import { playClick } from "@/lib/sfx";
+import { playClick, playPaper } from "@/lib/sfx";
 
 type Pick = { docId: string; label: string; value: string };
 
@@ -25,6 +25,7 @@ export function Dossier({ caseDef }: { caseDef: CaseDef }) {
     setFound(new Set());
     setResetKey((k) => k + 1);
     zCounter.current = 10;
+    playPaper();
   }, [caseDef.id]);
 
   const total = caseDef.discrepancies?.length ?? 0;
@@ -108,6 +109,7 @@ export function Dossier({ caseDef }: { caseDef: CaseDef }) {
           <div className="animate-slideUp" style={{ animationDelay: `${i * 60}ms` }}>
             <DocumentCard
               doc={doc}
+              faction={caseDef.faction}
               compareMode={compareMode}
               selected={first ? { docId: first.docId, label: first.label } : null}
               selectedPair={second ? { docId: second.docId, label: second.label } : null}
