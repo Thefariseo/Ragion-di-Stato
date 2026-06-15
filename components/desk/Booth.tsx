@@ -4,25 +4,8 @@ import type { CaseDef, DayDef, GameState } from "@/types";
 import { FACTIONS } from "@/data/factions";
 import { formatClock } from "@/lib/format";
 import { ApplicantPortrait, portraitSeed } from "./ApplicantPortrait";
+import { BoothScene } from "./BoothScene";
 import { Typewriter } from "@/components/ui/Typewriter";
-
-function QueueSilhouettes() {
-  const figs = Array.from({ length: 10 });
-  return (
-    <svg className="absolute top-0 left-0 right-0 h-12 w-full opacity-30 pointer-events-none" viewBox="0 0 400 48" preserveAspectRatio="none" aria-hidden>
-      {figs.map((_, i) => {
-        const x = 6 + i * 30 + ((i * 7) % 6);
-        const h = 30 + ((i * 13) % 10);
-        return (
-          <g key={i} fill="#0e0f0a">
-            <rect x={x} y={48 - h} width="13" height={h} />
-            <rect x={x + 3} y={48 - h - 7} width="7" height="7" />
-          </g>
-        );
-      })}
-    </svg>
-  );
-}
 
 export function Booth({ game, dayDef, caseDef }: { game: GameState; dayDef: DayDef; caseDef?: CaseDef }) {
   const sospetto = game.player.sospetto;
@@ -31,12 +14,12 @@ export function Booth({ game, dayDef, caseDef }: { game: GameState; dayDef: DayD
 
   return (
     <div className="tex-wall relative shrink-0 h-[38%] min-h-[198px] overflow-hidden border-b-4 border-black">
-      <QueueSilhouettes />
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2/5 h-1.5 bg-neon shadow-[0_0_16px_4px_rgba(143,185,173,0.5)]" />
+      <BoothScene />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/40 pointer-events-none" />
 
       <div className="h-full flex gap-2.5 p-2.5 relative z-[2]">
         {/* SPORTELLO */}
-        <div className="w-[252px] shrink-0 border-4 border-env-0 bg-[#14130f] flex flex-col items-center justify-end relative overflow-hidden">
+        <div className="w-[252px] shrink-0 border-4 border-env-0 bg-black/25 flex flex-col items-center justify-end relative overflow-hidden">
           <div className="absolute top-1 left-0 right-0 text-center rds-label text-[7px]">Sportello 7 · Ammissione</div>
           {caseDef ? (
             <div className="flex flex-col items-center pb-2">
