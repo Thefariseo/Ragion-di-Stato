@@ -42,7 +42,7 @@ export function DebugPanel({ open, onClose }: { open: boolean; onClose: () => vo
       </div>
 
       <Section title="Fase">
-        {(["briefing", "directives", "desk", "daySummary"] as GamePhase[]).map((p) => (
+        {(["newspaper", "briefing", "directives", "desk", "daySummary", "night"] as GamePhase[]).map((p) => (
           <Btn key={p} onClick={() => goToPhase(p)}>{p}</Btn>
         ))}
         <Btn onClick={() => debugAdvanceDay()}>avanza giorno »</Btn>

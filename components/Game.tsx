@@ -3,10 +3,12 @@
 import { useEffect, useState } from "react";
 import { useGameStore } from "@/store/gameStore";
 import { TitleScreen } from "./screens/TitleScreen";
+import { NewspaperScreen } from "./screens/NewspaperScreen";
 import { BriefingScreen } from "./screens/BriefingScreen";
 import { DirectivesScreen } from "./screens/DirectivesScreen";
 import { DeskScreen } from "./screens/DeskScreen";
 import { DaySummaryScreen } from "./screens/DaySummaryScreen";
+import { NightScreen } from "./screens/NightScreen";
 import { EndingScreen } from "./screens/EndingScreen";
 import { DebugPanel } from "./debug/DebugPanel";
 
@@ -37,10 +39,12 @@ export default function Game() {
       ) : (
         <>
           {phase === "title" && <TitleScreen />}
+          {phase === "newspaper" && <NewspaperScreen />}
           {phase === "briefing" && <BriefingScreen />}
           {phase === "directives" && <DirectivesScreen />}
           {(phase === "desk" || phase === "event") && <DeskScreen />}
           {phase === "daySummary" && <DaySummaryScreen />}
+          {phase === "night" && <NightScreen />}
           {phase === "ending" && <EndingScreen />}
         </>
       )}

@@ -8,6 +8,8 @@ import type {
   DaySummary,
   FactionId,
   GameState,
+  NightDecision,
+  NightSummary,
   PlayerState,
 } from "@/types";
 import { applyFactionDeltas, initFactions } from "./factions";
@@ -15,17 +17,20 @@ import { buildDayQueue, currentCaseId } from "./narrative";
 import { pickEventAfter } from "./events";
 import { resolveDayEnding } from "./endings";
 import { validateCase } from "./rules";
+import { computeCitation } from "./citations";
+import { buildNightNeeds } from "./night";
 
-export const SAVE_VERSION = 1;
+export const SAVE_VERSION = 2;
 
 const MIN_PER_CASE = 40;
 const MIN_PER_EVENT = 15;
 
 const DEFAULT_PLAYER: PlayerState = {
-  stipendio: 0,
+  stipendio: 120000,
   famiglia: 80,
   lucidita: 70,
   sospetto: 10,
+  debiti: 0,
 };
 
 const DEFAULT_COUNTRY = {
@@ -43,7 +48,7 @@ export function createGame(seed: number): GameState {
     seed,
     rngCursor: 0,
     day: 1,
-    phase: "briefing",
+    phase: "newspaper",
     clock: 0,
     player: { ...DEFAULT_PLAYER },
     factions: initFactions(),
@@ -56,7 +61,9 @@ export function createGame(seed: number): GameState {
     firedEvents: [],
     activeEventId: undefined,
     log: [],
+    citations: [],
     lastSummary: undefined,
+    lastNight: undefined,
     endingId: undefined,
   };
   base.queue = buildDayQueue(1, base.flags, base.pendingInjects);
@@ -66,7 +73,7 @@ export function createGame(seed: number): GameState {
 /* --------------------------------------------------- applica conseguenza */
 
 function clampPlayerField(key: keyof PlayerState, value: number): number {
-  if (key === "stipendio") return value; // non limitato
+  if (key === "stipendio" || key === "debiti") return value; // non limitati
   return clamp(value, 0, 100);
 }
 
@@ -121,6 +128,8 @@ export function chooseCaseAction(state: GameState, actionId: string): GameState 
     flags: state.flags,
   });
 
+  const citation = computeCitation(def, action, validation, state.day);
+
   let next = applyConsequence(state, action.consequence);
   next = {
     ...next,
@@ -136,6 +145,7 @@ export function chooseCaseAction(state: GameState, actionId: string): GameState 
         inRegola: validation.inRegola,
       },
     ],
+    citations: citation ? [...next.citations, citation] : next.citations,
   };
 
   const eventId = pickEventAfter(next, next.currentCaseIndex);
@@ -208,7 +218,10 @@ export function endDay(state: GameState): GameState {
   const payPerCase = dayDef?.payPerCase ?? 0;
   const pay = processedToday * payPerCase;
   const penalty = Math.max(0, quota - processedToday) * payPerCase;
-  const net = pay - penalty;
+
+  const todayCitations = state.citations.filter((c) => c.day === state.day);
+  const fines = todayCitations.reduce((s, c) => s + c.fine, 0);
+  const net = pay - penalty - fines;
 
   const player: PlayerState = {
     ...state.player,
@@ -221,6 +234,8 @@ export function endDay(state: GameState): GameState {
     quota,
     pay,
     penalty,
+    citationsCount: todayCitations.length,
+    fines,
     notes: [
       descrizioneSospetto(player.sospetto),
       fazionePiuVicina(state),
@@ -239,7 +254,44 @@ export function endDay(state: GameState): GameState {
 
 export function continueFromSummary(state: GameState): GameState {
   if (state.endingId) return { ...state, phase: "ending" };
-  return advanceDay(state);
+  return { ...state, phase: "night" };
+}
+
+/* ----------------------------------------------------- notte / economia */
+
+export function resolveNight(
+  state: GameState,
+  decisions: Record<string, NightDecision>,
+): GameState {
+  const needs = buildNightNeeds(state);
+  const player: PlayerState = { ...state.player };
+  const flags = { ...state.flags };
+  let speso = 0;
+  const saltate: string[] = [];
+  const note: string[] = [];
+
+  for (const need of needs) {
+    const affordable = player.stipendio - speso >= need.cost;
+    const wantsPay = (decisions[need.id] ?? "paga") === "paga";
+    if (wantsPay && affordable) {
+      speso += need.cost;
+      if (need.payFamiglia) player.famiglia = clamp(player.famiglia + need.payFamiglia, 0, 100);
+      if (need.payLucidita) player.lucidita = clamp(player.lucidita + need.payLucidita, 0, 100);
+    } else {
+      saltate.push(need.label);
+      note.push(need.skipText);
+      if (need.skip.famiglia) player.famiglia = clamp(player.famiglia + need.skip.famiglia, 0, 100);
+      if (need.skip.lucidita) player.lucidita = clamp(player.lucidita + need.skip.lucidita, 0, 100);
+      if (need.skip.sospetto) player.sospetto = clamp(player.sospetto + need.skip.sospetto, 0, 100);
+      if (need.skip.debiti) player.debiti += need.skip.debiti;
+      for (const f of need.skip.setFlags ?? []) flags[f] = true;
+    }
+  }
+  player.stipendio -= speso;
+
+  const lastNight: NightSummary = { day: state.day, speso, saltate, note };
+  const withNight: GameState = { ...state, player, flags, lastNight };
+  return advanceDay(withNight);
 }
 
 export function advanceDay(state: GameState): GameState {
@@ -254,7 +306,7 @@ export function advanceDay(state: GameState): GameState {
     clock: 0,
     activeEventId: undefined,
     lastSummary: undefined,
-    phase: "briefing",
+    phase: "newspaper",
   };
 }
 

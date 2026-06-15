@@ -174,6 +174,8 @@ export interface PlayerState {
   famiglia: number;
   lucidita: number;
   sospetto: number;
+  /** debiti accumulati saltando le spese della notte */
+  debiti: number;
 }
 
 export interface CountryState {
@@ -244,6 +246,89 @@ export interface DayDef {
   payPerCase: number;
 }
 
+/* --------------------------------------------------------------- Citazioni */
+
+export type CitationSeverity = "lieve" | "grave";
+
+export interface Citation {
+  id: string;
+  day: number;
+  caseId: string;
+  reason: string;
+  severity: CitationSeverity;
+  fine: number;
+  ruleId?: string;
+  /** se false, la multa arriva senza spiegazione (giorni più opachi) */
+  visibleToPlayer: boolean;
+}
+
+/* ----------------------------------------------------------- Notte/economia */
+
+export interface NightNeed {
+  id: string;
+  label: string;
+  desc: string;
+  cost: number;
+  /** conseguenza se NON pagata */
+  skipText: string;
+  skip: {
+    famiglia?: number;
+    lucidita?: number;
+    sospetto?: number;
+    debiti?: number;
+    setFlags?: string[];
+  };
+  /** conseguenza se pagata (oltre alla spesa) */
+  payFamiglia?: number;
+  payLucidita?: number;
+}
+
+export type NightDecision = "paga" | "salta";
+
+export interface NightSummary {
+  day: number;
+  speso: number;
+  saltate: string[];
+  note: string[];
+}
+
+/* ----------------------------------------------------------------- Giornale */
+
+export interface NewspaperItem {
+  headline: string;
+  body?: string;
+  /** appare solo se il flag è attivo (o assente se forbid) */
+  requiresFlag?: string;
+  forbidsFlag?: string;
+}
+
+export interface NewspaperView {
+  masthead: string;
+  date: string;
+  lead: string;
+  items: { headline: string; body?: string }[];
+}
+
+/* --------------------------------------------------------------------- NPC */
+
+export interface NpcDef {
+  id: string;
+  name: string;
+  role: string;
+  faction?: FactionId;
+  /** mappa flag → etichetta di stato (il primo flag attivo vince) */
+  statusByFlag: { flag: string; status: string; tone: "buono" | "cattivo" | "neutro" }[];
+  defaultStatus: string;
+}
+
+export interface NpcView {
+  id: string;
+  name: string;
+  role: string;
+  status: string;
+  tone: "buono" | "cattivo" | "neutro";
+}
+
 /* ------------------------------------------------------------------ Finali */
 
 export interface EndingDef {
@@ -258,11 +343,13 @@ export interface EndingDef {
 
 export type GamePhase =
   | "title"
+  | "newspaper"
   | "briefing"
   | "directives"
   | "desk"
   | "event"
   | "daySummary"
+  | "night"
   | "ending";
 
 export interface ProcessedCase {
@@ -299,8 +386,12 @@ export interface GameState {
   /** evento attivo in attesa di scelta del giocatore */
   activeEventId?: string;
   log: LogEntry[];
+  /** citazioni/multe accumulate nella run */
+  citations: Citation[];
   /** resoconto dell'ultima giornata chiusa */
   lastSummary?: DaySummary;
+  /** resoconto dell'ultima notte */
+  lastNight?: NightSummary;
   endingId?: string;
 }
 
@@ -310,5 +401,9 @@ export interface DaySummary {
   quota: number;
   pay: number;
   penalty: number;
+  /** numero di citazioni della giornata */
+  citationsCount: number;
+  /** totale multe della giornata */
+  fines: number;
   notes: string[];
 }

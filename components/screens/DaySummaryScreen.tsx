@@ -12,7 +12,8 @@ export function DaySummaryScreen() {
   if (!summary) return null;
 
   const dayLog = game.log.filter((l) => l.day === summary.day);
-  const net = summary.pay - summary.penalty;
+  const net = summary.pay - summary.penalty - summary.fines;
+  const todayCitations = game.citations.filter((c) => c.day === summary.day && c.visibleToPlayer);
   const hasEnding = !!game.endingId;
 
   return (
@@ -30,9 +31,25 @@ export function DaySummaryScreen() {
             <div className="bg-black/[0.05] border-2 border-ink/20 p-2">
               <div className="font-pixel text-[7px] uppercase tracking-wider text-ink/60">Compenso</div>
               <div className="font-read text-xl text-ink">₤ {formatLire(net)}</div>
-              {summary.penalty > 0 && <div className="text-stamp-red font-read text-[11px]">sanzione ₤ {formatLire(summary.penalty)}</div>}
+              {summary.penalty > 0 && <div className="text-stamp-red font-read text-[11px]">quota mancata ₤ {formatLire(summary.penalty)}</div>}
+              {summary.fines > 0 && <div className="text-stamp-red font-read text-[11px]">multe ₤ {formatLire(summary.fines)}</div>}
             </div>
           </div>
+
+          {todayCitations.length > 0 && (
+            <div className="bg-black/[0.05] border-2 border-stamp-red/40 p-3 mb-4">
+              <div className="font-pixel text-[7px] uppercase tracking-widest text-stamp-red mb-2">
+                Richiami procedurali ({todayCitations.length})
+              </div>
+              <ul className="font-read text-[12px] text-ink/80 space-y-1 leading-snug">
+                {todayCitations.map((c) => (
+                  <li key={c.id}>
+                    — {c.reason} <span className="text-stamp-red">(₤ {formatLire(c.fine)})</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           <div className="mb-4">
             {summary.notes.map((n, i) => (<p key={i} className="font-read text-[14px] text-ink/90 italic leading-snug">{n}</p>))}

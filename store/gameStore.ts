@@ -2,7 +2,7 @@
 
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import type { GamePhase, GameState } from "@/types";
+import type { GamePhase, GameState, NightDecision } from "@/types";
 import {
   SAVE_VERSION,
   advanceDay,
@@ -10,6 +10,7 @@ import {
   continueFromSummary,
   createGame,
   resolveEvent,
+  resolveNight,
 } from "@/game/engine";
 import { randomSeed } from "@/lib/rng";
 
@@ -27,6 +28,7 @@ interface GameStore {
   chooseAction: (actionId: string) => void;
   resolveEventOption: (optionIndex: number) => void;
   continueSummary: () => void;
+  resolveNightChoices: (decisions: Record<string, NightDecision>) => void;
   backToTitle: () => void;
 
   // debug
@@ -58,6 +60,9 @@ export const useGameStore = create<GameStore>()(
 
       continueSummary: () =>
         set((st) => ({ game: continueFromSummary(st.game) })),
+
+      resolveNightChoices: (decisions: Record<string, NightDecision>) =>
+        set((st) => ({ game: resolveNight(st.game, decisions) })),
 
       backToTitle: () => set({ game: titleState() }),
 
