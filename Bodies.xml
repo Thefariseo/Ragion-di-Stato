@@ -1,0 +1,85 @@
+<bodies>
+	
+	<loc id="back" rect="31 39 40 45"/>
+	<loc id="legl" rect="26 100 25 35"/>
+	<loc id="legr" rect="52 103 26 37"/>
+
+	<contra type="gun" loc="back" file="Contra-Gun0.png">
+		<offset body="F0" val="0 0"/>
+		<offset body="F1" val="-2 -3"/>
+		<offset body="F2" val="0 -8"/>
+		<offset body="M0" val="0 0"/>
+		<offset body="M2" val="0 7"/>
+	</contra>
+	<contra type="gun" loc="back" file="Contra-Gun1.png">
+		<offset body="F0" val="-1 -5"/>
+		<offset body="F1" val="-3 -4"/>
+		<offset body="F2" val="0 -9"/>
+		<offset body="M0" val="-1 -3"/>
+		<offset body="M2" val="0 0"/>
+	</contra>
+	<contra type="gun" loc="back" file="Contra-Gun2.png">
+		<offset body="F0" val="1 -2"/>
+		<offset body="F1" val="-1 -2"/>
+		<offset body="F2" val="0 -6"/>
+		<offset body="M0" val="1 -2"/>
+		<offset body="M2" val="0 0"/>
+	</contra>
+
+	<contra type="knife" loc="back" file="Contra-Knife0.png">
+		<offset body="F0" val="-1 -5"/>
+		<offset body="F1" val="-7 -3"/>
+		<offset body="F2" val="0 -10"/>
+		<offset body="M0" val="-1 -2"/>
+		<offset body="M2" val="-1 4"/>
+	</contra>
+	<contra type="knife" loc="back" file="Contra-Knife1.png">
+		<offset body="F1" val="-3 0"/>
+	</contra>		
+	<contra type="knife" loc="back" file="Contra-Knife2.png">
+		<offset body="F1" val="-2 0"/>
+	</contra>
+
+	<contra type="bomb" loc="back" file="Contra-Bomb0.png">
+		<offset body="F0" val="-2 2"/>
+		<offset body="F1" val="-4 -2"/>
+		<offset body="F2" val="0 -3"/>
+		<offset body="M0" val="-2 0"/>
+		<offset body="M2" val="-1 4"/>
+	</contra>		
+	<contra type="bomb" loc="back" file="Contra-Bomb1.png">
+		<offset body="F0" val="0 -3"/>
+		<offset body="F1" val="-2 0"/>
+		<offset body="F2" val="0 -6"/>
+		<offset body="M0" val="0 -4"/>
+		<offset body="M2" val="0 2"/>
+	</contra>
+	<contra type="bomb" loc="back" file="Contra-Bomb2.png">
+		<offset body="F0" val="1 -7"/>
+		<offset body="F1" val="-2 -7"/>
+		<offset body="F2" val="0 -6"/>
+		<offset body="M0" val="0 -6"/>
+		<offset body="M2" val="0 2"/>
+	</contra>
+
+	<contra type="drugs" loc="legr" file="Contra-Drugs0.png">
+		<offset body="F0" val="-7 -8"/>
+		<offset body="F1" val="-8 -9"/>
+		<offset body="F2" val="-5 0"/>
+		<offset body="M0" val="-4 -3"/>
+	</contra>
+	<contra type="drugs" loc="legl" file="Contra-Drugs1.png">
+		<offset body="F0" val="1 -6"/>
+		<offset body="F1" val="0 -4"/>
+		<offset body="F2" val="4 3"/>
+		<offset body="M0" val="-1 0"/>
+		<offset body="M2" val="-1 4"/>
+	</contra>
+	<contra type="drugs" loc="legr" file="Contra-Drugs2.png">
+		<offset body="F0" val="-5 -9"/>
+		<offset body="F1" val="-7 -7"/>
+		<offset body="F2" val="-3 0"/>
+		<offset body="M0" val="-3 0"/>		
+	</contra>
+
+</bodies>

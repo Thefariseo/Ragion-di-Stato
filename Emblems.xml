@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<emblems>
+	<emblem id="MinistryOfAdmission" file="MinistryOfAdmission.png" count="9" valid="2" size="35 35" canrotate="false"/>
+	<emblem id="MinistryOfLabor" file="MinistryOfLabor.png" count="9" valid="3" size="35 35" canrotate="false"/>
+</emblems>

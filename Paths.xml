@@ -1,0 +1,216 @@
+<border>
+	<anim id="walk" suffix="-WalkH" suffixv="-WalkV" loop="true" fps="8" fpsv="6"/>
+	<anim id="run" suffix="-Run" loop="true" fps="8"/>
+	<anim id="shot" suffix="-Shot" loop="false" fps="6"/>
+	<anim id="idle" suffix="-Idle" loop="false" fps="0"/>
+	<anim id="climb" suffix="-Climb" loop="false" fps="6"/>
+	<anim id="throw" suffix="-Throw" loop="false" fps="4"/>
+
+	<anim id="kneel-aim" suffix="-KneelAim" loop="false" fps="1"/>
+	<anim id="kneel-shoot" suffix="-KneelShoot" loop="false" fps="4"/>
+	<anim id="stand-aim" suffix="-StandAim" loop="false" fps="1"/>
+	<anim id="stand-shoot" suffix="-StandShoot" loop="false" fps="4"/>
+
+	<anim id="fraga" suffix="-FragA" loop="false" fps="4"/>
+	<anim id="fragb" suffix="-FragB" loop="false" fps="5"/>
+	<anim id="fragc" suffix="-FragC" loop="false" fps="6"/>
+
+	<!-- waiting line -->
+	<path id="waiting-line" speed="5">
+		<point pos="0 32" randomize="10 10"/>
+		<point pos="70 32" randomize="15 10"/>
+		<point pos="70 58" randomize="15 10"/>
+		<point pos="10 58" randomize="15 10"/>
+		<point pos="10 86" randomize="10 10"/>
+		<point pos="116 86" randomize="2 10"/>
+	</path>
+	<path id="disperse-0">
+		<point pos="-500 30"/>
+		<point pos="-600 30"/>
+	</path>
+	<path id="disperse-1">
+		<point pos="-500 60"/>
+		<point pos="-600 60"/>
+	</path>
+	<path id="disperse-2">
+		<point pos="-500 90"/>
+		<point pos="-600 90"/>
+	</path>
+
+	<path id="panic-0" anim="run" speed="25">
+		<point pos="-500 30"/>
+		<point pos="-600 30"/>
+	</path>
+	<path id="panic-1" anim="run" speed="25">
+		<point pos="-500 60"/>
+		<point pos="-600 60"/>
+	</path>
+	<path id="panic-2" anim="run" speed="25">
+		<point pos="-500 90"/>
+		<point pos="-600 90"/>
+	</path>	
+
+	<!-- entrant -->	
+	<path id="enter-left" speed="15" endevent="arrived-in-booth">
+		<point pos="134 92"/>
+		<point pos="151 92"/>
+	</path>
+
+	<path id="exit-right" speed="12" next="leaving-free">
+		<point pos="192 90"/>
+		<point pos="490 90"/>
+		<point pos="490 120"/>
+	</path>
+
+	<path id="exit-right-bomb" speed="15" next="exit-right-bomber-prepare" endevent="bomber-alarm">
+		<point pos="192 90"/>
+		<point pos="470 90"/>
+		<point pos="470 85"/>
+	</path>	
+	
+	<path id="exit-right-bomber-prepare" speed="10" endevent="bomber-explode">
+		<point pos="470 85"/>
+		<point pos="470 56"/>
+	</path>	
+
+	<path id="exit-left" speed="12" next="leaving-free">
+		<point pos="155 90"/>
+		<point pos="140 90"/>
+		<point pos="120 100"/>
+		<point pos="-10 100"/>
+	</path>
+
+	<path id="leaving-free" snap="true" anim="idle">
+		<point pos="-20 -20"/>
+		<point pos="-20 -20"/>
+	</path>
+
+	<path id="enter-right" endevent="start-intro">
+		<point pos="240 90"/>
+		<point pos="180 90"/>
+	</path>
+
+	<path id="runforit" speed="25" anim="run" next="climb">
+		<point pos="80 48"/>
+		<point pos="162 48"/>
+	</path>
+
+	<path id="climb" anim="climb" next="runforit2" snap="true" endevent="start-sniping">
+		<point pos="162 48"/>
+		<point pos="185 48"/>
+	</path>
+
+	<path id="runforit2" speed="30" anim="run" endevent="throw-grenade" next="throw-grenade">
+		<point pos="320 48"/>
+		<point pos="320 48"/>
+	</path>
+
+	<path id="throw-grenade" speed="25" anim="throw">
+	</path>
+
+	<path id="shot" anim="shot">
+	</path>
+
+	<path id="entrant-detainstart" anim="walk" delay="1" speed="15" startevent="entrant-detain-starting" endevent="entrant-detain-waiting-outside">
+		<point pos="153 90"/>
+		<point pos="130 90"/>
+	</path>
+	<path id="entrant-detainfinish" anim="walk" delay="0.75" speed="12">
+		<point pos="126 70"/>
+		<point pos="126 -10"/>
+	</path>
+
+	<path id="exit-right-panic" anim="run" speed="25">
+		<point pos="580 200"/>
+		<point pos="590 200"/>
+	</path>
+
+	<!-- guard 0 -->	
+	<path id="guard0-enter" speed="12" delay="3">
+		<point pos="124 0"/>
+		<point pos="123 25"/>
+	</path>
+	<path id="guard0-detainstart" delay="1" speed="12" endevent="guards-detain-waiting-outside">
+		<point pos="123 90"/>
+		<point pos="124 90"/>
+	</path>
+	<path id="guard0-detainfinish" speed="12" next="guard0-detainreturn">
+		<point pos="124 -10"/>
+		<point pos="124 -11"/>
+	</path>
+	<path id="guard0-detainreturn" speed="12" delay="7">
+		<point pos="124 0"/>
+		<point pos="123 25"/>
+	</path>
+	
+	<!-- guard 1 -->
+	<path id="guard1-enter" speed="12">
+		<point pos="127 0"/>
+		<point pos="126 73"/>
+	</path>
+	<path id="guard1-detainstart" speed="12">
+		<point pos="124 100"/>
+		<point pos="130 100"/>
+	</path>
+	<path id="guard1-detainfinish" speed="12" delay="1" next="guard1-detainreturn">
+		<point pos="126 90"/>
+		<point pos="127 -10"/>
+	</path>
+	<path id="guard1-detainreturn" speed="12" delay="3">
+		<point pos="127 0"/>
+		<point pos="126 73"/>
+	</path>
+
+	<!-- guard 2 -->
+	<path id="guard2-enter" delay="1" speed="12">
+		<point pos="486 0"/>
+		<point pos="486 25"/>
+		<point pos="443 25"/>
+	</path>
+	<path id="guard2-aimwait" delay="2" snap="true">
+		<point pos="443 25"/>
+	</path>
+	<path id="guard2-aimshoot" next="guard2-shoot" anim="kneel-aim" delay="1"/>
+	<path id="guard2-shoot" next="guard2-aimshoot" anim="kneel-shoot" startevent="shoot-guard2"/>
+	<path id="guard2-aimdone" next="guard2-idle" anim="kneel-aim" delay="2"/>
+	<path id="guard2-idle" anim="idle"/>
+
+	<!-- guard 3 -->
+	<path id="guard3-enter" delay="3" speed="13">
+		<point pos="490 0"/>
+		<point pos="490 53"/>
+		<point pos="446 53"/>
+	</path>
+	<path id="guard3-aimwait" delay="1" snap="true">
+		<point pos="446 53"/>
+	</path>
+	<path id="guard3-aimshoot" next="guard3-shoot" anim="stand-aim" delay="1.5"/>
+	<path id="guard3-shoot" next="guard3-aimshoot" anim="stand-shoot" startevent="shoot-guard3"/>
+	<path id="guard3-aimdone" next="guard3-idle" anim="stand-aim" delay="4"/>
+	<path id="guard3-idle" anim="idle"/>
+
+	<!-- guard 4 -->
+	<path id="guard4-enter" delay="5" speed="15">
+		<point pos="484 0"/>
+		<point pos="484 80"/>
+		<point pos="444 80"/>
+	</path>
+	<path id="guard4-aimwait" delay="3" snap="true">
+		<point pos="444 80"/>
+	</path>
+	<path id="guard4-aimshoot" next="guard4-shoot" anim="kneel-aim" delay="2"/>
+	<path id="guard4-shoot" next="guard4-aimshoot" anim="kneel-shoot" startevent="shoot-guard4"/>
+	<path id="guard4-aimdone" next="guard4-idle" anim="kneel-aim" delay="3"/>
+	<path id="guard4-idle" anim="idle"/>
+
+	<path id="guard3-grenaded" anim="fraga" snap="true">
+		<point pos="428 49"/>
+	</path>
+	<path id="guard2-grenaded" anim="fragb" snap="true">
+		<point pos="443 20"/>
+	</path>
+	<path id="guard4-grenaded" anim="fragc" snap="true">
+		<point pos="438 85"/>
+	</path>
+
+</border>

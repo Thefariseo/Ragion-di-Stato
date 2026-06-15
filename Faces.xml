@@ -1,0 +1,48 @@
+<faces>
+	<!-- Male -->
+	<sheet id="M0">
+		<face age="45" bmi="25" hairheight="0"/>
+		<face age="70" bmi="18" hairheight="5" head="Bald"/>
+		<face age="38" bmi="20" hairheight="4" eyes="Glasses"/>
+		<face age="36" bmi="23" hairheight="6" mouth="Mustache"/>
+	</sheet>
+	<sheet id="M1">
+		<face age="40" bmi="22" hairheight="4" head="Beard"/>
+		<face age="29" bmi="17" hairheight="4"/>
+		<face age="35" bmi="24" hairheight="5"/>
+		<face age="43" bmi="34" hairheight="2" head="Bald"/>
+	</sheet>
+	<sheet id="M2">
+		<face age="40" bmi="19" hairheight="4" head="Balding"/>
+		<face age="29" bmi="23" hairheight="2"/>
+		<face age="35" bmi="22" hairheight="7" head="Blonde"/>
+		<face age="43" bmi="24" hairheight="10" mouth="Mustache"/>
+	</sheet>
+	<sheet id="M3">
+		<face age="35" bmi="19" hairheight="8" head="Balding"/>
+		<face age="40" bmi="26" hairheight="12"/>
+		<face age="46" bmi="32" hairheight="3"/>
+		<face age="30" bmi="22" hairheight="6" mouth="Mustache"/>
+	</sheet>
+
+	<!-- Female -->
+	<sheet id="F0">
+		<face age="25" bmi="19" hairheight="10"/>
+		<face age="68" bmi="18" hairheight="3"/>
+		<face age="39" bmi="33" hairheight="-7"/>
+		<face age="27" bmi="22" hairheight="-6"/>
+	</sheet>
+	<sheet id="F1">
+		<face age="20" bmi="19" hairheight="3"/>
+		<face age="30" bmi="24" hairheight="5"/>
+		<face age="22" bmi="26" hairheight="2"/>
+		<face age="65" bmi="17" hairheight="0"/>
+	</sheet>
+	<sheet id="F2">
+		<face age="19" bmi="23" hairheight="4"/>
+		<face age="36" bmi="30" hairheight="2"/>
+		<face age="31" bmi="22" hairheight="5"/>
+		<face age="40" bmi="24" hairheight="13"/>
+	</sheet>
+
+</faces>

@@ -1,0 +1,740 @@
+#------------------------------------------------------------------------------
+# Test
+# penn podcast with george takei
+
+TEST
+	= nation Arstotzka
+	= error WrongHeightError
+
+ARSTOTZKAN
+	= nation Arstotzka
+	+ Passport
+	+ IdCard
+
+GENERIC
+	= error
+		x 1 --
+		x 2 <generic> <speech> <missing> <identity>
+
+#------------------------------------------------------------------------------
+# Order of the Ezic Star
+#------------------------------------------------------------------------------
+EZIC
+	? Game/Ezic == ""
+		MANUALPAPERS			
+		= nation Arstotzka
+		> Intro-Replace
+			" The Order awaits.
+			+ EzicIntro
+			= Game/Ezic waiting-for-corman
+			@ Leave
+	? Game/Ezic == waiting-for-corman
+		= nation Arstotzka
+		= name Corman-Drex
+		= want EzicIntro
+		( EzicIntroCorman
+			.*/Name
+			EzicIntro/Corman
+		? Game/Ezic-MetCorman == YES
+			> Intro-Replace
+				" You have something of mine.
+		> Intro-Before
+			= Game/Ezic-MetCorman YES
+		> Give-EzicIntro
+			" Very good.
+			" If you help us, we will help you.
+			= Game/Ezic just-joined
+	? Game/Ezic == just-joined
+		= nation Arstotzka
+
+#------------------------------------------------------------------------------
+# Mr Persistent
+#------------------------------------------------------------------------------
+MR_PERSISTENT_BASE
+	? Game/MrPersistent == done
+		= fallback GENERIC
+		BREAK
+	= nation Obristan
+	= name Jorji-Costava
+	= gender M
+	= face M-1-1-4-4-0
+	> Approved
+		" All right! You the best!
+		" Arstotzka the best!
+		" Here, take this!
+		+ TokenObristan
+		= Game/MrPersistent done
+
+MR_PERSISTENT0
+	INCLUDE MR_PERSISTENT_BASE
+	MANUALPAPERS
+	= error Misc-BoothCounter
+	> Intro-Replace
+		" Ok! Here we go!
+		" Glory to Arstotzka!
+		" The greatest country!
+	> ShutterClose
+		+ HintMissing
+	> Interrogate-Replace
+		" @Where is your passport?
+		" Passport!
+		" Arstotzka so great, passport not required.
+		" Right?
+		" @A passport is required.
+		" Ok, ok. I hear you.
+		" I come back again.
+		@ Leave
+
+MR_PERSISTENT1
+	INCLUDE MR_PERSISTENT_BASE
+	MANUALPAPERS
+	+ Pezpert
+	= error Misc-Pezpert
+	> Intro-Replace
+		" Ok! Hello again!
+		" Now I have passport!
+		" Arstotzka still best country for sure!
+	> Interrogate-Replace
+		" @This passport is crude fake.
+		" Hey now! Is not true!
+		" Is pre-approved!
+	> Denied
+		" @ Cobrastan is not a real country.
+		" Ok, ok.
+		" You no like passport, I understand.
+		" I come back again with better one.
+
+MR_PERSISTENT2
+	INCLUDE MR_PERSISTENT_BASE
+	MANUALPAPERS
+	+ Passport
+	+ EntryPermit
+	= error EntryPermit-Missing
+	> Intro-Replace
+		" Old friend hello!
+		" I am back again!
+		" This time everything set.
+	> Interrogate-Replace
+		" @You are missing an entry permit.
+		" Oh man you funny guy!
+	> Denied
+		" @An entry permit is required.
+		" Wow, you run very strict border here.
+		" That is good. Do job right.
+		" I look for entry thing and come back.
+
+MR_PERSISTENT3
+	INCLUDE MR_PERSISTENT_BASE
+	MANUALPAPERS
+	+ Passport
+	+ EntryPermit
+	+ EntryTicket
+	= error EntryPermit-Missing
+	> Intro-Replace
+		" Hey it is me!
+		" Are you happy to see?
+		" I have everything you ask for now.
+	> Interrogate-Replace
+		" @Tickets are no longer accepted.
+		" Hey no! 
+		" Guy sold me ticket. Say is good!
+		" You check again maybe.
+	> Denied
+		" @Do not come back again.
+		" Haha! 
+		" You nice guy but I have business in Arstotzka.
+		" I get right papers and come see you.
+
+MR_PERSISTENT4
+	INCLUDE MR_PERSISTENT_BASE
+	> Intro-Replace
+		" Hello my guy!
+		" Ok. Today is day!
+		" Look at all good papers.
+		" Was not cheap.
+		" Or easy! Haha!
+	> Denied
+		" @I told you not to come back.
+		" This is crap.
+		" You know what? Forget it.
+		" Arstotzka worst country.
+		" You worst person.	
+
+#------------------------------------------------------------------------------
+# Brothel
+#------------------------------------------------------------------------------
+BROTHEL0
+	= nation Arstotzka
+	= gender F
+	> Intro-Replace
+		" Hello handsome.
+		" You look bored.
+		" If you want good time, come see us.
+		+ BrothelFlyer
+		= Game/Brothel step2
+	> Approved
+		" I will be around couple months.
+		" Don't forget to visit.
+BROTHEL1
+	= nation Impor
+	= gender F
+	= name Ava-
+	= purpose work
+	= job food-service
+	= duration 3
+	> Intro-Replace
+		" Hey there.
+		" I can make you happy any time.
+		+ BrothelFlyer
+		= Game/Brothel step3
+	> Approved
+		" Come to Pink Vice. Ask for Ava.
+BROTHEL2
+	= nation Obristan
+	= gender F
+	= purpose work
+	= job food-service
+	= duration 6
+	= face F-0-0-4-4
+	> Intro-After
+		" Oh. Here.
+		+ BrothelFlyer
+	> Leave
+		" Please help me.
+		+ BrothelHelp
+		= Game/Brothel step4
+BROTHEL3
+	= nation Arstotzka
+	= name Dari-Ludum
+	= gender M
+	= want BrothelHelp
+	= error BrothelHelp
+	= face M-11-12-8-5
+	( PimpName
+		.*/Name
+		BrothelHelp
+	> Intro-Replace
+		" Hello friend.
+		+ BrothelFlyer
+		" You come down, I give you good girl.
+		= Game/Brothel done
+	> Give-BrothelHelp
+		" That little bitch.
+		" I break her in two.
+		@ Detain
+	> Interrogate-Replace
+		" @You are Dari Ludum?
+		" Of course, it says on passport.
+		@ Detain
+	> Detain-Replace
+		" @One moment.
+		" What is this shit?
+		" Give me my papers back.
+		@ News Human Trafficking Ring Shut Down! \ Grestin Checkpoint Officer Nabs Mastermind \ Face:M-11-12-8-5
+	> Leave
+		@ News Dancers At Grestin Club Found Dead! \ Newly Immigrated Girls Victims Of Human Trafficking
+
+#------------------------------------------------------------------------------
+# Killer athlete
+#------------------------------------------------------------------------------
+KILLERATHLETE
+	= nation Republia
+	= gender M
+	= name Vince-Lestrade
+	= face M-3-3-10-10
+	+ Passport
+	+ EntryPermit
+	= purpose transit
+	= error Bulletin-News0News1
+	( KillerName0
+		.*/Name
+		.*/Face
+		Bulletin/News0
+	( KillerName1
+		.*/Name
+		.*/Face
+		Bulletin/News1
+	> Interrogate-Replace
+		" @You are Vince Lestrade?
+		" Damn.
+		" Look, I did not kill her. I was set up.
+		" Do not believe the Republian lies. 
+		" Let me through.
+		@ Detain
+	> Detain-After
+		" Shit.
+		@ News Vince Lestrade Apprehended In Grestin! \ Track Champ Looks Quite Guilty Now
+	> Approved
+		@ News \ Vince Lestrade Spotted in Arstotzka
+	> Denied
+		@ News \ Vince Lestrade Apprehended In Kolechia!
+		
+
+#------------------------------------------------------------------------------
+# Husband and wife traveling together
+#------------------------------------------------------------------------------
+HUSBAND_WIFE_TEAM
+	= nation Antegria
+	? Game/HusbandWifeTeam == ""
+		= gender M
+		= name -Martin
+		= purpose immigrate
+		> Intro-Replace
+			" ask-purpose
+			" Today is beautiful day, my friend.
+			" We finally become free from Antegrian tyranny!
+		> Approved
+			" Thank you so much!
+			" Please be kind to my wife, she is just after me.
+			= Game/HusbandWifeTeam husband-approved
+		> Denied
+			" No! They will kill us!
+			" Please, I beg you.
+			" Let my wife pass. She is coming to you next.
+			= Game/HusbandWifeTeam husband-denied
+	? Game/HusbandWifeTeam == husband-approved
+		= gender F		
+		= name -Martin
+		= error EntryPermit-Missing
+		> Intro-Replace
+			" Did you see my husband?
+			" He made it through, yes?
+		> Interrogate-Replace
+			" @Where is your entry permit?
+			" Please, I beg you.
+			" They would not give me permit. I have no choice.
+			" I will be killed if I return to Antegria.
+		> Approved
+			" Thank you.
+			" I will not forget this.
+			+ TokenAntegria
+			= Game/HusbandWifeTeam husband-wife
+		> Denied
+			" Why?
+			" You have doomed me.
+			= Game/HusbandWifeTeam husband-only
+	?  Game/HusbandWifeTeam == husband-denied
+		= gender F		
+		= name -Martin
+		> Intro-Replace
+			" Why did you turn my husband away?
+			" I will not leave him to die.
+			" You have doomed us both.
+			= Game/HusbandWifeTeam husband-only
+			@ Leave
+
+#------------------------------------------------------------------------------
+# First Day
+#------------------------------------------------------------------------------
+FIRST_DAY
+	= nation Arstotzka:3 Republia:1 Impor:1 Kolechia:1
+	? nation != Arstotzka 
+		= error Traveler-WrongNation
+	> Intro-Replace
+		# no dialog on first day
+	> Denied
+		" ask-nativesonly
+
+KOLECHIAN_HATER
+	= nation Kolechia
+	= gender M
+	MANUALPAPERS
+	> Intro-Replace
+		" It was a mistake to open this checkpoint.
+		@ Leave
+
+FINALLY_RETURN_HOME
+	= nation Arstotzka
+	> Intro-Replace
+		" Finally I can return home.
+	> Denied
+		" ask-nativesonly
+		" You bastard.
+	> Approved
+		" ask-approved
+		" Thank you.
+
+SMALL_CHECKPOINT
+	= nation Impor
+	= error Traveler-WrongNation
+	> Intro-Replace
+		" This checkpoint is smaller than I expected.
+	> Denied
+		" ask-nativesonly
+
+WAITED_FOREVER
+	= nation Republia
+	= error Traveler-WrongNation
+	> Intro-Replace
+		" I have waited in this damn line since for 8 hours.
+		" I hope it was worth it.
+	> Denied
+		" ask-nativesonly
+		" Unbelievable. Go to hell.
+
+#------------------------------------------------------------------------------
+# Inspection intro
+#------------------------------------------------------------------------------
+INSPECTION_FIRST
+	= nation Republia:1 Impor:1 Kolechia:1 Antegria:1 Obristan:1 UnitedFed:1
+	> Intro-Replace
+
+INSPECTION_ERROR
+	= nation Antegria
+	= error Passport-WrongExpiration
+	> Intro-Replace
+
+INSPECTION_DAY
+	= error
+		x 1 --
+		x 2 <generic>
+	> Intro-Replace
+
+HURRY_UP
+	= nation Arstotzka
+	> Intro-Replace
+		" Hurry up.
+		" I am meeting bus soon.
+	> Denied
+		" What is this?
+	> Approved
+		" Finally.
+
+#------------------------------------------------------------------------------
+# EntryTicket intro
+#------------------------------------------------------------------------------
+ENTRYTICKET_FIRST
+	= nation Republia:1 Impor:1 Kolechia:1 Antegria:1 Obristan:1 UnitedFed:1
+	> Intro-Replace
+
+ENTRYTICKET_HIDDEN
+	= nation Republia:1 Impor:1 Kolechia:1 Antegria:1 Obristan:1 UnitedFed:1
+	> Intro-Replace
+	= error EntryTicket-Hidden
+
+ENTRYTICKET_WRONGDATE
+	= nation Republia:1 Impor:1 Kolechia:1 Antegria:1 Obristan:1 UnitedFed:1
+	> Intro-Replace
+	= error EntryTicket-WrongUseDate
+
+ENTRYTICKET_DAY
+	= nation Arstotzka:1 Republia:1 Impor:1 Kolechia:1 Antegria:1 Obristan:1 UnitedFed:1
+	> Intro-Replace
+	= error
+		x 1 --
+		x 2 EntryTicket <generic>
+
+GLAD_YOU_HAVE_JOB
+	= nation Arstotzka:1 Republia:1 Impor:1 Kolechia:1 Antegria:1 Obristan:1 UnitedFed:1
+	> Intro-Replace
+		" I heard about terrorist attack.
+		" You are lucky to have a job still.
+	> Approved
+		" Be safe.
+
+#------------------------------------------------------------------------------
+# EntryPermit & IdCard intro
+#------------------------------------------------------------------------------
+ENTRYPERMIT_IDCARD_FIRST
+	= nation Republia:1 Impor:1 Kolechia:1 Antegria:1 Obristan:1 UnitedFed:1
+
+ENTRYPERMIT_IDCARD_DAY
+	= nation Arstotzka:1 Republia:1 Impor:1 Kolechia:1 Antegria:1 Obristan:1 UnitedFed:1
+	= error
+		x 1 --
+		x 2 <generic> <missing> <speech>
+
+ENTRYPERMIT_IDCARD_IDCARD
+	= nation Arstotzka
+	= error
+		x 1 --
+		x 2 <generic> <missing> <speech>
+
+WRONG_NAME
+	= nation Arstotzka:1 Republia:1 Impor:1 Kolechia:1 Antegria:1 Obristan:1 UnitedFed:1
+	= error EntryPermit-WrongName
+
+TICKET_NOT_PERMIT
+	= nation Republia:1 Impor:1 Kolechia:1 Antegria:1 Obristan:1 UnitedFed:1
+	MANUALPAPERS
+	+ Passport
+	+ EntryTicket
+	+ EntryPermit
+	= error EntryPermit-Missing
+	> Intro-Replace
+		" ask-purpose
+		" What? I do not know. To visit?
+		" ask-duration
+		" A few days maybe.
+	> Interrogate-Replace
+		" ask-missing-entrypermit
+		" Entry permit? I have ticket here.
+		" Let me through.
+	> Denied
+		" @Ticket is not enough any more.
+		" @Get a permit.
+		" Bullshit!
+		" I paid good money for ticket.
+
+VISIT_SON
+	= nation Impor
+	= purpose visit
+	= gender F
+	= duration 6
+	= error EntryPermit-Expired
+	> Intro-Replace
+		" ask-purpose
+		" I am so happy that the border has opened.
+		" I will visit my son. I have not seen him in six years. [Speech/Purpose]
+		" ask-duration
+		" 6 months. [Speech/Duration]
+	> Interrogate-Replace
+		" ask-expired-paper
+		" Please, let me pass. My son is waiting.
+		= Day/InterrogateVisitSon yes
+	> Approved
+		" Thank you.
+		? Day/InterrogateVisitSon == yes
+			+ TokenImpor
+	> Denied
+		" Curse you.
+
+#------------------------------------------------------------------------------
+# Detain intro
+#------------------------------------------------------------------------------
+DETAIN_FIRST
+	= nation Antegria
+	= error EntryPermit-WrongId
+	> Enable-Detain
+		" Hey wait.
+		" Do not arrest me, please.
+		" Just deny my passport and I will go away.
+
+DETAIN_DAY
+	= nation Arstotzka:1 Kolechia:1 Republia:1 Impor:1 Antegria:1 Obristan:1 UnitedFed:1
+	= error
+		x 1 --
+		x 2 <generic> <speech> <missing>
+
+HATE_COUNTRY
+	= nation UnitedFed
+	= purpose transit
+	= duration 0.07
+	> Intro-Replace
+		" ask-purpose
+		" It is not my choice. I hate this damn country.
+		" I am just passing through. [Speech/Purpose]
+		" ask-duration
+		" As little as possible. 2 days. [Speech/Duration]
+	> Approved
+		" Ugh.
+	> Denied
+		" Just as well.
+
+#------------------------------------------------------------------------------
+# WorkPermit intro
+#------------------------------------------------------------------------------
+WORKPERMIT_FIRST
+	= nation Kolechia:1 Republia:1 Impor:1 Antegria:1 Obristan:1 UnitedFed:1
+	= purpose work
+
+WORKPERMIT_DAY
+	= nation Arstotzka:1 Kolechia:1 Republia:1 Impor:1 Antegria:1 Obristan:1 UnitedFed:1
+	= purpose work:2 transit:1 immigrate:1 visit:1
+	= error
+		x 1 --
+		x 2 <generic> <speech> <missing>
+
+SUICIDE_BOMBER
+	? Game/FirstSuicideBomber == approved
+		= fallback GENERIC
+		BREAK
+	= nation Kolechia
+	= contrabandTypes bomb
+	> Approved
+		= Game/FirstSuicideBomber approved
+
+#------------------------------------------------------------------------------
+# Search intro
+#------------------------------------------------------------------------------
+SEARCH_FIRST
+	= nation Kolechia
+	= gender F
+	= purpose visit
+	= error Rules-SearchKolechiaClear
+
+SEARCH_DAY
+	= nation Arstotzka:1 Kolechia:3 Republia:1 Impor:1 Antegria:1 Obristan:1 UnitedFed:1
+	= error
+		x 1 --
+		x 2 <generic> <speech> <missing>
+	? nation == Kolechia
+		= error Rules-SearchKolechia
+
+SEARCH_CONFUSING_GENDER
+	= nation Arstotzka
+	= gender M
+	= error Traveler-ConfusingGender
+
+SEARCH_BRIBE_INTRO
+	= nation Kolechia
+	= gender M
+	= name Shaddy-Safadi
+	= face M-11-11-11-11-0
+	= error Rules-SearchKolechiaContraband
+	= contrabandTypes drugs
+	> Enable-Detain
+		" Slow down my friend.
+		" I have only harmless medicine.
+		" I give you 5 credits if you let me through.
+	> Approved
+		" Excellent.
+		" As I promised.
+		+ Money5
+	> Denied
+		" Why you turn down good money?
+		" @You are lucky to escape arrest.
+		" @Do not come back.
+	> Detain-Replace
+		" @You cannot bribe an officer of Arstotzka.
+		" I hope they pay well for your obedience, dog.
+
+#------------------------------------------------------------------------------
+# Forgery intro
+#------------------------------------------------------------------------------
+FORGERY_FIRST
+	= nation Kolechia:1 Republia:1 Impor:1 Antegria:1 Obristan:1 UnitedFed:1
+	= error WrongSeal
+
+FORGERY_DAY
+	= nation Arstotzka:1 Kolechia:1 Republia:1 Impor:1 Antegria:1 Obristan:1 UnitedFed:1
+	? nation != Arstotzka
+		= error 
+			x 1 --
+			x 1 WrongSeal
+			x 1 <generic> <speech> <missing>
+	? nation == Arstotzka
+		= error
+			x 1 --
+			x 2 <.*>
+
+#*
+#------------------------------------------------------------------------------
+# Day 4
+D4
+	= nation Kolechia
+	+ Passport
+	+ EntryPermit
+	= error Rules-MustFingerprintKolechia
+
+#------------------------------------------------------------------------------
+# Day 3 - WorkPermit intro
+D3.5
+	= nation Arstotzka:1 Republia:1 Impor:1 Kolechia:1 Antegria:1 Obristan:1 UnitedFed:1
+	+ Passport
+	? nation == Arstotzka 
+		+ IdCard
+	? nation != Arstotzka 
+		+ EntryPermit
+		= purpose visit:1 transit:1 work:2
+	? purpose == work
+		+ WorkPermit
+	= error
+		x 1 --
+		x 2 <generic> <generic-speech>
+
+D3A
+	= nation Republia:1 Impor:1 Kolechia:1 Antegria:1 Obristan:1 UnitedFed:1
+	+ Passport
+	+ EntryPermit
+	+ WorkPermit
+	= purpose work
+
+#------------------------------------------------------------------------------
+# Day 4 - Missing documents intro
+D4.5
+	= nation Arstotzka:1 Republia:1 Impor:1 Kolechia:1 Antegria:1 Obristan:1 UnitedFed:1
+	+ Passport
+	? nation == Arstotzka 
+		+ IdCard
+	? nation != Arstotzka 
+		+ EntryPermit
+		= purpose visit:2 transit:2 work:2 immigrate:1
+	? purpose == work
+		+ WorkPermit
+	= error
+		x 1 --
+		x 2 <generic> <generic-speech> <missing>
+
+D4A
+	= nation Republia:1 Impor:1 Kolechia:1 Antegria:1 Obristan:1 UnitedFed:1
+	+ Passport
+	+ EntryPermit
+	= error EntryPermit-Missing
+
+D4B
+	= nation Arstotzka
+	+ Passport
+	+ IdCard
+	= error Passport-Hidden
+
+#------------------------------------------------------------------------------
+# Day 5 - Forged documents intro
+
+D5
+	= nation Kolechia
+	+ EntryPermit
+	? nation == Kolechia
+		= error Traveler-SearchKolechiaContraband
+*#
+#*
+D5
+	= nation Arstotzka:1 Republia:1 Impor:1 Kolechia:1 Antegria:1 Obristan:1 UnitedFed:1
+	+ Passport
+	? nation == Arstotzka 
+		+ IdCard
+	? nation != Arstotzka 
+		+ EntryPermit
+		= purpose visit:2 transit:2 work:2 immigrate:1
+	? purpose == work
+		+ WorkPermit
+	= error
+		x 1 --
+		x 2 <generic> <generic-speech> <missing> <forgery>
+
+D5A
+	= nation Republia:1 Impor:1 Kolechia:1 Antegria:1 Obristan:1 UnitedFed:1
+	+ Passport
+	+ EntryPermit
+	= error EntryPermit-Forged
+*#
+#------------------------------------------------------------------------------
+
+#*		
+	>
+		> Intro
+			" Hello.
+		> Detain-Before
+			" Please. If I go back they will kill me.
+			" Here, take this.
+			+ FiveBucks
+		> Approved
+			" Thank you so much.
+		> Denied
+			" Damn you!
+*#
+#*
+Pervert-1
+	= gender F
+	= nation Republia
+	= purpose transit
+	= name Luca-Pop
+	+ Passport
+	+ EntryPermit
+	>
+		> Intro-Before
+			" Listen to me. I have offer.
+			" My group trade $10 for each search photo you give us.
+		> Intro-After
+			" You hear me? $10 per photo.
+*#			

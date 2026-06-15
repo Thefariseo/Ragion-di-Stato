@@ -1,0 +1,314 @@
+inspector
+	ask-purpose
+		What is the purpose of your trip?		
+	#ask-welcomehome
+	#	Welcome back.
+	#	Welcome home.	
+	ask-duration
+		Duration of stay?
+	ask-wrong-duration
+		The length of your stay is different.
+	ask-forgery-missing
+		This document is missing its seal.
+		There is no seal here.
+		I do not see the required seal here.
+	ask-forgery-wrong
+		This document is forged.
+		This is a forgery.
+	ask-forgery-entrypermit	EntryPermit/Emblem/MinistryOfAdmission
+		=NONE *ask-forgery-missing
+		*ask-forgery-wrong		
+	ask-forgery-workpermit	WorkPermit/Emblem/MinistryOfLabor
+		=NONE *ask-forgery-missing
+		*ask-forgery-wrong
+	ask-forgery-idcard
+		This card contains false information.
+	ask-wrong-birthdate
+		These dates do not match.
+	ask-expired-paper
+		This document has expired.
+		You cannot enter using an expired document.
+	ask-missing-passport
+		Where is the passport?
+		A passport is required.
+	ask-missing-entrypermit
+		Where is the entry permit?
+		You have no entry permit.
+		The entry permit is missing.
+	ask-missing-workpermit
+		Where is the work pass?
+		You have no work pass.
+		The work pass is missing.
+	ask-missing-idcard
+		Where is your id card?
+		I need your id card.
+	ask-wrong-name
+		These names do not match.
+#	ask-fingerprints
+#		I'll need to collect your fingerprints.
+#		Fingerprints, please.
+#		I'm going to verify your identity.
+	ask-wrong-workend
+		You are not authorized to work this long.
+		This work pass expires before your visit.
+	ask-wrong-idnumber
+		These numbers do not match.
+		There is a discrepancy here.
+		There are two different numbers here.
+	ask-wrong-face
+		This does not look like you.
+		Your picture. It is different.
+		Your appearance has changed.
+	ask-wrong-issuingcity
+		This issuing city is incorrect.
+		You passport has false information.
+	ask-wrong-gender Passport/Gender
+		=M You are a man?
+		=M It says here that you are male.
+		=F You are a woman?
+		=F Your passport says you are female.
+		Are you a woman or a man?
+		You are male or female?
+	ask-wrong-purpose EntryPermit/Purpose
+		=work 		This entry permit is for work.
+		=transit 	You are authorized for transit only.
+		=transport 	You are authorized for transport only.
+		=visit 		You have only a visitors entry permit.
+		=immigrate	This entry permit is for immigrating.
+		Your entry purpose does not match up.
+		This entry permit purpose does not match.
+#	ask-approved-foreigner	Traveler/Purpose
+#		=work		Work hard.
+#		=work 		Enjoy your work.
+#		=transit 	Enjoy your trip.
+#		=transit 	Don't cause any trouble.
+#		=transport 	Carry on.
+#		=transport 	Finish your delivery.
+#		=visit 		Enjoy your stay.
+#		=visit 		Enjoy your visit.
+#		=immigrate	Enjoy your new life.
+#		=immigrate	Good luck.
+	ask-approved
+		?Traveler/Nationality==Arstotzka 	Glory to Arstotzka.
+		?Traveler/Nationality!=Arstotzka 	Cause no trouble.
+	ask-nativesonly
+		?Traveler/Nationality==Arstotzka 	Try again.
+		?Traveler/Nationality!=Arstotzka 	Arstotzkans only.
+	ask-wrong-nation
+		?Traveler/Nationality==Obristan 	No entry from Obristan.
+		?Traveler/Nationality==Kolechia 	No entry from Kolechia.
+		?Traveler/Nationality==UnitedFed 	No entry from United Federation.
+		?Traveler/Nationality==Antegria	 	No entry from Antegria.
+		?Traveler/Nationality==Republia	 	No entry from Republia.
+		?Traveler/Nationality==Arstotzka	No entry from Arstotzka.
+		?Traveler/Nationality==Impor		No entry from Impor.
+	ask-confiscate-passport
+		#Your passport has been confiscated.
+		All passports are confiscated.
+		#You have no right to retain your passport.
+	ask-search
+		Face the scanner.
+		Turn towards the scanner.
+	ask-detain
+		Wait here.
+		One moment please.
+	ask-search-enabled
+		You have been selected for a random search.
+	ask-detain-enabled
+		?Traveler/Nationality==Kolechia 	There is a policy in place for Kolechians.
+		?Traveler/Nationality==Kolechia 	Kolechians are not permitted to enter.
+		There is a policy in place.
+		You are not permitted to enter.
+	ask-fingerprint-enabled
+		You have been selected for random fingerprinting.
+		Your fingerprints must be collected.
+	ask-wrong-entryticket-date
+		This ticket is for another day.
+		You cannot enter today.
+		The date on this ticket is wrong.
+	ask-missing-entryticket
+		You cannot enter without a ticket.
+		Foreigners must present an entry ticket.
+		Where is your entry ticket?
+	ask-wrong-alias
+		There is no record of this name.
+		I cannot verify your alias.
+		*ask-wrong-identity
+	ask-wrong-fingerprints
+		Your fingerprints do not match our records.
+		I cannot verify your fingerprints.
+		*ask-wrong-identity
+	ask-wrong-identity
+		I cannot verify your identity.		
+		Your identity does not match.
+	ask-contraband
+		There is zero tolerance for your kind.
+		You have made a mistake coming here.
+	ask-wrong-height
+		Your height is different.
+		*ask-wrong-information
+	ask-wrong-weight
+		Your weight is different.
+		*ask-wrong-information
+	ask-wrong-information
+		This information does not look correct.
+		This is incorrect.
+
+traveler
+	state-purpose	Speech/Purpose
+		=visit		Visiting.
+		=visit		Just visiting.
+		=visit 		I am visiting relatives.
+		=transport	Transport.
+		=transport	I come to deliver goods.
+		=transport  I am transporting packages.
+		=transit 	Transit.
+		=transit	I pass through.
+		=transit 	Transit through the country.
+		=work 		Work.
+		=work		I come to work.
+		=work 		I have job here.
+		=work 		I plan to work.
+		=immigrate	Immigrating.
+		=immigrate	I am immigrating to Arstotzka.
+		=immigrate 	I will move here.
+		=immigrate	?Passport/Gender==F I am coming to live with my husband.
+		=immigrate	?Passport/Gender==M My wife is Arstotzkan.
+	mistake-prefix
+		Right.
+		I make mistake.
+		Yes, of course.
+		Apologies.
+	wrong-purpose Traveler/Purpose
+		=visit 		*mistake-prefix I am just visiting.
+		=transport 	*mistake-prefix I am transporting goods.
+		=transit 	*mistake-prefix I just pass through.
+		=work 		*mistake-prefix I have come to work.
+		=immigrate 	*mistake-prefix I move here permanently.
+	random-stay
+		I stay
+		I remain for
+		It will be
+	state-duration	Speech/Duration
+		=0		*random-stay forever.
+		=0		*random-stay until I die.
+		=0		I don't plan to leave.
+		=0.07	*random-stay just 2 days.
+		=0.07	*random-stay couple days.
+		=0.5	*random-stay just 14 days.
+		=0.5	*random-stay couple weeks.
+		=0.5	*random-stay only two weeks.
+		=1		*random-stay 30 days.
+		=1		*random-stay a few weeks.
+		=1		*random-stay one month.
+		=2		*random-stay 60 days.
+		=2		*random-stay 8 weeks.
+		=2		*random-stay couple months.
+		=2		*random-stay two months.
+		=3		*random-stay 90 days.
+		=3		*random-stay 12 weeks.
+		=3		*random-stay three months.
+		=3		*random-stay a few months.
+		=6		*random-stay six months.
+		=6		*random-stay half a year.
+		=12		*random-stay one year.
+		=12		*random-stay full year.
+		=12		*random-stay a year.
+	wrong-duration	Traveler/Duration
+		*mistake-prefix *state-duration
+	wrong-gender	Passport/Gender
+		#=F	Of course I am a woman.
+		#=F	I am a woman.
+		#=M	I promise you I am a man.
+		#=M	I am a man.	
+		The passport is correct.
+		Why do you ask?
+		As the document says.
+		What is this question?
+	missing-passport
+		They took away my passport.
+		What is passport?
+	missing-permit
+		I was not able to get one.
+		What is that?
+		Do I need one?
+		Is required?
+		I lost it.
+		I did not know it was required.
+	missing-entrypermit
+		*missing-permit			
+	missing-workpermit
+		I will get one after I enter.
+		*missing-permit
+	missing-idcard
+		I never got one.
+		I left before they were issued.
+		I lost it.
+	hidden-paper
+		Here it is.
+		Sorry. I have it here.
+		I have it here.
+		Here.
+	expired-permit
+		I could not come until now.
+		I was busy.
+	expired-passport
+		What? That is mistake. I just renewed it.
+		That must be a typographical error.
+		*default 
+	wrong-face
+		It is an old picture.
+		I had surgery.
+		The years have been cruel.
+		I do not know what to say. It is me.
+	wrong-name
+		I have two different names.
+		I have multiple names.
+		My name was changed recently.
+	wrong-idnumber
+		It must be a mistake. The permit is valid.
+		*default
+	wrong-workend
+		I will renew the pass soon.
+		I am planning to renew it.
+		My entry permit is longer than I need.
+	wrong-entryticket-date
+		It is my mistake.
+		Oh?
+		*default
+	missing-entryticket
+		I do not know what that is.
+		I have none.
+		It was lost.		
+	forgery
+		I have no idea what you are talking about.
+		I do not know anything about that.
+	missing-seal
+		*forgery
+	wrong-seal
+		*forgery
+	detain
+		What are you doing?
+		What is happening?
+		What is this?
+	detain-enabled
+		What are you talking about?
+		I know nothing about this.
+		Oh?
+	contraband
+		*default
+	wrong-height
+		Perhaps my shoes are different.
+		It is a natural difference.
+		*default
+	wrong-weight
+		I am wearing different clothes.
+		My weight has changed naturally.
+		*default	
+	default
+		Please let me through.
+		What are you talking about?
+		I know nothing about this.
+		I do not know what to say.
+		Oh?
+

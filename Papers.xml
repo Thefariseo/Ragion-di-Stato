@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<papers>
+	<!-- Passports -->
+	<paper id="Passport" nation="Obristan" outer="PassportOuterObristan.png" font="bm_mini_a8_6" fontshifty="2" textcolor="0x574848" fromtraveler="true" stampable="true" canconfiscate="true">
+		<page image="PassportInnerObristan.png">
+			<mark text="$Name" format="Last, First"/>
+			<mark image="$Face" scale="0.5"/>
+			<mark text="$BirthDate"/>
+			<mark text="$Gender"/>		
+			<mark text="$IssuingCity"/>
+			<mark text="$ExpirationDate" format="120 720"/>
+			<mark text="$IdNumber"/>
+		</page>
+	</paper>
+
+	<paper id="Passport" nation="UnitedFed" outer="PassportOuterUnitedFed.png" font="bm_mini_a8_6" fontshifty="2" textcolor="0x574848" fromtraveler="true" stampable="true" canconfiscate="true">
+		<page image="PassportInnerUnitedFed.png">
+			<mark text="$Name" format="Last, First"/>
+			<mark image="$Face" scale="0.5"/>
+			<mark text="$BirthDate"/>
+			<mark text="$Gender"/>		
+			<mark text="$IssuingCity"/>
+			<mark text="$ExpirationDate" format="120 720"/>
+			<mark text="$IdNumber" align="right"/>
+		</page>
+	</paper>
+
+	<paper id="Passport" nation="Republia" outer="PassportOuterRepublia.png" font="bm_mini_a8_6" fontshifty="2" textcolor="0x574848" fromtraveler="true" stampable="true" canconfiscate="true">
+		<page image="PassportInnerRepublia.png">
+			<mark text="$Name" format="Last, First"/>
+			<mark image="$Face" scale="0.5"/>
+			<mark text="$BirthDate"/>
+			<mark text="$Gender"/>		
+			<mark text="$IssuingCity"/>
+			<mark text="$ExpirationDate" format="120 720"/>
+			<mark text="$IdNumber" align="right"/>
+		</page>
+	</paper>
+
+	<paper id="Passport" nation="Antegria" outer="PassportOuterAntegria.png" font="bm_mini_a8_6" fontshifty="2" textcolor="0x574848" fromtraveler="true" stampable="true" canconfiscate="true">
+		<page image="PassportInnerAntegria.png">
+			<mark text="$Name" format="Last, First"/>
+			<mark image="$Face" scale="0.5"/>
+			<mark text="$BirthDate"/>
+			<mark text="$Gender"/>		
+			<mark text="$IssuingCity"/>
+			<mark text="$ExpirationDate" format="120 720"/>
+			<mark text="$IdNumber"/>
+		</page>
+	</paper>
+
+	<paper id="Passport" nation="Impor" outer="PassportOuterImpor.png" font="bm_mini_a8_6" fontshifty="2" textcolor="0x574848" fromtraveler="true" stampable="true" canconfiscate="true">
+		<page image="PassportInnerImpor.png">
+			<mark text="$Name" format="Last, First"/>
+			<mark image="$Face" scale="0.5"/>
+			<mark text="$BirthDate"/>
+			<mark text="$Gender"/>		
+			<mark text="$IssuingCity"/>
+			<mark text="$ExpirationDate" format="120 720"/>
+			<mark text="$IdNumber" align="right"/>
+		</page>
+	</paper>
+
+	<paper id="Passport" nation="Kolechia" outer="PassportOuterKolechia.png" font="bm_mini_a8_6" fontshifty="2" textcolor="0x574848" fromtraveler="true" stampable="true" canconfiscate="true">
+		<page image="PassportInnerKolechia.png">
+			<mark text="$Name" format="Last, First"/>
+			<mark image="$Face" scale="0.5"/>
+			<mark text="$BirthDate"/>
+			<mark text="$Gender"/>		
+			<mark text="$IssuingCity"/>
+			<mark text="$ExpirationDate" format="120 720"/>
+			<mark text="$IdNumber" align="right"/>
+		</page>
+	</paper>
+
+	<paper id="Passport" nation="Arstotzka" outer="PassportOuterArstotzka.png" font="bm_mini_a8_6" fontshifty="2" textcolor="0x574848" fromtraveler="true" stampable="true" canconfiscate="true">
+		<page image="PassportInnerArstotzka.png">
+			<mark text="$Name" format="Last, First"/>
+			<mark image="$Face" scale="0.5"/>
+			<mark text="$BirthDate"/>
+			<mark text="$Gender"/>		
+			<mark text="$IssuingCity"/>
+			<mark text="$ExpirationDate" format="120 720"/>
+			<mark text="$IdNumber"/>
+		</page>
+	</paper>
+
+	<!-- VisaSlip -->
+	<paper id="VisaSlip" outer="VisaSlipOuter.png" font="minikylie_minikylie_6" fontshifty="2" textcolor="0x3d394d" fromtraveler="true" reveal="spitfromright" stampable="true">
+		<page image="VisaSlipInner.png">
+		</page>
+	</paper>
+
+	<!-- IdCard -->
+	<paper id="IdCard" outer="IdCardOuter.png" font="minikylie_minikylie_6" fontshifty="2" textcolor="0x3d394d" fromtraveler="true">
+		<page image="IdCardInner.png">
+			<mark text="$District" textcolor="0xd9bdf7"/>
+			<mark image="$Face" scale="0.4" backcolor="0xb29ccc" textcolor="0x3d394d"/>
+			<mark text="$Name" wrap="70"/>
+			<mark text="$BirthDate"/>
+			<mark text="$Height"/>
+			<mark text="$Weight"/>
+		</page>
+	</paper>
+
+	<!-- Permits -->	
+	<paper id="EntryPermit" outer="EntryPermitOuter.png" font="bm_mini_a8_6" fontshifty="2" textcolor="0x776789" fromtraveler="true">
+		<page image="EntryPermitInner.png" align="center">
+			<mark text="$Name"/>
+			<mark text="$IdNumber"/>
+			<mark text="$Purpose"/>
+			<mark text="$Duration"/>
+			<mark text="$ExpirationDate"/>
+			<mark emblem="MinistryOfAdmission" emblemrect="10 11 130 54"/>
+		</page>
+	</paper>
+	
+	<paper id="WorkPermit" outer="WorkPermitOuter.png" font="bm_mini_a8_6" fontshifty="2" textcolor="0x896a67" fromtraveler="true">
+		<page image="WorkPermitInner.png" align="center">
+			<mark text="$Name"/>
+			<mark text="$Job"/>
+			<mark text="$WorkEndDate"/>
+			<mark emblem="MinistryOfLabor" emblemrect="10 11 130 47"/>
+		</page>
+	</paper>
+
+	<paper id="EntryTicket" outer="EntryTicketOuter.png" font="bm_mini_a8_6" fontshifty="2" textcolor="0x776789" fromtraveler="true">
+		<page image="EntryTicketInner.png">
+			<mark text="$UseDate" pos="88 35" pos2="90 42"/>			
+		</page>
+	</paper>
+
+	<!-- Money -->
+	<paper id="Money5" outer="MoneyOuter5.png" font="uni_05_53_regular_6" fontshifty="2" textcolor="0x574848" reveal="fromtraveler"inspectable="false">
+		<page image="MoneyInner5.png"/>
+	</paper>
+	
+	<!-- Console -->	
+	<paper id="Transcript" outer="TranscriptOuter.png" font="uni_05_53_regular_6" fontshifty="2" textcolor="0x574848" dock="89.5 194">
+		<page image="TranscriptInner.png" wrap="124" backcolor="0xd2edec">
+			<mark text="$Speech0"/>
+			<mark text="$Speech1" flow="down" flowpad="2"/>
+			<mark text="$Speech2" flow="down" flowpad="2"/>
+			<mark text="$Speech3" flow="down" flowpad="2"/>
+			<mark text="$Speech4" flow="down" flowpad="2"/>
+			<mark text="$Speech5" flow="down" flowpad="2"/>
+			<mark text="$Speech6" flow="down" flowpad="2"/>
+			<mark text="$Speech7" flow="down" flowpad="2"/>
+			<mark text="$Speech8" flow="down" flowpad="2"/>
+			<mark text="$Speech9" flow="down" flowpad="2"/>
+		</page>
+	</paper>
+
+	<paper id="Dispatch" outer="DispatchOuter.png" font="commo_regular_6" fontshifty="3" textcolor="0x574848" dock="126.5 194">
+		<page image="DispatchInner.png">
+			<mark text="$Name"/>
+			<mark text="$Height"/>
+			<mark text="$Weight"/>		
+			<mark text="$Gender"/>
+			<mark text="$Occupation"/>
+			<mark text="$Nationality"/>
+			<mark text="$IdNumber"/>
+		</page>
+	</paper>
+
+	<paper id="IdentityRecord" outer="IdentityRecordOuter.png" font="bm_mini_a8_6" fontshifty="3" textcolor="0x615352" reveal="printbottom">
+		<page image="IdentityRecordInner.png">
+			<mark text="$Name"/>
+			<mark image="$Fingerprints"/>
+			<mark text="$Alias"/>
+			<!--<mark text="$Identity" wrap="160"/>-->
+			<mark image="IdentityRecordLine.png" pos="10 15" pos2="10 35"/>
+			<mark image="IdentityRecordLine.png" pos="10 40" pos2="10 60"/>
+			<mark image="IdentityRecordLine.png" pos="10 65" pos2="10 85"/>
+		</page>
+	</paper>
+
+	<paper id="Fingerprints" outer="FingerprintsOuter.png" font="bm_mini_a8_6" fontshifty="3" textcolor="0x615352">
+		<page image="FingerprintsInner.png">
+			<mark image="$Fingerprints" textcolor="0x202020"/>
+		</page>
+	</paper>
+
+	<paper id="FingerprintsBlank" trade="Fingerprints" outer="FingerprintsBlankOuter.png" font="bm_mini_a8_6" fontshifty="3" textcolor="0x615352" reveal="spitfromright">
+		<page image="FingerprintsInner.png">
+		</page>
+	</paper>
+
+	<!-- Citation -->
+	<paper id="Citation" outer="CitationOuter.png" font="bm_mini_a8_6" fontshifty="3" textcolor="0x5a5559" reveal="printbottom">
+		<page image="CitationInner.png">
+			<mark text="$Message" wrap="160"/>
+			<mark text="$Penalty" align="center"/>
+		</page>
+	</paper>
+
+	<!-- FilerEnvelope -->
+	<paper id="FilerEnvelope" outer="FilerEnvelopeOuter.png" font="atari_small_6" fontshifty="3" textcolor="0x303030" reveal="infiler">
+		<page image="FilerEnvelopeInner.png">
+			<mark text="$Title" wrap="127"/>
+		</page>
+	</paper>
+
+	<!-- Photo -->
+	<paper id="Photo" outer="PhotoOuter.png" font="bm_mini_a8_6" fontshifty="3" textcolor="0x504631" reveal="printtop" canconfiscate="true">
+		<page id="front" image="PhotoInner.png">
+			<mark image="$BodyFront" pos="19 24"/>
+			<mark image="$HeadFront" pos="46 0"/>
+
+			<mark image="PhotoGoPrev.png" link="back" pos="7 165"/>
+			<mark image="PhotoGoNext.png" link="back" pos="115 165"/>
+		</page>
+		<page id="back" image="PhotoInner.png">
+			<mark image="$HeadBack" pos="46 0"/>
+			<mark image="$BodyBack" pos="19 24"/>
+
+			<mark image="$ContrabandBack" pos="50 63"/>
+			<mark image="$ContrabandBackLegL" pos="45 124"/>
+			<mark image="$ContrabandBackLegR" pos="71 127"/>
+
+			<mark image="PhotoGoPrev.png" link="front" pos="7 165"/>
+			<mark image="PhotoGoNext.png" link="front" pos="115 165"/>
+		</page>
+	</paper>
+
+	<!-- EZIC -->
+	<paper id="EzicIntro" outer="EzicIntroOuter.png" font="bm_mini_a8_6" fontshifty="3" textcolor="0xffffff">
+		<page id="front" image="EzicIntroInnerFront.png">
+			<mark image="Blank20x20.png" link="back" pos="80 80"/>
+		</page>
+		<page id="back" image="EzicIntroInnerBack.png">
+			<mark text="$Corman" pos="50 50" align="center"/>
+			<mark image="Blank20x20.png" link="front" pos="0 80"/>
+		</page>
+	</paper>
+
+	<!-- Brothel -->
+	<paper id="BrothelFlyer" outer="BrothelFlyerOuter.png" font="bm_mini_a8_6" fontshifty="3" textcolor="0x504631" inspectable="false">
+		<page image="BrothelFlyerInner.png">
+		</page>
+	</paper>
+
+	<paper id="BrothelHelp" outer="BrothelHelpOuter.png" font="bm_mini_a8_6" fontshifty="3" textcolor="0x504631">
+		<page image="BrothelHelpInner.png">
+		</page>
+	</paper>	
+
+	<!-- Pezpert -->
+	<paper id="Pezpert" outer="PezpertOuter.png" font="bm_mini_a8_6" fontshifty="2" textcolor="0x574848" backcolor="0xa29492" fromtraveler="true" stampable="true">
+		<page image="PezpertInner.png">
+			<mark image="$Face" scale="0.5"/>			
+		</page>
+	</paper>
+
+	<!-- HintMissing -->
+	<paper id="HintMissing" outer="HintMissingOuter.png" font="bm_mini_a8_6" fontshifty="3" textcolor="0x5a5559" reveal="printbottom">
+		<page image="HintMissingInner.png">			
+		</page>
+	</paper>
+
+	<!-- Tokens -->
+	<paper id="TokenArstotzka" outer="TokenOuter.png"><page image="TokenInnerArstotzka.png"/></paper>
+	<paper id="TokenKolechia" outer="TokenOuter.png"><page image="TokenInnerKolechia.png"/></paper>
+	<paper id="TokenAntegria" outer="TokenOuter.png"><page image="TokenInnerAntegria.png"/></paper>
+	<paper id="TokenObristan" outer="TokenOuter.png"><page image="TokenInnerObristan.png"/></paper>
+	<paper id="TokenImpor" outer="TokenOuter.png"><page image="TokenInnerImpor.png"/></paper>
+	<paper id="TokenUnitedFed" outer="TokenOuter.png"><page image="TokenInnerUnitedFed.png"/></paper>
+	<paper id="TokenRepublia" outer="TokenOuter.png"><page image="TokenInnerRepublia.png"/></paper>
+
+	<!-- Bulletin -->
+	<paper id="Bulletin" outer="BulletinOuter.png" font="04b03_regular_6" dock="52.5 189" fontshifty="3" textcolor="0x565656" reveal="ondesk:0">
+		<page id="notice0" image="BulletinInner.png">
+			<mark text="$Notice0" wrap="140" inspectable="false"/>
+			<mark text="$NowDate" align="right" pos="142 11"/>
+			<mark image="$Emblem0" pos="110 153" inspectable="false"/>
+			<mark text="$PageNumberNotice0" align="right" pos="129 195"/>
+			<mark image="BulletinGoNext.png" pos="133 184" link="#next"/>
+			<mark image="$PagesNote" pos="89 173" inspectable="false"/>
+		</page>
+		<page id="notice1" image="BulletinInner.png">
+			<mark text="$Notice1" wrap="140" inspectable="false"/>
+			<mark image="$Emblem1" pos="110 153" inspectable="false"/>
+			<mark text="$PageNumberNotice1" align="right" pos="129 195"/>
+			<mark image="BulletinGoPrev.png" pos="1 184" link="#prev"/>
+			<mark image="BulletinGoNext.png" pos="133 184" link="#next"/>
+		</page>
+		<page id="passporttut" image="BulletinInnerPassportTut.png">
+			<mark text="$PageNumberPassporttut" align="right" pos="129 195"/>
+			<mark image="BulletinGoPrev.png" pos="1 184" link="#prev"/>
+			<mark image="BulletinGoNext.png" pos="133 184" link="#next"/>
+		</page>
+		<page id="correlatetut" image="BulletinInnerCorrelateTut.png">
+			<mark text="$PageNumberCorrelatetut" align="right" pos="129 195"/>
+			<mark image="BulletinGoPrev.png" pos="1 184" link="#prev"/>
+			<mark image="BulletinGoNext.png" pos="133 184" link="#next"/>
+		</page>			
+		<page id="missingtut" image="BulletinInnerMissingTut.png">
+			<mark text="$PageNumberMissingtut" align="right" pos="129 195"/>
+			<mark image="BulletinGoPrev.png" pos="1 184" link="#prev"/>
+			<mark image="BulletinGoNext.png" pos="133 184" link="#next"/>
+		</page>		
+		<page id="ruletut" image="BulletinInnerRuleTut.png">
+			<mark text="$PageNumberRuletut" align="right" pos="129 195"/>
+			<mark image="BulletinGoPrev.png" pos="1 184" link="#prev"/>
+			<mark image="BulletinGoNext.png" pos="133 184" link="#next"/>
+		</page>
+		<page id="boothtut" image="BulletinInnerBoothTut.png">
+			<mark text="$PageNumberBoothtut" align="right" pos="129 195"/>
+			<mark image="BulletinGoPrev.png" pos="1 184" link="#prev"/>
+			<mark image="BulletinGoNext.png" pos="133 184" link="#next"/>
+		</page>			
+		<page id="news" image="BulletinInnerNews.png">
+			<mark text="$News0" pos="76 38" align="center" wrap="122"/>
+			<mark image="NewsDivider.png" pos="76 0" flow="down" align="center" wrap="122"/>
+			<mark text="$News1" pos="76 0" flow="down" align="center" wrap="122"/>
+			<mark image="NewsDivider.png" pos="76 0" flow="down" align="center" wrap="122"/>
+			<mark text="$News2" pos="76 0" flow="down" align="center" wrap="122"/>
+			<mark image="NewsDivider.png" pos="76 0" flow="down" align="center" wrap="122"/>
+			<mark text="$PageNumberNews" align="right" pos="129 195"/>
+			<mark image="BulletinGoPrev.png" pos="1 184" link="#prev"/>
+			<mark image="BulletinGoNext.png" pos="133 184" link="#next"/>
+		</page>
+	</paper>
+
+	<!-- Rules -->
+	<paper id="Rules" outer="RulesOuter.png" font="bm_mini_a8_6" fontshifty="3" textcolor="0x574848" dock="126 191">
+		<page id="home" image="RulesInnerHome.png" backcolor="0xe4e6bd">
+			<mark text="Basic Rules" link="basic"/>
+			<mark text="Regional Map" link="map"/>
+			<mark text="Document Seals" link="samples"/>
+			<mark image="RulesGoHome.png" pos="216 1"/>
+			<mark image="RulesGoNext.png" link="#next" pos="221 146"/>
+		</page>
+		
+		<page id="basic" image="RulesInnerBasic.png" wrap="90">
+			<mark text="$Rule0"/>
+			<mark text="$Rule1"/>
+			<mark text="$Rule2"/>			
+			<mark text="$Rule3"/>
+			<mark text="$Rule4"/>
+			
+			<mark text="$Rule5" side="1"/>
+			<mark text="$Rule6" side="1"/>
+			<mark text="$Rule7" side="1"/>
+			<mark text="$Rule8" side="1"/>
+			<mark text="$Rule9" side="1"/>
+			
+			<mark image="RulesGoHome.png" link="home" pos="7 1"/>
+			<mark image="RulesGoPrev.png" link="#prev" pos="7 146"/>
+			<mark image="RulesGoNext.png" link="#next" pos="221 146"/>
+		</page>
+		
+		<page id="map" image="RulesInnerMap.png" backcolor="0xe4e6bd">
+			<mark text="Obristan" link="region-obristan"/>
+			<mark text="Antegria" link="region-antegria"/>
+			<mark text="Republia" link="region-republia"/>		
+			<mark text="United" link="region-united"/>
+			<mark text="Federation" link="region-united"/>
+			<mark text="Impor" link="region-impor"/>
+			<mark text="Kolechia" side="1" link="region-kolechia"/>
+			<mark text="Arstotzka" side="1" link="region-arstotzka"/>
+
+			<mark image="RulesGoHome.png" link="home" pos="7 1"/>
+			<mark image="RulesGoPrev.png" link="#prev" pos="7 146"/>
+			<mark image="RulesGoNext.png" link="#next" pos="221 146"/>
+		</page>
+
+		<page id="region-obristan" image="RulesInnerRegion.png">
+			<mark text="OBRISTAN" font="pixantiqua_medium_9" fontshifty="3" align="center"/>
+			
+			<mark image="$Obristan-Passport0" scale="0.5" side="1"/>
+			<mark text="" side="1"/>
+			<mark text="$Obristan-IssuingCities" side="1" wrap="86"/>
+
+			<mark image="$IssuingCity" pos="143 138"/>
+			<mark image="RulesGoHome.png" link="home" pos="7 1"/>
+			<mark image="RulesGoPrev.png" link="#prev" pos="7 146"/>
+			<mark image="RulesGoNext.png" link="#next" pos="221 146"/>
+		</page>
+
+		<page id="region-antegria" image="RulesInnerRegion.png">
+			<mark text="ANTEGRIA" font="pixantiqua_medium_9" fontshifty="3" align="center"/>
+			<mark image="$Antegria-Passport0" scale="0.5" side="1"/>
+			<mark text="" side="1"/>
+			<mark text="$Antegria-IssuingCities" side="1" wrap="86"/>
+
+			<mark image="$IssuingCity" pos="143 138"/>
+			<mark image="RulesGoHome.png" link="home" pos="7 1"/>
+			<mark image="RulesGoPrev.png" link="#prev" pos="7 146"/>
+			<mark image="RulesGoNext.png" link="#next" pos="221 146"/>
+		</page>				
+
+		<page id="region-republia" image="RulesInnerRegion.png">
+			<mark text="REPUBLIA" font="pixantiqua_medium_9" fontshifty="3" align="center"/>
+			<mark image="$Republia-Passport0" scale="0.5" side="1"/>
+			<mark text="" side="1"/>
+			<mark text="$Republia-IssuingCities" side="1" wrap="86"/>
+
+			<mark image="$IssuingCity" pos="143 138"/>
+			<mark image="RulesGoHome.png" link="home" pos="7 1"/>
+			<mark image="RulesGoPrev.png" link="#prev" pos="7 146"/>
+			<mark image="RulesGoNext.png" link="#next" pos="221 146"/>
+		</page>
+
+		<page id="region-united" image="RulesInnerRegion.png">
+			<mark text="UNITED FED." font="pixantiqua_medium_9" fontshifty="3" align="center"/>
+			<mark image="$UnitedFed-Passport0" scale="0.5" side="1"/>
+			<mark text="" side="1"/>
+			<mark text="$UnitedFed-IssuingCities" side="1" wrap="86"/>
+
+			<mark image="$IssuingCity" pos="143 138"/>
+			<mark image="RulesGoHome.png" link="home" pos="7 1"/>
+			<mark image="RulesGoPrev.png" link="#prev" pos="7 146"/>
+			<mark image="RulesGoNext.png" link="#next" pos="221 146"/>
+		</page>
+
+		<page id="region-impor" image="RulesInnerRegion.png">
+			<mark text="IMPOR" font="pixantiqua_medium_9" fontshifty="3" align="center"/>
+			<mark image="$Impor-Passport0" scale="0.5" side="1"/>
+			<mark text="" side="1"/>
+			<mark text="$Impor-IssuingCities" side="1" wrap="86"/>
+
+			<mark image="$IssuingCity" pos="143 138"/>
+			<mark image="RulesGoHome.png" link="home" pos="7 1"/>
+			<mark image="RulesGoPrev.png" link="#prev" pos="7 146"/>
+			<mark image="RulesGoNext.png" link="#next" pos="221 146"/>
+		</page>
+
+		<page id="region-kolechia" image="RulesInnerRegion.png">
+			<mark text="KOLECHIA" font="pixantiqua_medium_9" fontshifty="3" align="center"/>
+			<mark image="$Kolechia-Passport0" scale="0.5" side="1"/>
+			<mark text="" side="1"/>
+			<mark text="$Kolechia-IssuingCities" side="1" wrap="86"/>
+
+			<mark image="$IssuingCity" pos="143 138"/>
+			<mark image="RulesGoHome.png" link="home" pos="7 1"/>
+			<mark image="RulesGoPrev.png" link="#prev" pos="7 146"/>
+			<mark image="RulesGoNext.png" link="#next" pos="221 146"/>
+		</page>	
+
+		<page id="region-arstotzka" image="RulesInnerRegionArstotzka.png">
+			<mark text="ARSTOTZKA" font="pixantiqua_medium_9" fontshifty="3" align="center"/>
+			<mark text="$Arstotzka-Districts" wrap="75"/>
+
+			<mark image="$Arstotzka-Passport0" scale="0.5" side="1"/>
+			<mark text="" side="1"/>
+			<mark text="$Arstotzka-IssuingCities" side="1" wrap="86"/>
+			
+			<mark image="$IssuingCity" pos="143 138"/>
+			<mark image="RulesGoHome.png" link="home" pos="7 1"/>
+			<mark image="RulesGoPrev.png" link="#prev" pos="7 146"/>
+			<mark image="RulesGoNext.png" link="#next" pos="221 146"/>
+		</page>
+
+		<page id="samples" image="RulesInnerSamples.png" backcolor="0xe4e6bd">
+			<mark image="$EntryPermitSeals"/>
+			<mark image="$WorkPermitSeals" side="1"/>
+			<mark image="$SealRequired" side="1"/>
+
+			<mark image="RulesGoHome.png" link="home" pos="7 1"/>
+			<mark image="RulesGoPrev.png" link="#prev" pos="7 146"/>
+			<!--<mark image="RulesGoNext.png" link="#next" pos="221 146"/>-->
+		</page>		
+	</paper>	
+
+</papers>

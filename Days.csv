@@ -1,0 +1,286 @@
+DAY,1,2,3,4,5,6,7,8,9,10,100
+DESC,"Arstotzkans only
+No inspection
+No errors","Inspection intro
+","EntryTicket intro
+Missing papers intro","EntryPermit/IdCard intro
+Fingerprint intro
+",Detain intro,"WorkPermit intro
+Suicide bomber","Search intro
+Bribe intro","Forgery intro
+",,Sniping intro,Test day
+RULES,"RuleNeedPassport
+RuleArstotzkaOnly","RuleNeedPassport
+RuleNeedCurrentDocs
+
+","RuleNeedPassport
+RuleNeedCurrentDocs
+RuleNeedEntryTicket
+","RuleNeedPassport
+RuleNeedCurrentDocs
+RuleNeedIdCard
+RuleNeedEntryPermit
+","RuleNeedPassport
+RuleNeedCurrentDocs
+RuleNeedIdCard
+RuleNeedEntryPermit
+","RuleNeedPassport
+RuleNeedCurrentDocs
+RuleNeedIdCard
+RuleNeedEntryPermit
+RuleNeedWorkPermit
+","RuleNeedPassport
+RuleNeedCurrentDocs
+RuleNeedIdCard
+RuleNeedEntryPermit
+RuleNeedWorkPermit
+RuleNoContraband
+RuleSearchKolechia","RuleNeedPassport
+RuleNeedCurrentDocs
+RuleNeedIdCard
+RuleNeedEntryPermit
+RuleNeedWorkPermit
+RuleNoContraband
+","RuleNeedPassport
+RuleNeedIdCard
+RuleNeedEntryPermit
+RuleNeedCurrentDocs
+RuleNoContraband
+RuleSearchKolechia","RuleNeedPassport
+RuleNeedIdCard
+RuleNeedEntryPermit
+RuleNeedWorkPermit
+RuleNeedCurrentDocs","RuleNeedPassport
+RuleNeedCurrentDocs
+RuleNeedIdCard
+RuleNeedEntryPermit
+RuleNeedWorkPermit
+RuleNoContraband
+RuleSearchKolechia"
+COUNT,5,7,8,9,9,100,9,9,8,8,8
+TRAVELERS,"FINALLY_RETURN_HOME
+SMALL_CHECKPOINT
+WAITED_FOREVER
+FIRST_DAY
+KOLECHIAN_HATER
+FIRST_DAY","INSPECTION_FIRST
+INSPECTION_ERROR
+INSPECTION_DAY
+HURRY_UP
+INSPECTION_DAY
+BROTHEL0
+INSPECTION_DAY","ENTRYTICKET_FIRST
+ENTRYTICKET_HIDDEN
+BROTHEL1
+ENTRYTICKET_DAY
+GLAD_YOU_HAVE_JOB
+ENTRYTICKET_WRONGDATE
+ENTRYTICKET_DAY
+MR_PERSISTENT0
+ENTRYTICKET_DAY","ENTRYPERMIT_IDCARD_FIRST
+ENTRYPERMIT_IDCARD_DAY
+TICKET_NOT_PERMIT
+ENTRYPERMIT_IDCARD_DAY
+VISIT_SON
+ENTRYPERMIT_IDCARD_DAY
+WRONG_NAME
+MR_PERSISTENT1
+ENTRYPERMIT_IDCARD_IDCARD
+ENTRYPERMIT_IDCARD_DAY","DETAIN_FIRST
+DETAIN_DAY
+KILLERATHLETE
+DETAIN_DAY
+HATE_COUNTRY
+DETAIN_DAY
+DETAIN_DAY
+HUSBAND_WIFE_TEAM
+HUSBAND_WIFE_TEAM
+DETAIN_DAY","WORKPERMIT_FIRST
+BROTHEL2
+WORKPERMIT_DAY
+WORKPERMIT_DAY
+MR_PERSISTENT2
+WORKPERMIT_DAY
+BROTHEL3
+WORKPERMIT_DAY
+SUICIDE_BOMBER","SEARCH_FIRST
+SEARCH_DAY
+SEARCH_DAY
+SEARCH_CONFUSING_GENDER
+SEARCH_DAY
+SEARCH_DAY
+SEARCH_BRIBE_INTRO
+SEARCH_DAY
+SEARCH_DAY","FORGERY_FIRST
+FORGERY_DAY
+MR_PERSISTENT3
+FORGERY_DAY
+EZIC
+FORGERY_DAY
+FORGERY_DAY
+FORGERY_DAY
+EZIC
+FORGERY_DAY",,MR_PERSISTENT4,
+FEATURES,FREEDENIAL,"FREEDENIAL
+INSPECT","FREEDENIAL
+INSPECT","FREEDENIAL
+INSPECT
+FINGERPRINT","FREEDENIAL
+INSPECT
+FINGERPRINT
+DETAIN","FREEDENIAL
+INSPECT
+FINGERPRINT
+DETAIN","FREEDENIAL
+INSPECT
+FINGERPRINT
+DETAIN
+SEARCH","FREEDENIAL
+INSPECT
+FINGERPRINT
+DETAIN
+SEARCH","FREEDENIAL
+INSPECT
+FINGERPRINT
+DETAIN
+SEARCH","FREEDENIAL
+INSPECT
+FINGERPRINT
+DETAIN
+SEARCH
+SNIPING","FREEDENIAL
+INSPECT
+FINGERPRINT
+DETAIN
+SEARCH
+SNIPING"
+NEWS,"T Grestin Border Checkpoint Opens At Last!
+S After 6 Long Years. Can the Ministry of Admission Keep Us Safe?
+--
+T Families To Reunite
+--
+S The Weather","T Grestin Checkpoint A Success!
+S Entry Restrictions To Relax, Admit Foreigners.
+--
+T Analysts Upbeat
+S Increased Trade And Cooperation Predicted.
+--
+S The Weather","T Terrorists Strike At Grestin!
+S Kolechian Agitators Suspected.
+--
+T Checkpoint Lockdown
+S More Guards. More Scrutiny.
+--
+S The Weather","T Blackmarket Activity Explodes
+S Government Blames Lax Immigration Controls
+--
+T Checkpoint Expansion Postponed
+--
+S The Weather","T Republian Track Star Wanted For Murder!
+S Vince Lestrade's Whereabouts Unknown. Has Likely Fled Republia.
+I Face:M-3-3-10-10
+--
+T Vince Lestrade: Profile
+S Girlfriend Killed In Jealous Rage?
+--
+S The Weather","T Jobs Few, Becoming Fewer
+S Immigrants Taking Jobs From Locals
+--
+S The Weather","T Another Attack At Grestin Checkpoint!
+S Suicide Bomber Slips Through Security.
+--
+S The Weather","T Kolechian Leader Files Complaint!
+S ""Unprovoked Border Searches Violate Rights""
+--
+T The Weather
+S Crushing Cold Conditions Continue",,,
+BULLETIN,"Welcome to your new position at Grestin Border Checkpoint.
+
+Stamp passport ENTRY VISA and return documents to entrant.
+
+Entry is restricted to Arstotzkan citizens only.
+
+Deny all foreigners.","From today, foreigners with a valid passport are permitted to enter.
+
+Your booth's INSPECTION hardware is now installed.
+
+Check all passport information carefully for discrepancies. Deny any entrant with inconsistent information.
+
+Continued...[PAGESNOTE]
+--
+__________________________
+INSPECT MODE
+
+Enter INSPECT mode using the red button on your desk. While inspecting, highlight two pieces of discrepant information for further options.
+
+__________________________
+RULES & REGULATIONS
+
+This post is bound by Ministry of Admission rules and regulations. Study the rule book closely.","Entry for non-citizens is now regulated. 
+
+All foreigners require a valid ENTRY TICKET.
+
+Verify information before stamping passport ENTRY VISA and returning all documents to entrant.[PAGESNOTE]","Stricter credential requirements have been instituted.
+
+Arstotzkan citizens must show their ID CARD.
+
+Foreigners must secure and present a valid ENTRY PERMIT.
+
+Entry tickets are no longer sufficient.
+
+Continued...
+--
+
+Check all information thoroughly.
+
+Deny any applicant with discrepant documents.
+
+Refer to the AUDIO TRANSCRIPT to correlate entrant's statements.","You are now authorized to detain suspicious individuals.
+
+Interrogate discrepancies to enable detention option.","The Ministry of Labor has insituted a special program to control immigrant labor.
+
+Travelers entering for work require a valid WORK PASS.","To facilitate more thorough inspections, a SEARCH scanner system has been installed in your booth.
+
+Kolechian extremists are suspected in yesterday's bombing. 
+
+Search all Kolechians before approving their entry.","The Kolechians have filed a formal complaint. Automatic searches of Kolechian citizens are no longer authorized.
+
+Intelligence suggests counterfeiters have begun forging official Arstotzkan documents.
+
+Verify all document seals before approving entry.",,,
+BPAGES,passporttut boothtut,correlatetut boothtut,missingtut boothtut,boothtut,boothtut,,ruletut,,,,
+DURATION,2,4,6,7,7,7,7,7,5,5,500
+RUNNER,,YES,,,,,,,,,
+LAMP,1,1,1,1,1,1,1,1,1,1,1
+GUARDS,3,3,12340,12340,12340,12340,12340,12340,12340,12340,12340
+PAPERS,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,

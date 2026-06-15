@@ -1,0 +1,15 @@
+<news>
+	<layout>
+		<article loc="0 0"  width="2" heightifempty="11"/>
+		<article loc="3 10" width="1" heightifempty="8"/>
+		<article loc="2 17" width="1" heightifempty="2"/>
+		<article loc="2 5"  width="1" heightifempty="7"/>	
+	</layout>
+
+	<layout>
+		<article loc="0 0"  width="3" heightifempty="10"/>
+		<article loc="2 12" width="2" heightifempty="10"/>
+		<article loc="3 0"  width="1" heightifempty="2"/>
+		<article loc="1 22" width="1" heightifempty="4"/>
+	</layout>
+</news>
