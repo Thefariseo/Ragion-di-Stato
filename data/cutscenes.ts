@@ -10,7 +10,7 @@ export const INTRO: Cutscene = {
   beats: [
     {
       bg: "black",
-      visual: "stamp",
+      scene: "stampfall",
       stampLabel: "RISERVATO",
       title: "MINISTERO DELL'INTERNO",
       lines: ["Repubblica Italiana. Anno XXVI.", "Su questo fascicolo, finora, c'era un altro nome."],
@@ -19,7 +19,7 @@ export const INTRO: Cutscene = {
     },
     {
       bg: "paper",
-      visual: "letter",
+      scene: "letter",
       title: "Lettera di nomina — copia unica",
       lines: [
         "Si comunica la Sua assegnazione all'Ufficio Validazione e",
@@ -34,7 +34,7 @@ export const INTRO: Cutscene = {
     },
     {
       bg: "corridor",
-      visual: "none",
+      scene: "corridor",
       lines: [
         "Fuori, un Paese che trema: scioperi, ordigni, governi di mesi.",
         "Qui dentro, solo carta. Ma la carta, a volte, pesa più dei morti.",
@@ -44,7 +44,7 @@ export const INTRO: Cutscene = {
     },
     {
       bg: "archive",
-      visual: "emblems",
+      scene: "emblems",
       title: "Schedario — i poteri in campo",
       emblems: [
         { faction: "governo", caption: "DEMOCRAZIA SOLIDALE — il partito che governa. Ordine, continuità, coperture." },
@@ -58,7 +58,7 @@ export const INTRO: Cutscene = {
     },
     {
       bg: "black",
-      visual: "stamp",
+      scene: "stampfall",
       stampLabel: "ASSEGNATO",
       lines: [
         "Da oggi, firma lei.",
@@ -84,13 +84,14 @@ function facCs(
     beats: [
       {
         bg: "archive",
-        visual: "emblems",
+        scene: "emblems",
         title: "Dossier riservato — nuovo soggetto in campo",
         emblems: [{ faction, caption: name }],
         sound: "telex",
         music,
+        durationMs: 3000,
       },
-      { bg: "black", visual: "none", lines, sound: "thud" },
+      { bg: "black", scene: "telex", lines, sound: "telex" },
     ],
   };
 }
@@ -139,7 +140,7 @@ export const END_GENERIC: Cutscene = {
   beats: [
     {
       bg: "black",
-      visual: "stamp",
+      scene: "stampfall",
       stampLabel: "ARCHIVIATO",
       lines: ["Il fascicolo si chiude."],
       sound: "stamp",
@@ -147,12 +148,13 @@ export const END_GENERIC: Cutscene = {
     },
     {
       bg: "archive",
-      visual: "none",
+      scene: "archive",
       lines: [
         "Le luci dell'Archivio si spengono, una fila dopo l'altra.",
         "Quel che hai deciso, ormai, appartiene allo Stato.",
       ],
       sound: "thud",
+      durationMs: 4200,
     },
   ],
 };

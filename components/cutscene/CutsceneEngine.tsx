@@ -1,11 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { Cutscene } from "@/types";
+import type { Cutscene, CutsceneBeat } from "@/types";
 import { Typewriter } from "@/components/ui/Typewriter";
-import { Stamp } from "@/components/ui/Stamp";
-import { FactionEmblem } from "@/components/desk/FactionEmblem";
-import { BoothScene } from "@/components/desk/BoothScene";
+import { CutsceneStage } from "./CutsceneStage";
 import { playStamp, playTelex, playPaper, playRing, playThud } from "@/lib/sfx";
 import { playMusic } from "@/lib/music";
 
@@ -18,14 +16,21 @@ const SOUND: Record<string, () => void> = {
   type: playPaper,
 };
 
-const BG: Record<string, string> = {
-  black: "bg-[#0a0907]",
-  corridor: "tex-wall",
-  archive: "tex-panel",
-  paper: "tex-wood",
-  desk: "tex-wood",
-};
+function duration(beat: CutsceneBeat): number {
+  if (beat.durationMs) return beat.durationMs;
+  const typing = (beat.lines ?? []).join(" ").length * 22;
+  let base = 2200;
+  if (beat.scene === "corridor" || beat.scene === "archive") base = 3600;
+  else if (beat.scene === "letter") base = 2600;
+  else if (beat.scene === "emblems") base = 1200 + (beat.emblems?.length ?? 1) * 1100;
+  return Math.max(base, typing + 1600);
+}
 
+/**
+ * Riproduce una cutscene come SEQUENZA: ogni beat è una scena animata che parte
+ * da sola e avanza dopo `durationMs` (auto-play). Il testo compare a ritmo come
+ * sottotitolo. Click per accelerare, "Salta" per uscire.
+ */
 export function CutsceneEngine({ cutscene, onDone }: { cutscene: Cutscene; onDone: () => void }) {
   const [i, setI] = useState(0);
   const beat = cutscene.beats[i];
@@ -34,10 +39,8 @@ export function CutsceneEngine({ cutscene, onDone }: { cutscene: Cutscene; onDon
     if (!beat) return;
     if (beat.sound && SOUND[beat.sound]) SOUND[beat.sound]();
     if (beat.music) playMusic(beat.music);
-    if (beat.durationMs) {
-      const t = setTimeout(advance, beat.durationMs);
-      return () => clearTimeout(t);
-    }
+    const t = setTimeout(advance, duration(beat));
+    return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i]);
 
@@ -50,89 +53,43 @@ export function CutsceneEngine({ cutscene, onDone }: { cutscene: Cutscene; onDon
 
   return (
     <div
-      className={`h-full w-full relative overflow-hidden ${BG[beat.bg ?? "black"]} flex items-center justify-center p-8 select-none`}
+      className="h-full w-full relative overflow-hidden select-none bg-[#0a0907]"
       onClick={advance}
+      style={{ background: "radial-gradient(ellipse at 50% 35%, #1a1813 0%, #0a0907 75%)" }}
     >
-      {beat.bg === "corridor" && <BoothScene />}
-      {beat.bg === "corridor" && <div className="absolute inset-0 bg-black/55" />}
-      {beat.bg === "archive" && (
-        <div className="absolute inset-0 opacity-30 pointer-events-none">
-          {Array.from({ length: 6 }).map((_, k) => (
-            <div key={k} className="absolute left-0 right-0 h-px bg-black" style={{ top: `${12 + k * 14}%` }} />
-          ))}
+      <CutsceneStage key={i} beat={beat} />
+
+      {/* sottotitolo a ritmo */}
+      {(beat.title || beat.lines) && (
+        <div className="absolute left-0 right-0 bottom-10 px-10 z-[5] flex flex-col items-center">
+          <div className="max-w-2xl w-full bg-black/55 px-4 py-2 border-t-2 border-b-2 border-black">
+            {beat.title && beat.scene !== "letter" && beat.scene !== "emblems" && (
+              <div className="font-pixel uppercase text-[11px] tracking-[0.18em] text-olive-hi mb-1">{beat.title}</div>
+            )}
+            {beat.lines && (
+              <Typewriter key={i} lines={beat.lines} speed={20} className="font-read text-[16px] text-paper-cream/95 leading-relaxed text-center" />
+            )}
+          </div>
         </div>
       )}
 
-      <div className="relative z-[2] max-w-2xl w-full">
-        {beat.visual === "stamp" && beat.stampLabel && (
-          <div className="flex justify-center mb-5">
-            <div className="animate-stampSlam">
-              <Stamp label={beat.stampLabel} big rotate={-7} solid />
-            </div>
-          </div>
-        )}
-
-        {beat.visual === "emblems" && beat.emblems && (
-          <div className="rds-paper p-5 mb-3">
-            {beat.title && <div className="font-pixel uppercase text-[12px] text-stamp-red mb-3 tracking-widest text-center">{beat.title}</div>}
-            <div className="grid grid-cols-1 gap-2.5">
-              {beat.emblems.map((e, k) => (
-                <div key={k} className="flex items-center gap-3 animate-slideUp" style={{ animationDelay: `${k * 90}ms` }}>
-                  <FactionEmblem faction={e.faction} size={30} />
-                  <span className="font-read text-[13px] text-ink leading-snug">{e.caption}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {(beat.visual === "letter" || (beat.visual !== "emblems" && (beat.title || beat.lines))) && (
-          <div
-            className={
-              beat.visual === "letter"
-                ? "rds-paper p-6"
-                : "text-center"
-            }
-          >
-            {beat.title && (
-              <div
-                className={
-                  beat.visual === "letter"
-                    ? "font-pixel uppercase text-[13px] text-stamp-red border-b-2 border-ink/30 pb-1 mb-3 tracking-wide"
-                    : "font-pixel uppercase text-[16px] text-paper-cream tracking-[0.15em] mb-3"
-                }
-              >
-                {beat.title}
-              </div>
-            )}
-            {beat.lines && (
-              <Typewriter
-                key={i}
-                lines={beat.lines}
-                speed={18}
-                className={
-                  beat.visual === "letter"
-                    ? "font-read text-[14px] text-ink leading-relaxed text-left"
-                    : "font-read text-[16px] text-paper-cream/90 leading-relaxed"
-                }
-              />
-            )}
-          </div>
-        )}
-      </div>
-
-      <div className="absolute bottom-3 right-3 z-[3] flex items-center gap-3">
-        <span className="font-pixel text-[7px] uppercase tracking-widest text-paper/40 animate-blink">clicca per continuare</span>
+      {/* controlli */}
+      <div className="absolute bottom-3 right-3 z-[6] flex items-center gap-3">
+        <div className="flex gap-1">
+          {cutscene.beats.map((_, k) => (
+            <span key={k} className="w-1.5 h-1.5" style={{ backgroundColor: k <= i ? "#8fb9ad" : "#3d4232" }} />
+          ))}
+        </div>
         <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onDone();
-          }}
-          className="rds-btn text-[9px] px-3 py-1"
+          onClick={(e) => { e.stopPropagation(); onDone(); }}
+          className="rds-btn text-[10px] px-3 py-1"
         >
           Salta »
         </button>
       </div>
+      <span className="absolute bottom-3 left-3 z-[6] font-pixel text-[7px] uppercase tracking-widest text-paper/40 animate-blink">
+        clicca per accelerare
+      </span>
     </div>
   );
 }

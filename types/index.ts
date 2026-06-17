@@ -344,9 +344,23 @@ export type CutsceneVisual =
   | "telex"
   | "folder";
 
+export type CutsceneScene =
+  | "stampfall"
+  | "letter"
+  | "corridor"
+  | "emblems"
+  | "telex"
+  | "dossier"
+  | "newspaper"
+  | "archive"
+  | "door";
+
 export interface CutsceneBeat {
   bg?: CutsceneBg;
   visual?: CutsceneVisual;
+  /** scena animata della sequenza (timeline + oggetti animati) */
+  scene?: CutsceneScene;
+  headline?: string;
   emblems?: { faction: FactionId; caption: string }[];
   title?: string;
   lines?: string[];
