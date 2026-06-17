@@ -8,6 +8,7 @@ import type { GamePhase } from "@/types";
 import { GameViewport } from "./GameViewport";
 import { TitleScreen } from "./screens/TitleScreen";
 import { IntroScreen } from "./screens/IntroScreen";
+import { CutsceneScreen } from "./screens/CutsceneScreen";
 import { NewspaperScreen } from "./screens/NewspaperScreen";
 import { BriefingScreen } from "./screens/BriefingScreen";
 import { DirectivesScreen } from "./screens/DirectivesScreen";
@@ -20,6 +21,7 @@ import { DebugPanel } from "./debug/DebugPanel";
 const THEME_FOR: Record<GamePhase, string> = {
   title: "solenne",
   intro: "solenne",
+  cutscene: "solenne",
   newspaper: "lavoro",
   briefing: "lavoro",
   directives: "lavoro",
@@ -87,6 +89,7 @@ export default function Game() {
             <>
               {phase === "title" && <TitleScreen />}
               {phase === "intro" && <IntroScreen />}
+              {phase === "cutscene" && <CutsceneScreen />}
               {phase === "newspaper" && <NewspaperScreen />}
               {phase === "briefing" && <BriefingScreen />}
               {phase === "directives" && <DirectivesScreen />}

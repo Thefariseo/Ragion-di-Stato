@@ -253,8 +253,26 @@ export function endDay(state: GameState): GameState {
 /* --------------------------------------------------- avanzamento giorno */
 
 export function continueFromSummary(state: GameState): GameState {
-  if (state.endingId) return { ...state, phase: "ending" };
+  if (state.endingId) return playCutscene(state, "end_generic", "ending");
   return { ...state, phase: "night" };
+}
+
+/* ----------------------------------------------------- cutscene (stato) */
+
+export function playCutscene(
+  state: GameState,
+  id: string,
+  ret: GameState["phase"],
+): GameState {
+  return { ...state, activeCutscene: id, cutsceneReturn: ret, phase: "cutscene" };
+}
+
+export function endActiveCutscene(state: GameState): GameState {
+  const ret = state.cutsceneReturn ?? "desk";
+  const flags = state.activeCutscene
+    ? { ...state.flags, [`cs_${state.activeCutscene}`]: true }
+    : state.flags;
+  return { ...state, flags, activeCutscene: undefined, cutsceneReturn: undefined, phase: ret };
 }
 
 /* ----------------------------------------------------- notte / economia */

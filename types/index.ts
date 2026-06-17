@@ -377,6 +377,7 @@ export interface EndingDef {
 export type GamePhase =
   | "title"
   | "intro"
+  | "cutscene"
   | "newspaper"
   | "briefing"
   | "directives"
@@ -419,6 +420,9 @@ export interface GameState {
   firedEvents: string[];
   /** evento attivo in attesa di scelta del giocatore */
   activeEventId?: string;
+  /** cutscene attiva e fase a cui tornare quando finisce */
+  activeCutscene?: string;
+  cutsceneReturn?: GamePhase;
   log: LogEntry[];
   /** citazioni/multe accumulate nella run */
   citations: Citation[];

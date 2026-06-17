@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { CaseAction } from "@/types";
 import { useGameStore } from "@/store/gameStore";
 import { getDay } from "@/data/days";
 import { getCase } from "@/data/cases";
+import { getCutscene } from "@/data/cutscenes";
 import { Booth } from "@/components/desk/Booth";
 import { DeskProps } from "@/components/desk/DeskProps";
 import { Dossier } from "@/components/desk/Dossier";
@@ -26,10 +27,23 @@ const DEFAULT_STAMP: Record<string, string> = {
 export function DeskScreen() {
   const game = useGameStore((s) => s.game);
   const chooseAction = useGameStore((s) => s.chooseAction);
+  const playCutscene = useGameStore((s) => s.playCutscene);
 
   const dayDef = getDay(game.day);
   const caseId = game.queue[game.currentCaseIndex];
   const caseDef = caseId ? getCase(caseId) : undefined;
+
+  // presentazione di una fazione alla sua prima comparsa
+  useEffect(() => {
+    if (game.phase !== "desk") return;
+    const f = caseDef?.faction;
+    if (!f) return;
+    const id = `fac_${f}`;
+    if (game.flags[`cs_${id}`]) return;
+    if (!getCutscene(id)) return;
+    playCutscene(id, "desk");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [caseDef?.id]);
 
   const [stamping, setStamping] = useState<{ label: string; kind: CaseAction["kind"] } | null>(null);
   const [pending, setPending] = useState<CaseAction | null>(null);

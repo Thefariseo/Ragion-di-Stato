@@ -1,4 +1,4 @@
-import type { Cutscene } from "@/types";
+import type { Cutscene, FactionId } from "@/types";
 
 /**
  * Cutscene data-driven (motore in components/cutscene/CutsceneEngine).
@@ -73,8 +73,95 @@ export const INTRO: Cutscene = {
   ],
 };
 
+/** Presentazione animata di una fazione alla sua prima comparsa nella run. */
+function facCs(
+  faction: FactionId,
+  name: string,
+  lines: string[],
+  music: string,
+): Cutscene {
+  return {
+    id: `fac_${faction}`,
+    beats: [
+      {
+        bg: "archive",
+        visual: "emblems",
+        title: "Dossier riservato — nuovo soggetto in campo",
+        emblems: [{ faction, caption: name }],
+        sound: "telex",
+        music,
+      },
+      { bg: "black", visual: "none", lines, sound: "thud" },
+    ],
+  };
+}
+
+export const FAC_CUTSCENES: Record<string, Cutscene> = {
+  fac_governo: facCs(
+    "governo",
+    "DEMOCRAZIA SOLIDALE — il partito che governa",
+    ["«Continuità. Ordine. Discrezione.»", "Dal Partito arrivano richieste cortesi.", "Rifiutarle costa la carriera. O peggio."],
+    "solenne",
+  ),
+  fac_sir: facCs(
+    "sir",
+    "S.I.R. — i servizi ufficiali",
+    ["«Collaborazione richiesta. Discrezione obbligatoria.»", "I servizi vogliono i tuoi occhi.", "E, soprattutto, i tuoi silenzi."],
+    "tensione",
+  ),
+  fac_anello: facCs(
+    "anello",
+    "L'ANELLO — i servizi che non esistono",
+    ["«Noi non esistiamo. Eppure decidiamo.»", "Un fascicolo senza intestazione. Una firma che non c'è.", "È l'Anello. Da oggi, ti conosce."],
+    "tensione",
+  ),
+  fac_brigate: facCs(
+    "brigate",
+    "BRIGATE PROLETARIE — la lotta armata",
+    ["«Colpirne uno per educarne cento.»", "Volantini ciclostilati, sigle, una stella a cinque punte.", "La clandestinità bussa anche al tuo sportello."],
+    "tensione",
+  ),
+  fac_procura: facCs(
+    "procura",
+    "LA PROCURA — la magistratura",
+    ["«La legge è uguale per tutti. Anche per lo Stato.»", "Un giudice ostinato chiede gli atti", "che qualcuno, in alto, vuole sepolti."],
+    "solenne",
+  ),
+  fac_stampa: facCs(
+    "stampa",
+    "LA STAMPA — il giornalismo d'inchiesta",
+    ["«La verità ha sempre un prezzo. Di solito lo paga qualcun altro.»", "Un cronista ti porta una foto che scotta.", "Pubblicarla può far cadere un governo. O te."],
+    "solenne",
+  ),
+};
+
+export const END_GENERIC: Cutscene = {
+  id: "end_generic",
+  beats: [
+    {
+      bg: "black",
+      visual: "stamp",
+      stampLabel: "ARCHIVIATO",
+      lines: ["Il fascicolo si chiude."],
+      sound: "stamp",
+      music: "finale",
+    },
+    {
+      bg: "archive",
+      visual: "none",
+      lines: [
+        "Le luci dell'Archivio si spengono, una fila dopo l'altra.",
+        "Quel che hai deciso, ormai, appartiene allo Stato.",
+      ],
+      sound: "thud",
+    },
+  ],
+};
+
 export const CUTSCENES: Record<string, Cutscene> = {
   intro: INTRO,
+  end_generic: END_GENERIC,
+  ...FAC_CUTSCENES,
 };
 
 export function getCutscene(id: string): Cutscene | undefined {

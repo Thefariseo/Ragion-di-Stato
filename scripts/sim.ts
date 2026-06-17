@@ -9,6 +9,7 @@ import {
   resolveEvent,
   continueFromSummary,
   resolveNight,
+  endActiveCutscene,
 } from "@/game/engine";
 import { getCase } from "@/data/cases";
 import { getEnding } from "@/data/endings";
@@ -40,6 +41,8 @@ function run(seed: number, strat: Strategy): GameState {
       s = continueFromSummary(s); // → night oppure ending
     } else if (s.phase === "night") {
       s = resolveNight(s, {}); // paga il pagabile → giornale del giorno dopo
+    } else if (s.phase === "cutscene") {
+      s = endActiveCutscene(s); // salta la cutscene → torna alla fase prevista
     } else {
       // title / newspaper / briefing / directives → alla scrivania
       s = { ...s, phase: "desk" };

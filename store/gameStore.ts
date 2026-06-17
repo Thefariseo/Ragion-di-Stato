@@ -11,6 +11,8 @@ import {
   createGame,
   resolveEvent,
   resolveNight,
+  playCutscene as enginePlayCutscene,
+  endActiveCutscene,
 } from "@/game/engine";
 import { randomSeed } from "@/lib/rng";
 
@@ -29,6 +31,8 @@ interface GameStore {
   resolveEventOption: (optionIndex: number) => void;
   continueSummary: () => void;
   resolveNightChoices: (decisions: Record<string, NightDecision>) => void;
+  playCutscene: (id: string, ret: GamePhase) => void;
+  endCutscene: () => void;
   backToTitle: () => void;
 
   // debug
@@ -63,6 +67,11 @@ export const useGameStore = create<GameStore>()(
 
       resolveNightChoices: (decisions: Record<string, NightDecision>) =>
         set((st) => ({ game: resolveNight(st.game, decisions) })),
+
+      playCutscene: (id: string, ret: GamePhase) =>
+        set((st) => ({ game: enginePlayCutscene(st.game, id, ret) })),
+
+      endCutscene: () => set((st) => ({ game: endActiveCutscene(st.game) })),
 
       backToTitle: () => set({ game: titleState() }),
 
