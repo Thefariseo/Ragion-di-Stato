@@ -22,6 +22,8 @@ function duration(beat: CutsceneBeat): number {
   let base = 2200;
   if (beat.scene === "corridor" || beat.scene === "archive") base = 3600;
   else if (beat.scene === "letter") base = 2600;
+  else if (beat.scene === "office_open") base = 2800;
+  else if (beat.scene === "attentato") base = 3400;
   else if (beat.scene === "emblems") base = 1200 + (beat.emblems?.length ?? 1) * 1100;
   return Math.max(base, typing + 1600);
 }

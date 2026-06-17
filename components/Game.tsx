@@ -16,6 +16,7 @@ import { DeskScreen } from "./screens/DeskScreen";
 import { DaySummaryScreen } from "./screens/DaySummaryScreen";
 import { NightScreen } from "./screens/NightScreen";
 import { EndingScreen } from "./screens/EndingScreen";
+import { PhaseTransition } from "./ui/PhaseTransition";
 import { DebugPanel } from "./debug/DebugPanel";
 
 const THEME_FOR: Record<GamePhase, string> = {
@@ -99,6 +100,7 @@ export default function Game() {
               {phase === "ending" && <EndingScreen />}
             </>
           )}
+          {hydrated && <PhaseTransition phase={phase} />}
         </div>
       </GameViewport>
 

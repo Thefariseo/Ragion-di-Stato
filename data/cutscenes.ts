@@ -33,6 +33,13 @@ export const INTRO: Cutscene = {
       sound: "type",
     },
     {
+      bg: "desk",
+      scene: "office_open",
+      lines: ["Le sei del mattino. La lampada esita, poi tiene.", "L'ufficio si apre. Sei solo, con la tua firma."],
+      sound: "thud",
+      music: "solenne",
+    },
+    {
       bg: "corridor",
       scene: "corridor",
       lines: [
@@ -160,9 +167,36 @@ export const END_GENERIC: Cutscene = {
   ],
 };
 
+/** Sequenza d'attentato: scatta quando il Paese precipita nella crisi. */
+export const ATTENTATO: Cutscene = {
+  id: "attentato",
+  beats: [
+    {
+      bg: "black",
+      scene: "attentato",
+      headline: "ORDIGNO IN CITTÀ — È STRAGE",
+      lines: ["Un boato, poi le sirene.", "La radio gracchia un numero che cambierà ancora."],
+      sound: "thud",
+      music: "tensione",
+      durationMs: 3600,
+    },
+    {
+      bg: "corridor",
+      scene: "corridor",
+      lines: [
+        "In corridoio si corre. Le direttive cambieranno entro sera.",
+        "Sul tuo banco, intanto, la coda non si ferma.",
+      ],
+      sound: "telex",
+      music: "tensione",
+    },
+  ],
+};
+
 export const CUTSCENES: Record<string, Cutscene> = {
   intro: INTRO,
   end_generic: END_GENERIC,
+  attentato: ATTENTATO,
   ...FAC_CUTSCENES,
 };
 

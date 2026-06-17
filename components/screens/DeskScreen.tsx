@@ -37,9 +37,21 @@ export function DeskScreen() {
   const [stamping, setStamping] = useState<{ label: string; kind: CaseAction["kind"] } | null>(null);
   const [receipt, setReceipt] = useState<Citation | null>(null);
 
+  // quando il Paese precipita nella crisi: sequenza d'attentato (una volta)
+  const crisis = game.country.caos >= 68 || game.flags["attentato"] === true;
+  useEffect(() => {
+    if (game.phase !== "desk") return;
+    if (!crisis) return;
+    if (game.flags["cs_attentato"]) return;
+    if (game.activeCutscene) return;
+    playCutscene("attentato", "desk");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [crisis, game.phase]);
+
   // presentazione di una fazione alla sua prima comparsa
   useEffect(() => {
     if (game.phase !== "desk") return;
+    if (crisis && !game.flags["cs_attentato"]) return; // prima l'attentato
     const f = caseDef?.faction;
     if (!f) return;
     const id = `fac_${f}`;

@@ -403,3 +403,60 @@ body {
   74% { transform: translateY(-22px) rotate(-10deg); }
   100% { transform: translateY(0) rotate(-10deg); opacity: 1; }
 }
+
+/* ===================== transizione cinematografica tra fasi ===============
+   Una serranda/persiana ministeriale che cala e si rialza tra una fase e
+   l'altra: dà respiro e regia al passaggio. pointer-events: none. */
+@keyframes shutterTop {
+  0% { transform: translateY(-100%); }
+  42% { transform: translateY(0); }
+  58% { transform: translateY(0); }
+  100% { transform: translateY(-100%); }
+}
+@keyframes shutterBottom {
+  0% { transform: translateY(100%); }
+  42% { transform: translateY(0); }
+  58% { transform: translateY(0); }
+  100% { transform: translateY(100%); }
+}
+@keyframes seamFlash {
+  0%, 100% { opacity: 0; }
+  44%, 56% { opacity: 0.9; }
+}
+.rds-shutter-top { animation: shutterTop 760ms steps(9, end) both; }
+.rds-shutter-bottom { animation: shutterBottom 760ms steps(9, end) both; }
+.rds-shutter-seam { animation: seamFlash 760ms steps(9, end) both; }
+
+/* lampeggio rosso d'allarme (attentato) */
+@keyframes redAlarm {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 0.55; }
+}
+.cs-alarm { animation: redAlarm 0.7s steps(2, end) infinite; }
+
+/* lampo d'esplosione */
+@keyframes blastFlash {
+  0% { transform: scale(0.2); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+.cs-blast { animation: blastFlash 900ms steps(8, end) 300ms both; }
+
+/* lampada da ufficio che si accende (apertura) */
+@keyframes lampOn {
+  0%, 30% { opacity: 0; }
+  34% { opacity: 0.9; }
+  40% { opacity: 0.25; }
+  46% { opacity: 1; }
+  100% { opacity: 1; }
+}
+.cs-lamp { animation: lampOn 1400ms steps(1, end) both; }
+
+/* giornale che SBATTE in primo piano */
+@keyframes paperSlam {
+  0% { transform: scale(2.4) rotate(-7deg); opacity: 0; }
+  55% { transform: scale(0.95) rotate(1deg); opacity: 1; }
+  70% { transform: scale(1.04) rotate(-1deg); }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+.cs-slam { animation: paperSlam 520ms steps(7, end) both; }

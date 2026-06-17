@@ -354,7 +354,9 @@ export type CutsceneScene =
   | "dossier"
   | "newspaper"
   | "archive"
-  | "door";
+  | "door"
+  | "office_open"
+  | "attentato";
 
 export interface CutsceneBeat {
   bg?: CutsceneBg;

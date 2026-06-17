@@ -28,6 +28,8 @@ export function CutsceneStage({ beat }: { beat: CutsceneBeat }) {
       {scene === "newspaper" && <Newspaper headline={beat.headline ?? "EDIZIONE STRAORDINARIA"} />}
       {scene === "archive" && <Archive />}
       {scene === "door" && <Door />}
+      {scene === "office_open" && <OfficeOpen />}
+      {scene === "attentato" && <Attentato headline={beat.headline} />}
     </div>
   );
 }
@@ -202,6 +204,59 @@ function Archive() {
       <div className="cs-slide absolute left-[10%] bottom-[16%] w-28 h-7 bg-[#2a2620] border-2 border-black" style={{ animationDelay: "1200ms" }}>
         <div className="absolute left-1/2 -translate-x-1/2 top-2 w-6 h-1.5 bg-[#55584f]" />
       </div>
+    </div>
+  );
+}
+
+function OfficeOpen() {
+  // apertura ufficio: buio, poi la lampada sfarfalla e si accende sul banco
+  return (
+    <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 bg-[#070806]" />
+      {/* pozza di luce della lampada */}
+      <div
+        className="cs-lamp absolute left-1/2 top-[18%] -translate-x-1/2 w-[70%] h-[80%]"
+        style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(196,182,120,0.45) 0%, rgba(196,182,120,0.10) 38%, transparent 66%)" }}
+      />
+      {/* lampada */}
+      <div className="absolute left-1/2 top-[10%] -translate-x-1/2 flex flex-col items-center">
+        <div className="w-1 h-10 bg-[#1a1812]" />
+        <div className="cs-lamp w-12 h-3 bg-[#cdbf80] rounded-b-full shadow-[0_0_22px_8px_rgba(205,191,128,0.5)]" />
+      </div>
+      {/* banco con timbro e pratica */}
+      <div className="cs-lamp absolute left-1/2 bottom-[12%] -translate-x-1/2 flex items-end gap-4" style={{ animationDelay: "300ms" }}>
+        <div className="w-24 h-16 bg-[#efe9d4] border-2 border-[#9a8c66] -rotate-2" />
+        <div className="w-8 h-10 bg-wood-hi border-2 border-wood-lo" />
+      </div>
+    </div>
+  );
+}
+
+function Attentato({ headline }: { headline?: string }) {
+  return (
+    <div className="absolute inset-0 overflow-hidden bg-[#0a0807]">
+      {/* skyline notturno */}
+      <div className="absolute inset-x-0 bottom-0 h-[46%] flex items-end justify-center gap-1">
+        {Array.from({ length: 22 }).map((_, i) => (
+          <div key={i} className="bg-[#15140f]" style={{ width: 14, height: 30 + ((i * 53) % 90) }} />
+        ))}
+      </div>
+      {/* lampo d'esplosione */}
+      <div
+        className="cs-blast absolute left-[54%] bottom-[34%] w-40 h-40 -translate-x-1/2 rounded-full"
+        style={{ background: "radial-gradient(circle, #fff3c4 0%, #e8893a 38%, rgba(180,43,43,0.5) 62%, transparent 75%)" }}
+      />
+      {/* lampeggio rosso d'allarme su tutto */}
+      <div className="cs-alarm absolute inset-0 bg-[#b42b2b] mix-blend-screen" />
+      {/* titolo che sbatte */}
+      {headline && (
+        <div className="cs-slam absolute top-[14%] left-1/2 -translate-x-1/2 w-[72%]">
+          <div className="rds-paper p-3">
+            <div className="font-pixel uppercase text-[10px] tracking-widest text-ink/70 border-b-2 border-ink/40 pb-1 mb-1">Edizione straordinaria</div>
+            <div className="font-pixel uppercase text-[20px] leading-tight text-stamp-red">{headline}</div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
