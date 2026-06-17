@@ -338,8 +338,9 @@ export const DAY1_CASES: CaseDef[] = [
         authLevel: "riservato",
         fields: [{ label: "Firma", value: "Velardi", comparable: true }],
         body: [
-          "Caro funzionario, il verbale 0418 non serve agli archivi.",
-          "Lei mi capisce. Sarà ricordato.",
+          "Funzionario, il verbale 0418 non risulta necessario agli archivi.",
+          "Provveda di conseguenza. Ogni copia non conforme è materiale non autorizzato.",
+          "Lei mi capisce. E io ricordo chi mi capisce.",
         ],
       },
       {
@@ -354,7 +355,8 @@ export const DAY1_CASES: CaseDef[] = [
           { label: "Impresa", value: "Bramante S.p.A.", comparable: true },
         ],
         body: [
-          "Si dà atto che l'impresa Bramante ha ottenuto l'appalto in assenza di gara.",
+          "Si dà atto che l'aggiudicazione all'impresa Bramante è avvenuta in via d'urgenza.",
+          "Gara non esperita. Nessun rilievo agli atti.",
         ],
       },
     ],

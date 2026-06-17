@@ -23,14 +23,14 @@ export function computeCitation(
 
   if (action.kind === "approva") {
     if (regV === "respingi" || !validation.inRegola) {
-      reason = "Approvata una pratica che andava respinta.";
+      reason = "Nota disciplinare: autorizzazione accolta in assenza dei requisiti di conformità.";
       severity = "grave";
       fine = 20000;
       ruleId = validation.violations[0]?.ruleId;
     }
   } else if (action.kind === "respingi") {
     if (regV === "approva" && validation.inRegola) {
-      reason = "Respinta una pratica in regola.";
+      reason = "Richiamo amministrativo: respingimento di pratica conforme al regolamento.";
       severity = "lieve";
       fine = 8000;
     }
