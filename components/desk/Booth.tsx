@@ -75,8 +75,8 @@ export function Booth({ game, dayDef, caseDef }: { game: GameState; dayDef: DayD
           <div className="flex flex-col items-center">
             <NpcSprite key={caseDef.id} seed={portraitSeed(caseDef.id)} width={140} />
             <div className="rds-nameplate px-2 py-1 text-center w-full">
-              <div className="font-pixel uppercase text-[10px] leading-tight">{caseDef.subject}</div>
-              <div className="font-read text-[10px] uppercase tracking-wide text-paper/70">
+              <div className="font-pixel uppercase text-[11px] leading-tight">{caseDef.subject}</div>
+              <div className="font-read text-[11px] uppercase tracking-wide text-paper/70">
                 {fac ? `${fac.name} · ${fac.sigla}` : "pratica in entrata"}
               </div>
             </div>
@@ -93,8 +93,8 @@ export function Booth({ game, dayDef, caseDef }: { game: GameState; dayDef: DayD
       {/* VOCE — fumetto del richiedente */}
       {caseDef?.intro && (
         <div className="absolute left-[238px] top-3 z-[3] max-w-[330px] rds-paper p-2.5">
-          <div className="font-pixel text-[7px] uppercase tracking-wider text-ink/55 mb-0.5">Voce · sportello</div>
-          <Typewriter key={caseDef.id} lines={caseDef.intro} speed={18} className="font-read text-[14px] text-ink leading-snug" />
+          <div className="font-pixel text-[8px] uppercase tracking-wider text-ink/55 mb-0.5">Voce · sportello</div>
+          <Typewriter key={caseDef.id} lines={caseDef.intro} speed={18} className="font-read text-[15px] text-ink leading-snug" />
         </div>
       )}
 
@@ -133,7 +133,7 @@ export function Booth({ game, dayDef, caseDef }: { game: GameState; dayDef: DayD
         style={{ opacity: ambOn && amb ? 1 : 0 }}
       >
         <span className="font-pixel text-[7px] uppercase tracking-widest text-olive-hi mr-1">▸ dal corridoio</span>
-        <span className="font-read text-[12.5px] text-paper-cream/90 leading-snug">{amb?.caption}</span>
+        <span className="font-read text-[13.5px] text-paper-cream/90 leading-snug">{amb?.caption}</span>
       </div>
     </div>
   );

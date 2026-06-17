@@ -13,7 +13,6 @@ import { DeskProps } from "@/components/desk/DeskProps";
 import { Dossier } from "@/components/desk/Dossier";
 import { ActionBar } from "@/components/desk/ActionBar";
 import { Rulebook } from "@/components/desk/Rulebook";
-import { StatePanel } from "@/components/hud/StatePanel";
 import { EventModal } from "@/components/desk/EventModal";
 import { FineReceipt } from "@/components/desk/FineReceipt";
 import { Stamp } from "@/components/ui/Stamp";
@@ -118,7 +117,13 @@ export function DeskScreen() {
             <ActionBar caseDef={caseDef} onAction={handleAction} disabled={!!stamping || eventActive || !!receipt} />
           )}
           <Rulebook dayDef={dayDef} />
-          <StatePanel />
+          <div className="rds-panel px-2.5 py-2 mt-auto">
+            <div className="rds-label text-[8px] mb-1">Registro decisioni</div>
+            <p className="font-read text-[12px] text-paper/55 leading-snug">
+              Lo Stato non ti mostra i conti durante il turno. Famiglia, lucidità e
+              rapporti con gli apparati li leggerai nel resoconto.
+            </p>
+          </div>
         </aside>
       </div>
 

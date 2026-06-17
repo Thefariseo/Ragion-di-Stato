@@ -3,10 +3,26 @@
 import { useGameStore } from "@/store/gameStore";
 import { formatLire } from "@/lib/format";
 import { FACTIONS, CORE_FACTIONS } from "@/data/factions";
+import { LAST_DAY } from "@/data/days";
 import { FactionEmblem } from "@/components/desk/FactionEmblem";
 import { Typewriter } from "@/components/ui/Typewriter";
 import { playClick } from "@/lib/sfx";
 import type { GameState } from "@/types";
+
+/** barra su carta (inchiostro scuro su foglio chiaro) */
+function PaperGauge({ label, value, color }: { label: string; value: number; color: string }) {
+  return (
+    <div>
+      <div className="flex justify-between font-pixel text-[7px] uppercase tracking-wider text-ink/60">
+        <span>{label}</span>
+        <span>{Math.round(value)}</span>
+      </div>
+      <div className="h-2 mt-0.5 bg-ink/15 border border-ink/20 overflow-hidden">
+        <div className="h-full" style={{ width: `${Math.max(0, Math.min(100, value))}%`, backgroundColor: color }} />
+      </div>
+    </div>
+  );
+}
 
 function superiorNote(g: GameState, cits: number): string {
   if (g.player.sospetto >= 70) return "«Il suo nome ricorre troppo spesso, funzionario. Gli Affari Interni la cercano.»";
@@ -26,6 +42,8 @@ export function DaySummaryScreen() {
   const net = summary.pay - summary.penalty - summary.fines;
   const todayCitations = game.citations.filter((c) => c.day === summary.day && c.visibleToPlayer);
   const hasEnding = !!game.endingId;
+  // la scheda completa esce a cadenza (ogni 5 giorni) o all'ultima giornata
+  const fullReadout = summary.day % 5 === 0 || hasEnding || summary.day >= LAST_DAY;
 
   return (
     <div className="h-full w-full tex-wood flex items-center justify-center p-6 relative">
@@ -66,23 +84,51 @@ export function DaySummaryScreen() {
             {summary.notes.map((n, i) => (<p key={i} className="font-read text-[14px] text-ink/90 italic leading-snug">{n}</p>))}
           </div>
 
-          {/* scheda fazioni */}
+          {/* scheda fazioni — compatta ogni giorno */}
           <div className="bg-black/[0.05] border-2 border-ink/20 p-2 mb-3">
-            <div className="font-pixel text-[7px] uppercase tracking-widest text-ink/60 mb-1.5">Rapporti con le fazioni</div>
-            <div className="grid grid-cols-3 gap-x-3 gap-y-1">
+            <div className="font-pixel text-[7px] uppercase tracking-widest text-ink/60 mb-1.5">Rapporti con gli apparati</div>
+            <div className="grid grid-cols-3 gap-x-3 gap-y-1.5">
               {CORE_FACTIONS.map((id) => {
                 const rep = game.factions[id].reputation;
                 const c = rep >= 20 ? "text-stamp-green" : rep <= -20 ? "text-stamp-red" : "text-ink/60";
                 return (
                   <div key={id} className="flex items-center gap-1.5">
-                    <FactionEmblem faction={id} size={16} />
-                    <span className="font-read text-[10px] text-ink/80 truncate flex-1">{FACTIONS[id].sigla}</span>
-                    <span className={`font-term text-[12px] ${c}`}>{rep > 0 ? `+${rep}` : rep}</span>
+                    <FactionEmblem faction={id} size={22} />
+                    <span className="font-read text-[11px] text-ink/80 truncate flex-1">{FACTIONS[id].sigla}</span>
+                    <span className={`font-term text-[13px] ${c}`}>{rep > 0 ? `+${rep}` : rep}</span>
                   </div>
                 );
               })}
             </div>
           </div>
+
+          {/* SCHEDA RISERVATA — esce a cadenza: l'utente capisce come è messo */}
+          {fullReadout && (
+            <div className="border-2 border-ink/30 bg-ink/[0.05] p-3 mb-4">
+              <div className="rds-classified font-pixel text-[8px] tracking-[0.2em] text-center py-1 mb-2.5">
+                Scheda riservata · stato del funzionario
+              </div>
+              <div className="grid grid-cols-2 gap-x-5 gap-y-2">
+                <div>
+                  <div className="font-pixel text-[7px] uppercase tracking-widest text-ink/55 mb-1">Rapporto personale</div>
+                  <div className="space-y-1.5">
+                    <PaperGauge label="Famiglia" value={game.player.famiglia} color="#53701b" />
+                    <PaperGauge label="Lucidità" value={game.player.lucidita} color="#3f7d72" />
+                    <PaperGauge label="Sorveglianza" value={game.player.sospetto} color="#b42b2b" />
+                  </div>
+                </div>
+                <div>
+                  <div className="font-pixel text-[7px] uppercase tracking-widest text-ink/55 mb-1">Bollettino interno</div>
+                  <div className="space-y-1.5">
+                    <PaperGauge label="Repressione" value={game.country.repressione} color="#b42b2b" />
+                    <PaperGauge label="Caos" value={game.country.caos} color="#9a6b30" />
+                    <PaperGauge label="Verità pubblica" value={game.country.verita} color="#3f7d72" />
+                    <PaperGauge label="Compromesso" value={game.country.compromesso} color="#9c7f4f" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* nota del superiore */}
           <div className="border-l-4 border-stamp-red/60 bg-ink/[0.04] pl-3 py-2 mb-4">

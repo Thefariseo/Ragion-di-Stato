@@ -83,15 +83,16 @@ function facCs(
     id: `fac_${faction}`,
     beats: [
       {
-        bg: "archive",
-        scene: "emblems",
-        title: "Dossier riservato — nuovo soggetto in campo",
-        emblems: [{ faction, caption: name }],
+        bg: "black",
+        scene: "crest",
+        faction,
+        title: "Nuovo soggetto in campo",
+        lines: [name],
         sound: "telex",
         music,
-        durationMs: 3000,
+        durationMs: 3200,
       },
-      { bg: "black", scene: "telex", lines, sound: "telex" },
+      { bg: "black", scene: "telex", faction, lines, sound: "telex", music },
     ],
   };
 }

@@ -21,6 +21,7 @@ export function Stamp({
   big,
   rotate = -8,
   solid,
+  color,
 }: {
   label: string;
   kind?: ActionKind;
@@ -28,9 +29,12 @@ export function Stamp({
   rotate?: number;
   /** rende il timbro pieno e vivido (per la battuta sul feltro scuro) */
   solid?: boolean;
+  /** colore d'inchiostro personalizzato (timbri dedicati di fazione) */
+  color?: string;
 }) {
   const style: React.CSSProperties = { transform: `rotate(${rotate}deg)` };
   (style as Record<string, string>)["--rot"] = `${rotate}deg`;
+  if (color) style.color = color;
   if (solid) {
     style.mixBlendMode = "normal";
     style.opacity = 1;
@@ -39,7 +43,7 @@ export function Stamp({
   }
   return (
     <span
-      className={`rds-stamp ${variantFor(label, kind)} ${
+      className={`rds-stamp ${color ? "" : variantFor(label, kind)} ${
         big ? "text-5xl px-5 py-2" : "text-[11px]"
       }`}
       style={style}

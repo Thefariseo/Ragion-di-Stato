@@ -3,6 +3,8 @@
 import type { CutsceneBeat } from "@/types";
 import { Stamp } from "@/components/ui/Stamp";
 import { FactionEmblem } from "@/components/desk/FactionEmblem";
+import { FactionCrest } from "@/components/desk/FactionCrest";
+import { factionIdentity } from "@/data/factionIdentity";
 import { BoothScene } from "@/components/desk/BoothScene";
 
 /**
@@ -19,6 +21,7 @@ export function CutsceneStage({ beat }: { beat: CutsceneBeat }) {
       {scene === "stampfall" && <StampFall label={beat.stampLabel ?? "RISERVATO"} />}
       {scene === "letter" && <Letter title={beat.title} />}
       {scene === "corridor" && <Corridor />}
+      {scene === "crest" && beat.faction && <Crest faction={beat.faction} />}
       {scene === "emblems" && <Emblems emblems={beat.emblems ?? []} />}
       {scene === "telex" && <Telex />}
       {scene === "dossier" && <Dossier emblems={beat.emblems ?? []} />}
@@ -79,6 +82,21 @@ function Corridor() {
           <div className="w-4 h-10 bg-[#0e0f0a]" />
         </div>
       ))}
+    </div>
+  );
+}
+
+function Crest({ faction }: { faction: import("@/types").FactionId }) {
+  const ident = factionIdentity(faction);
+  return (
+    <div className="absolute inset-0 flex items-center justify-center">
+      {/* pattern dell'ente a tutto campo, debolissimo */}
+      <div className="absolute inset-0 opacity-[0.12]" style={{ backgroundImage: ident.pattern }} />
+      {/* fasci di luce dietro la cresta */}
+      <div className="absolute w-[60%] h-[60%] rounded-full blur-2xl opacity-25" style={{ backgroundColor: ident.accent }} />
+      <div className="cs-emblem relative">
+        <FactionCrest faction={faction} size={96} />
+      </div>
     </div>
   );
 }

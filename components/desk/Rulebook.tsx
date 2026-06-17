@@ -16,14 +16,14 @@ export function Rulebook({ dayDef }: { dayDef: DayDef }) {
       </button>
       {open && (
         <div className="rds-paper m-1.5 mt-0 p-2.5 max-h-64 overflow-auto thin-scroll">
-          <div className="font-pixel text-[7px] uppercase tracking-wider text-stamp-red mb-1">Direttive</div>
-          <ul className="font-read text-[12px] text-ink space-y-1 mb-2.5 list-disc list-inside leading-snug">
+          <div className="font-pixel text-[8px] uppercase tracking-wider text-stamp-red mb-1">Direttive</div>
+          <ul className="font-read text-[13px] text-ink space-y-1 mb-2.5 list-disc list-inside leading-snug">
             {dayDef.directives.map((d, i) => (
               <li key={i} className={d.startsWith("NUOVO") ? "text-stamp-red" : ""}>{d}</li>
             ))}
           </ul>
-          <div className="font-pixel text-[7px] uppercase tracking-wider text-stamp-red mb-1">Regole attive</div>
-          <ul className="font-read text-[11px] text-ink/80 space-y-1 leading-snug">
+          <div className="font-pixel text-[8px] uppercase tracking-wider text-stamp-red mb-1">Regole attive</div>
+          <ul className="font-read text-[12px] text-ink/80 space-y-1 leading-snug">
             {dayDef.ruleIds.map((id) => (
               <li key={id}>— {RULES[id]?.text ?? id}</li>
             ))}

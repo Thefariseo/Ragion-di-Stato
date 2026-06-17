@@ -349,6 +349,7 @@ export type CutsceneScene =
   | "letter"
   | "corridor"
   | "emblems"
+  | "crest"
   | "telex"
   | "dossier"
   | "newspaper"
@@ -361,6 +362,8 @@ export interface CutsceneBeat {
   /** scena animata della sequenza (timeline + oggetti animati) */
   scene?: CutsceneScene;
   headline?: string;
+  /** fazione protagonista del beat (cresta, leitmotiv, pattern) */
+  faction?: FactionId;
   emblems?: { faction: FactionId; caption: string }[];
   title?: string;
   lines?: string[];

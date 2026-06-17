@@ -135,12 +135,12 @@ export function WorldScene({
       if (Math.random() < (c.alarm ? 0.06 : 0.012)) flick.current = 0.45 + Math.random() * 0.3;
       else flick.current += (1 - flick.current) * 0.2;
 
-      // sfondo (palette del prologo: cupo, freddo, desaturato)
-      px(0, 0, W, horizon, "#181b13");
-      px(0, 0, W, horizon * 0.5, "#10120c");
-      px(0, horizon, W, H - horizon, "#16140d");
+      // sfondo (cupo e freddo ma LEGGIBILE: il corridoio si deve vedere)
+      px(0, 0, W, horizon, "#2c3024");
+      px(0, 0, W, horizon * 0.5, "#1d2017");
+      px(0, horizon, W, H - horizon, "#241f17");
       // fughe pavimento
-      g.strokeStyle = "#0e0d09";
+      g.strokeStyle = "#171510";
       g.lineWidth = 1;
       for (let i = -5; i <= 5; i++) {
         g.beginPath();
@@ -152,15 +152,15 @@ export function WorldScene({
       const dW = 30;
       const dH = horizon * 0.7;
       px(W / 2 - dW / 2, horizon - dH, dW, dH, "#0e120c");
-      const lit = (c.alarm ? 0.4 : 0.7) * flick.current;
-      px(W / 2 - dW / 2 + 3, horizon - dH + 3, dW - 6, dH - 4, `rgba(150,150,108,${lit})`);
+      const lit = (c.alarm ? 0.6 : 0.95) * flick.current;
+      px(W / 2 - dW / 2 + 3, horizon - dH + 3, dW - 6, dH - 4, `rgba(182,174,120,${lit})`);
       // manifesto a parete (desaturato)
-      px(36, 8, 22, 16, "#343022");
-      px(38, 10, 18, 3, "#5a4d34");
-      px(38, 15, 14, 2, "#473f2e");
+      px(36, 8, 22, 16, "#4a4330");
+      px(38, 10, 18, 3, "#6f5d3c");
+      px(38, 15, 14, 2, "#574d39");
       // bandiera (rossa solo in allarme, altrimenti cupa)
-      px(250, 8, 2, 26, "#0e0d09");
-      px(252, 8, 18, 10, c.alarm ? "#a8281f" : "#4a201a");
+      px(250, 8, 2, 26, "#15140f");
+      px(252, 8, 18, 10, c.alarm ? "#b42b2b" : "#5e261d");
 
       // attori
       runnerTimer -= dt / 1000;
@@ -204,8 +204,8 @@ export function WorldScene({
 
       // velo d'ombra + allarme
       const veil = g.createLinearGradient(0, 0, 0, H);
-      veil.addColorStop(0, "rgba(0,0,0,0.25)");
-      veil.addColorStop(1, "rgba(0,0,0,0.5)");
+      veil.addColorStop(0, "rgba(0,0,0,0.10)");
+      veil.addColorStop(1, "rgba(0,0,0,0.32)");
       g.fillStyle = veil;
       g.fillRect(0, 0, W, H);
       if (c.alarm) {
