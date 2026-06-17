@@ -30,7 +30,7 @@ export function StatePanel() {
   return (
     <div className="rds-panel p-2 space-y-2.5">
       <div>
-        <div className="rds-label text-[8px] border-b-2 border-black/50 pb-1 mb-1.5">Scheda personale</div>
+        <div className="rds-label text-[8px] border-b-2 border-black/50 pb-1 mb-1.5">Rapporto personale</div>
         <div className="space-y-1.5">
           <Gauge label="Famiglia" value={game.player.famiglia} color="#53701b" />
           <Gauge label="Lucidità" value={game.player.lucidita} color="#8fb9ad" />
@@ -38,7 +38,7 @@ export function StatePanel() {
       </div>
 
       <div>
-        <div className="rds-label text-[8px] border-b-2 border-black/50 pb-1 mb-1.5">Stato del Paese</div>
+        <div className="rds-label text-[8px] border-b-2 border-black/50 pb-1 mb-1.5">Bollettino interno</div>
         <div className="space-y-1.5">
           <Gauge label="Repressione" value={game.country.repressione} color="#b42b2b" />
           <Gauge label="Caos" value={game.country.caos} color="#9a6b30" />
@@ -48,7 +48,7 @@ export function StatePanel() {
       </div>
 
       <div>
-        <div className="rds-label text-[8px] border-b-2 border-black/50 pb-1 mb-1.5">Fazioni</div>
+        <div className="rds-label text-[8px] border-b-2 border-black/50 pb-1 mb-1.5">Registro apparati</div>
         <div className="space-y-1">
           {CORE_FACTIONS.map((id: FactionId) => {
             const f = FACTIONS[id];

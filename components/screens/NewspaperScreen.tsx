@@ -39,14 +39,14 @@ export function NewspaperScreen() {
                   </div>
                   <div className="font-read text-[8px] text-ink/50 text-center mt-0.5 italic">[foto d'archivio]</div>
                 </div>
-                <p className="font-read text-[12px] text-ink/85 leading-snug">{p.leadBody}</p>
+                <p className="font-read text-[13px] text-ink/85 leading-snug">{p.leadBody}</p>
               </div>
 
               <div className="columns-2 gap-3 mt-3 [column-rule:1px_solid_rgba(20,17,13,0.2)]">
                 {p.items.map((it, i) => (
                   <div key={i} className="break-inside-avoid mb-2.5 border-t border-ink/20 pt-1.5">
                     <div className="font-pixel uppercase text-[10px] text-ink leading-tight mb-0.5">{it.headline}</div>
-                    {it.body && <p className="font-read text-[11px] text-ink/75 leading-snug">{it.body}</p>}
+                    {it.body && <p className="font-read text-[12px] text-ink/75 leading-snug">{it.body}</p>}
                   </div>
                 ))}
               </div>
@@ -56,9 +56,9 @@ export function NewspaperScreen() {
             <div className="border-l-2 border-ink/30 pl-3">
               <div className="bg-ink/[0.06] border-2 border-ink/20 p-2 mb-3">
                 <div className="font-pixel uppercase text-[8px] tracking-widest text-stamp-red mb-1">{p.sidebar.title}</div>
-                <p className="font-read text-[12px] text-ink/85 leading-snug italic">{p.sidebar.body}</p>
+                <p className="font-read text-[13px] text-ink/85 leading-snug italic">{p.sidebar.body}</p>
               </div>
-              <div className="space-y-1.5 font-read text-[11px] text-ink/70 leading-snug">
+              <div className="space-y-1.5 font-read text-[12px] text-ink/70 leading-snug">
                 <div className="font-pixel uppercase text-[8px] tracking-widest text-ink/50">In breve</div>
                 <p>— Listini: la lira ancora debole sul marco.</p>
                 <p>— Meteo: nebbia in pianura, freddo sulle valli.</p>
@@ -69,7 +69,7 @@ export function NewspaperScreen() {
           </div>
 
           <div className="mt-4 flex justify-end border-t border-ink/30 pt-2">
-            <button onClick={() => { playClick(); goToPhase("briefing"); }} className="rds-btn px-5 py-2 text-[11px]">
+            <button onClick={() => { playClick(); goToPhase("briefing"); }} className="rds-btn px-5 py-2 text-[12px]">
               Prendi servizio »
             </button>
           </div>

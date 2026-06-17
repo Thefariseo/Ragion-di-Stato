@@ -1,12 +1,23 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import type { CaseDef, DayDef, GameState } from "@/types";
 import { FACTIONS } from "@/data/factions";
 import { formatClock } from "@/lib/format";
+import { pickAmbient, type AmbientEvent } from "@/data/ambient";
+import { playThud, playTelex, playPaper, playRing, playDrawer } from "@/lib/sfx";
 import { portraitSeed } from "./ApplicantPortrait";
 import { NpcSprite } from "./NpcSprite";
 import { WorldScene } from "./WorldScene";
 import { Typewriter } from "@/components/ui/Typewriter";
+
+const AMB_SOUND: Record<string, () => void> = {
+  thud: playThud,
+  telex: playTelex,
+  paper: playPaper,
+  ring: playRing,
+  drawer: playDrawer,
+};
 
 export function Booth({ game, dayDef, caseDef }: { game: GameState; dayDef: DayDef; caseDef?: CaseDef }) {
   const sospetto = game.player.sospetto;
@@ -14,6 +25,39 @@ export function Booth({ game, dayDef, caseDef }: { game: GameState; dayDef: DayD
   const alarm = caos >= 68 || game.flags["attentato"] === true;
   const fac = caseDef?.faction ? FACTIONS[caseDef.faction] : undefined;
   const sg = sospetto >= 70 ? "#b42b2b" : sospetto >= 40 ? "#9a6b30" : "#53701b";
+
+  // ticker degli eventi ambientali del corridoio
+  const ctxRef = useRef({ suspicion: sospetto, caos, day: game.day });
+  ctxRef.current = { suspicion: sospetto, caos, day: game.day };
+  const [amb, setAmb] = useState<AmbientEvent | null>(null);
+  const [ambOn, setAmbOn] = useState(false);
+  const lastId = useRef<string | undefined>(undefined);
+
+  useEffect(() => {
+    let alive = true;
+    let next: ReturnType<typeof setTimeout>;
+    let hide: ReturnType<typeof setTimeout>;
+    const schedule = () => {
+      next = setTimeout(() => {
+        if (!alive) return;
+        const e = pickAmbient(ctxRef.current, Math.random(), lastId.current);
+        if (e) {
+          lastId.current = e.id;
+          setAmb(e);
+          setAmbOn(true);
+          if (e.sound) AMB_SOUND[e.sound]?.();
+          hide = setTimeout(() => setAmbOn(false), 5000);
+        }
+        schedule();
+      }, 6500 + Math.random() * 6000);
+    };
+    schedule();
+    return () => {
+      alive = false;
+      clearTimeout(next);
+      clearTimeout(hide);
+    };
+  }, []);
 
   return (
     <div className="relative shrink-0 h-[40%] min-h-[210px] overflow-hidden border-b-4 border-black tex-wall">
@@ -31,8 +75,8 @@ export function Booth({ game, dayDef, caseDef }: { game: GameState; dayDef: DayD
           <div className="flex flex-col items-center">
             <NpcSprite key={caseDef.id} seed={portraitSeed(caseDef.id)} />
             <div className="rds-nameplate px-2 py-1 text-center w-full">
-              <div className="font-pixel uppercase text-[9px] leading-tight">{caseDef.subject}</div>
-              <div className="font-read text-[9px] uppercase tracking-wide text-paper/70">
+              <div className="font-pixel uppercase text-[10px] leading-tight">{caseDef.subject}</div>
+              <div className="font-read text-[10px] uppercase tracking-wide text-paper/70">
                 {fac ? `${fac.name} · ${fac.sigla}` : "pratica in entrata"}
               </div>
             </div>
@@ -48,9 +92,9 @@ export function Booth({ game, dayDef, caseDef }: { game: GameState; dayDef: DayD
 
       {/* VOCE — fumetto del richiedente */}
       {caseDef?.intro && (
-        <div className="absolute left-[238px] top-3 z-[3] max-w-[320px] rds-paper p-2">
-          <div className="font-pixel text-[6px] uppercase tracking-wider text-ink/55 mb-0.5">Voce · sportello</div>
-          <Typewriter key={caseDef.id} lines={caseDef.intro} speed={18} className="font-read text-[12px] text-ink leading-snug" />
+        <div className="absolute left-[238px] top-3 z-[3] max-w-[330px] rds-paper p-2.5">
+          <div className="font-pixel text-[7px] uppercase tracking-wider text-ink/55 mb-0.5">Voce · sportello</div>
+          <Typewriter key={caseDef.id} lines={caseDef.intro} speed={18} className="font-read text-[14px] text-ink leading-snug" />
         </div>
       )}
 
@@ -65,7 +109,7 @@ export function Booth({ game, dayDef, caseDef }: { game: GameState; dayDef: DayD
             <span>Pratiche</span>
             <span>{game.currentCaseIndex}/{game.queue.length}</span>
           </div>
-          <div className="font-read text-[10px] text-paper/70">quota {dayDef.quota}</div>
+          <div className="font-read text-[11px] text-paper/70">quota {dayDef.quota}</div>
         </div>
         <div className="rds-panel px-2 py-1.5">
           <div className="rds-label text-[7px] flex justify-between mb-1">
@@ -81,6 +125,15 @@ export function Booth({ game, dayDef, caseDef }: { game: GameState; dayDef: DayD
             <div className="font-pixel text-[8px] uppercase tracking-widest text-stamp-redhi text-center">● Allarme</div>
           </div>
         )}
+      </div>
+
+      {/* vignetta ambientale — il corridoio racconta */}
+      <div
+        className="absolute bottom-1.5 left-[238px] z-[4] max-w-[58%] rds-panel px-2.5 py-1 transition-opacity duration-500"
+        style={{ opacity: ambOn && amb ? 1 : 0 }}
+      >
+        <span className="font-pixel text-[7px] uppercase tracking-widest text-olive-hi mr-1">▸ dal corridoio</span>
+        <span className="font-read text-[12.5px] text-paper-cream/90 leading-snug">{amb?.caption}</span>
       </div>
     </div>
   );

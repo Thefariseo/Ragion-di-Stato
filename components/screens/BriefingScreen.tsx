@@ -25,7 +25,7 @@ export function BriefingScreen() {
 
           <div className="bg-black/[0.04] border-2 border-ink/15 p-3">
             <div className="font-pixel text-[7px] uppercase tracking-widest text-stamp-red mb-2">Comunicato interno</div>
-            <Typewriter lines={dayDef.briefing} speed={16} className="font-read text-[15px] text-ink leading-snug" />
+            <Typewriter lines={dayDef.briefing} speed={16} className="font-read text-[16px] text-ink leading-snug" />
           </div>
 
           <div className="mt-5 flex justify-end">

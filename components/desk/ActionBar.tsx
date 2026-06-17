@@ -39,7 +39,7 @@ export function ActionBar({
 
   return (
     <div className="rds-panel p-2">
-      <div className="rds-label text-[8px] border-b-2 border-black/50 pb-1 mb-2">Quadro decisioni</div>
+      <div className="rds-label text-[8px] border-b-2 border-black/50 pb-1 mb-2">Registro decisioni</div>
 
       {stamps.length > 0 && (
         <div className="tex-wood p-2 mb-2 flex flex-wrap gap-1.5 justify-center border-2 border-wood-lo">
@@ -52,7 +52,7 @@ export function ActionBar({
               title={a.hint}
             >
               <span
-                className="block text-center font-pixel text-[10px] leading-tight"
+                className="block text-center font-pixel text-[12px] leading-tight"
                 style={{ color: stampColor(a) }}
               >
                 {a.stampLabel ?? DEFAULT_STAMP[a.kind] ?? a.label}
@@ -74,9 +74,9 @@ export function ActionBar({
               onClick={() => onAction(a)}
               className={`rds-btn w-full text-left px-2 py-1.5 ${btnMod(a.kind)}`}
             >
-              <span className="block text-[10px] leading-tight">{a.label}</span>
+              <span className="block text-[12px] leading-tight">{a.label}</span>
               {a.hint && (
-                <span className="block font-read text-[11px] normal-case opacity-75 mt-0.5">{a.hint}</span>
+                <span className="block font-read text-[12px] normal-case opacity-75 mt-0.5">{a.hint}</span>
               )}
             </button>
           ))}

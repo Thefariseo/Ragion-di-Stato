@@ -8,11 +8,11 @@ import { OutcomeOverlay } from "@/components/ui/OutcomeOverlay";
 import { playRing, playThud, playClick, playTelex } from "@/lib/sfx";
 
 const CHANNEL_LABEL: Record<string, string> = {
-  telefono: "TELEFONO",
-  telex: "TELEX",
-  busta: "BUSTA",
-  ispezione: "ISPEZIONE",
-  voce: "VOCE",
+  telefono: "TRASCRIZIONE TELEFONICA",
+  telex: "DISPACCIO · TELEX",
+  busta: "BUSTA RISERVATA",
+  ispezione: "VERBALE D'ISPEZIONE",
+  voce: "COMUNICAZIONE VERBALE",
 };
 
 export function EventModal() {
@@ -38,10 +38,10 @@ export function EventModal() {
           <span className="rds-label text-[7px]">▸ {CHANNEL_LABEL[ev.channel] ?? ev.channel}</span>
         </div>
         <div className="rds-paper p-3">
-          <Typewriter lines={ev.body} speed={14} className="font-read text-[14px] text-ink mb-3 leading-snug" />
+          <Typewriter lines={ev.body} speed={14} className="font-read text-[15px] text-ink mb-3 leading-snug" />
           <div className="space-y-2">
             {ev.options.map((o, i) => (
-              <button key={i} onClick={() => { playClick(); setPending(i); }} className="rds-btn w-full text-left px-2.5 py-2 text-[11px] normal-case">
+              <button key={i} onClick={() => { playClick(); setPending(i); }} className="rds-btn w-full text-left px-2.5 py-2 text-[13px] normal-case">
                 {o.label}
               </button>
             ))}

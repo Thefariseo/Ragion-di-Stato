@@ -85,7 +85,7 @@ export function DeskScreen() {
       <div className={`flex-1 min-h-0 flex ${stamping ? "animate-deskShake" : ""}`}>
         {/* scrivania (legno) */}
         <div className="tex-wood flex-1 relative overflow-hidden">
-          <DeskProps />
+          <DeskProps day={game.day} />
           {!caseDef && (
             <div className="h-full flex items-center justify-center text-paper/60 font-pixel uppercase tracking-widest text-sm">
               Coda esaurita. Chiusura giornata…

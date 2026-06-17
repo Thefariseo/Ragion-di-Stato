@@ -130,14 +130,14 @@ export function DocumentCard({
                       data-no-drag
                       onPointerDown={(e) => e.stopPropagation()}
                       onClick={() => onSelectField(doc.id, f.label, f.value)}
-                      className={`font-read text-[14px] text-left leading-tight flex-1 min-w-0 ${
+                      className={`font-read text-[15px] text-left leading-tight flex-1 min-w-0 ${
                         isPicked(f.label) ? "bg-stamp-red/30 text-ink" : "text-ink hover:bg-black/10"
                       }`}
                     >
                       {f.value}
                     </button>
                   ) : (
-                    <span className="font-read text-[14px] text-ink leading-tight flex-1 min-w-0">{f.value}</span>
+                    <span className="font-read text-[15px] text-ink leading-tight flex-1 min-w-0">{f.value}</span>
                   )}
                 </div>
               );
@@ -146,7 +146,7 @@ export function DocumentCard({
         </div>
 
         {doc.body && doc.body.length > 0 && (
-          <div className="mt-2 pt-1.5 font-read text-[13px] text-ink/90 space-y-1 leading-snug relative">
+          <div className="mt-2 pt-1.5 font-read text-[14px] text-ink/90 space-y-1 leading-snug relative">
             {doc.body.map((p, i) => (
               <p key={i}>{p}</p>
             ))}
@@ -167,7 +167,7 @@ export function DocumentCard({
             {doc.protocollo ? `PROT. ${doc.protocollo}` : " "}
           </div>
           <div className="text-right">
-            <div className="font-[cursive] text-[13px] text-ink-blu/80 leading-none italic -rotate-3 pr-2">
+            <div className="font-[cursive] text-[14px] text-ink-blu/80 leading-none italic -rotate-3 pr-2">
               {scribble(doc.id)}
             </div>
             <div className="font-pixel text-[6px] uppercase tracking-wider text-ink/40 border-t border-ink/30 pt-0.5 mt-0.5">

@@ -24,7 +24,7 @@ export function DirectivesScreen() {
             <span className="font-pixel uppercase text-stamp-red text-base">Circolare di servizio — Giorno {dayDef.day}</span>
           </div>
 
-          <ol className="font-read text-[15px] text-ink space-y-2 list-decimal list-inside mb-4 leading-snug">
+          <ol className="font-read text-[16px] text-ink space-y-2 list-decimal list-inside mb-4 leading-snug">
             {dayDef.directives.map((d, i) => (
               <li key={i} className={d.startsWith("NUOVO") ? "text-stamp-red" : ""}>{d}</li>
             ))}
@@ -32,7 +32,7 @@ export function DirectivesScreen() {
 
           <div className="bg-black/[0.04] border-2 border-ink/20 p-3">
             <div className="font-pixel text-[7px] uppercase tracking-widest text-ink/60 mb-1">Regole di validazione in vigore</div>
-            <ul className="font-read text-[12px] text-ink/80 space-y-1 leading-snug">
+            <ul className="font-read text-[13px] text-ink/80 space-y-1 leading-snug">
               {dayDef.ruleIds.map((id) => (<li key={id}>— {RULES[id]?.text ?? id}</li>))}
             </ul>
           </div>
