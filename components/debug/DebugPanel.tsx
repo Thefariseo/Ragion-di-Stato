@@ -1,10 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import { useGameStore } from "@/store/gameStore";
 import { ENDINGS } from "@/data/endings";
 import { CORE_FACTIONS, FACTIONS } from "@/data/factions";
 import { clamp } from "@/lib/format";
 import type { FactionId, GamePhase } from "@/types";
+import { DebugGallery } from "./DebugGallery";
 
 /** Pannello di debug: volutamente NON diegetico (terminale verde). */
 export function DebugPanel({ open, onClose }: { open: boolean; onClose: () => void }) {
@@ -13,6 +15,7 @@ export function DebugPanel({ open, onClose }: { open: boolean; onClose: () => vo
   const debugAdvanceDay = useGameStore((s) => s.debugAdvanceDay);
   const goToPhase = useGameStore((s) => s.goToPhase);
   const startNewGame = useGameStore((s) => s.startNewGame);
+  const [gallery, setGallery] = useState(false);
 
   if (!open) return null;
 
@@ -36,6 +39,14 @@ export function DebugPanel({ open, onClose }: { open: boolean; onClose: () => vo
         <span className="font-pixel text-[10px] uppercase tracking-widest text-neon">debug · MoA</span>
         <button onClick={onClose} className="border border-neon/40 px-2">✕</button>
       </div>
+
+      <button
+        onClick={() => setGallery(true)}
+        className="w-full border border-neon/40 px-2 py-1 mb-2 font-pixel text-[9px] uppercase text-neon hover:bg-neon hover:text-[#070b09]"
+      >
+        ▣ Galleria asset
+      </button>
+      {gallery && <DebugGallery onClose={() => setGallery(false)} />}
 
       <div className="text-neon/70 mb-2">
         G{game.day} · {game.phase} · caso {game.currentCaseIndex}/{game.queue.length} · seed {game.seed}

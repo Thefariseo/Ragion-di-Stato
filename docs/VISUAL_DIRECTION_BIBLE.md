@@ -106,6 +106,27 @@ material, schermate vuote/pulite, animazioni lunghe/morbide.
 | Ombre a scatto, bordi netti | Ombre morbide, blur, glow |
 | Testo documenti `#574848` | Nero puro, serif eleganti |
 
+## 18. Presentazione, cutscene, audio (NUOVO)
+- **CutsceneEngine** (`components/cutscene` + `data/cutscenes.ts`): beat
+  data-driven (bg/visual/title/lines/sound/music/durata), avanzamento a click,
+  **Salta**. Niente cutscene hardcoded. Stile: rigido, low-res, pochi frame,
+  cupo, quasi propagandistico (timbro che cade, lettera battuta, stemmi che
+  compaiono). 🔜 cutscene per eventi e per ogni finale.
+- **Intro** (`intro` cutscene → prima del Giorno 1): nomina ministeriale →
+  Paese che trema → **schedario fazioni** (stemmi + una riga ciascuna) → ruolo.
+  Onboarding diegetico, non un tutorial moderno.
+- **Archivio fazioni** (`FactionArchive`, dal titolo): schedario riservato, non
+  un menu — scheda per fazione con stemma, identità, figure, «segreto» con
+  **omissis**.
+- **Colonna sonora procedurale** (`lib/music.ts`, WebAudio, nessun asset, niente
+  copie): cupa, marziale, minimale, in scala minore + drone basso. Temi:
+  `solenne` (titolo/intro/finali), `lavoro` (scrivania — quasi solo ambiente,
+  non invasivo), `tensione` (eventi), `finale`. Legata alla fase. Parte dopo il
+  primo gesto (policy browser). Toggle audio (♪) in basso a destra. 🔜 leitmotiv
+  per ogni fazione, più ambiente (pioggia, sirene, telescrivente).
+- **Galleria debug** (`DebugGallery`, dal pannello debug): stemmi, timbri, volti,
+  palette, musica, sfx — per verificare la coerenza artistica.
+
 ## 17. Checklist per ogni nuova feature visiva
 1. Sta dentro il cabinet `1180×664` e rispetta lo scaling? 2. Pixel/`pixelated`,
 zero blur/anti-alias? 3. Palette nei token? 4. Font pixel? 5. È **diegetica**

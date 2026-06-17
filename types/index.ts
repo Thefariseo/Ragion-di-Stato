@@ -332,6 +332,36 @@ export interface NpcView {
   tone: "buono" | "cattivo" | "neutro";
 }
 
+/* --------------------------------------------------------------- Cutscene */
+
+export type CutsceneBg = "black" | "corridor" | "archive" | "paper" | "desk";
+export type CutsceneVisual =
+  | "none"
+  | "letter"
+  | "stamp"
+  | "newspaper"
+  | "emblems"
+  | "telex"
+  | "folder";
+
+export interface CutsceneBeat {
+  bg?: CutsceneBg;
+  visual?: CutsceneVisual;
+  emblems?: { faction: FactionId; caption: string }[];
+  title?: string;
+  lines?: string[];
+  stampLabel?: string;
+  sound?: "type" | "stamp" | "telex" | "thud" | "paper" | "ring";
+  music?: string;
+  /** se impostata, avanza da sola; altrimenti attende il click */
+  durationMs?: number;
+}
+
+export interface Cutscene {
+  id: string;
+  beats: CutsceneBeat[];
+}
+
 /* ------------------------------------------------------------------ Finali */
 
 export interface EndingDef {
@@ -346,6 +376,7 @@ export interface EndingDef {
 
 export type GamePhase =
   | "title"
+  | "intro"
   | "newspaper"
   | "briefing"
   | "directives"

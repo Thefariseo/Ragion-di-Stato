@@ -5,11 +5,13 @@ import { useGameStore } from "@/store/gameStore";
 import { randomSeed } from "@/lib/rng";
 import { Stamp } from "@/components/ui/Stamp";
 import { Emblem } from "@/components/desk/Emblem";
+import { FactionArchive } from "@/components/desk/FactionArchive";
 import { playStamp } from "@/lib/sfx";
 
 export function TitleScreen() {
   const startNewGame = useGameStore((s) => s.startNewGame);
   const [seed, setSeed] = useState<string>(() => String(randomSeed()));
+  const [archive, setArchive] = useState(false);
 
   function start() {
     playStamp();
@@ -53,11 +55,19 @@ export function TitleScreen() {
             <button onClick={start} className="rds-btn rds-btn--respinto px-5 py-3 text-[11px]">Prendi servizio »</button>
           </div>
 
-          <div className="mt-5 text-center font-pixel text-[6px] uppercase tracking-wider text-ink/50 leading-relaxed">
+          <div className="mt-4 flex justify-center">
+            <button onClick={() => setArchive(true)} className="font-pixel text-[8px] uppercase tracking-widest text-ink/60 underline hover:text-stamp-red">
+              ▸ Archivio riservato — le fazioni
+            </button>
+          </div>
+
+          <div className="mt-3 text-center font-pixel text-[6px] uppercase tracking-wider text-ink/50 leading-relaxed">
             Liberamente ispirato a Papers, Please.<br />Partiti, sigle e persone sono finzione.
           </div>
         </div>
       </div>
+
+      {archive && <FactionArchive onClose={() => setArchive(false)} />}
     </div>
   );
 }

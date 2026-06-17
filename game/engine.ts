@@ -48,7 +48,7 @@ export function createGame(seed: number): GameState {
     seed,
     rngCursor: 0,
     day: 1,
-    phase: "newspaper",
+    phase: "intro",
     clock: 0,
     player: { ...DEFAULT_PLAYER },
     factions: initFactions(),
