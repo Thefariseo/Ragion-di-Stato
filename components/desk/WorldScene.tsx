@@ -135,12 +135,12 @@ export function WorldScene({
       if (Math.random() < (c.alarm ? 0.06 : 0.012)) flick.current = 0.45 + Math.random() * 0.3;
       else flick.current += (1 - flick.current) * 0.2;
 
-      // sfondo
-      px(0, 0, W, horizon, "#2a3026");
-      px(0, 0, W, horizon * 0.5, "#222820");
-      px(0, horizon, W, H - horizon, "#37301f");
+      // sfondo (palette del prologo: cupo, freddo, desaturato)
+      px(0, 0, W, horizon, "#181b13");
+      px(0, 0, W, horizon * 0.5, "#10120c");
+      px(0, horizon, W, H - horizon, "#16140d");
       // fughe pavimento
-      g.strokeStyle = "#2a261c";
+      g.strokeStyle = "#0e0d09";
       g.lineWidth = 1;
       for (let i = -5; i <= 5; i++) {
         g.beginPath();
@@ -152,15 +152,15 @@ export function WorldScene({
       const dW = 30;
       const dH = horizon * 0.7;
       px(W / 2 - dW / 2, horizon - dH, dW, dH, "#0e120c");
-      const lit = (c.alarm ? 0.5 : 0.85) * flick.current;
-      px(W / 2 - dW / 2 + 3, horizon - dH + 3, dW - 6, dH - 4, `rgba(190,180,110,${lit})`);
-      // manifesto a parete
-      px(36, 8, 22, 16, "#6a522f");
-      px(38, 10, 18, 3, "#9a6b30");
-      px(38, 15, 14, 2, "#7c6a48");
-      // bandiera
-      px(250, 8, 2, 26, "#15140f");
-      px(252, 8, 18, 10, c.alarm ? "#b42b2b" : "#7c241c");
+      const lit = (c.alarm ? 0.4 : 0.7) * flick.current;
+      px(W / 2 - dW / 2 + 3, horizon - dH + 3, dW - 6, dH - 4, `rgba(150,150,108,${lit})`);
+      // manifesto a parete (desaturato)
+      px(36, 8, 22, 16, "#343022");
+      px(38, 10, 18, 3, "#5a4d34");
+      px(38, 15, 14, 2, "#473f2e");
+      // bandiera (rossa solo in allarme, altrimenti cupa)
+      px(250, 8, 2, 26, "#0e0d09");
+      px(252, 8, 18, 10, c.alarm ? "#a8281f" : "#4a201a");
 
       // attori
       runnerTimer -= dt / 1000;

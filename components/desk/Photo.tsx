@@ -6,8 +6,8 @@ import { drawFace } from "./face";
 /** Fototessera sui documenti: volto pixel ~3:4, nativo basso scalato pixelated. */
 export function Photo({ seed, width = 60 }: { seed: number; label?: string; width?: number }) {
   const ref = useRef<HTMLCanvasElement | null>(null);
-  const W = 48;
-  const H = 60;
+  const W = 56;
+  const H = 70;
 
   useEffect(() => {
     const cv = ref.current;

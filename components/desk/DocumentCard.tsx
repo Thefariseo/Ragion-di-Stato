@@ -1,6 +1,7 @@
 "use client";
 
 import type { DocKind, FactionId, GameDocument } from "@/types";
+import { FACTIONS } from "@/data/factions";
 import { Photo } from "./Photo";
 import { Emblem } from "./Emblem";
 import { FactionEmblem } from "./FactionEmblem";
@@ -71,6 +72,9 @@ export function DocumentCard({
 }: Props) {
   const classified = doc.authLevel === "riservato" || doc.authLevel === "segreto";
   const band = BAND[doc.kind] ?? "#574848";
+  const fac = faction ? FACTIONS[faction] : undefined;
+  // identità grafica dell'ente: colore istituzionale come filo della testata
+  const facColor = fac?.color ?? "#b3a37a";
   const isPicked = (label: string) =>
     (selected?.docId === doc.id && selected.label === label) ||
     (selectedPair?.docId === doc.id && selectedPair.label === label);
@@ -90,16 +94,25 @@ export function DocumentCard({
         }}
       />
 
-      {/* carta intestata */}
+      {/* carta intestata dell'ente — filo istituzionale in alto */}
+      <div style={{ backgroundColor: facColor, height: 3 }} />
       <div className="px-1.5 py-1 flex items-center gap-1.5" style={{ backgroundColor: band }}>
         {faction ? <FactionEmblem faction={faction} size={18} /> : <Emblem size={18} color="#efeddc" />}
         <div className="min-w-0">
           <div className="font-pixel uppercase text-[10px] leading-none text-paper-cream truncate">{doc.title}</div>
           <div className="font-read text-[9px] uppercase tracking-wide text-paper-cream/70 leading-tight truncate">
-            {doc.issuer ?? (KIND_LABEL[doc.kind] ?? doc.kind)}
+            {doc.issuer ?? fac?.name ?? (KIND_LABEL[doc.kind] ?? doc.kind)}
           </div>
         </div>
-        <div className="ml-auto font-pixel text-[7px] uppercase text-paper-cream/70 shrink-0">
+        {fac && fac.sigla !== "—" && (
+          <div
+            className="ml-auto shrink-0 font-pixel text-[8px] uppercase tracking-wider px-1 py-0.5 leading-none"
+            style={{ color: facColor, border: `1px solid ${facColor}`, opacity: 0.85 }}
+          >
+            {fac.sigla}
+          </div>
+        )}
+        <div className={`${fac && fac.sigla !== "—" ? "" : "ml-auto"} font-pixel text-[7px] uppercase text-paper-cream/70 shrink-0`}>
           {KIND_LABEL[doc.kind] ?? doc.kind}
         </div>
       </div>

@@ -73,7 +73,7 @@ export function Booth({ game, dayDef, caseDef }: { game: GameState; dayDef: DayD
         <div className="absolute top-1 left-0 right-0 text-center rds-label text-[7px]">Sportello 7 · Ammissione</div>
         {caseDef ? (
           <div className="flex flex-col items-center">
-            <NpcSprite key={caseDef.id} seed={portraitSeed(caseDef.id)} />
+            <NpcSprite key={caseDef.id} seed={portraitSeed(caseDef.id)} width={140} />
             <div className="rds-nameplate px-2 py-1 text-center w-full">
               <div className="font-pixel uppercase text-[10px] leading-tight">{caseDef.subject}</div>
               <div className="font-read text-[10px] uppercase tracking-wide text-paper/70">

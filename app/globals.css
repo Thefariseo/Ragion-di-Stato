@@ -96,22 +96,25 @@ body {
 
 /* ------------------------------------------------------------- materiali */
 
+/* Materiali nella PALETTE DEL PROLOGO: cupi, freddi, desaturati, con una
+   pozza di luce centrale come nella cutscene d'apertura. */
 .tex-wall {
-  background-color: var(--olive-lo);
+  background-color: #101108;
   background-image:
     var(--noise),
-    repeating-linear-gradient(90deg, #3a3f30 0, #3a3f30 26px, #333827 26px, #333827 54px),
-    linear-gradient(180deg, #4a503c 0%, #2e3326 100%);
+    repeating-linear-gradient(90deg, #191b12 0, #191b12 26px, #14160d 26px, #14160d 54px),
+    linear-gradient(180deg, #1f221a 0%, #0b0c06 100%);
   background-size: 140px 140px, auto, auto;
   background-blend-mode: overlay, multiply, normal;
 }
 .tex-wood {
-  background-color: var(--tan-lo, #7a6038);
+  background-color: #110f0a;
   background-image:
     var(--noise),
-    repeating-linear-gradient(91deg, #7d6238 0, #8a6c3e 7px, #6f5631 12px, #835f37 17px);
-  background-size: 140px 140px, auto;
-  background-blend-mode: overlay, normal;
+    repeating-linear-gradient(91deg, #17130c 0, #1c180f 7px, #131009 12px, #181308 17px),
+    radial-gradient(125% 118% at 50% 24%, rgba(60, 56, 42, 0.55) 0%, rgba(0, 0, 0, 0) 60%);
+  background-size: 140px 140px, auto, auto;
+  background-blend-mode: overlay, soft-light, screen;
 }
 .tex-panel {
   background-color: var(--env2);
@@ -344,3 +347,59 @@ body {
 
 @keyframes csFadeIn { from { opacity: 0; } to { opacity: 1; } }
 .cs-fade { animation: csFadeIn 700ms ease-out both; }
+
+/* ammenda a scontrino che esce da sotto la scrivania */
+@keyframes receiptUp {
+  0% { transform: translateY(130%); opacity: 0; }
+  55% { opacity: 1; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+.rds-receipt { animation: receiptUp 540ms steps(7, end) both; }
+
+/* ===================== velo del prologo (sempre sulla scrivania) =========
+   Vignettatura fredda e pozza di luce: la scrivania è sempre cupa e sinistra,
+   i documenti restano l'unica cosa illuminata. pointer-events: none. */
+.rds-prologue-veil {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 6;
+  background:
+    radial-gradient(ellipse 82% 76% at 50% 30%, rgba(0, 0, 0, 0) 36%, rgba(5, 7, 6, 0.66) 100%),
+    linear-gradient(180deg, rgba(9, 13, 11, 0.16) 0%, rgba(5, 6, 4, 0.46) 100%);
+  mix-blend-mode: multiply;
+}
+
+/* ===================== animazioni scrivania (consegna/cartella/busta) =====
+   #5: più movimento di NPC e oggetti — la pratica viene consegnata, la cartella
+   si apre, la busta si strappa. Tutto a scatti pixel (steps). */
+@keyframes dossierDeliver {
+  0% { transform: translate(-130px, -72px) rotate(-9deg); opacity: 0; }
+  68% { transform: translate(7px, 5px) rotate(1.5deg); opacity: 1; }
+  100% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+}
+.rds-deliver { animation: dossierDeliver 540ms steps(8, end) both; }
+
+@keyframes folderCover {
+  0% { transform: rotateX(0deg); opacity: 1; }
+  58% { opacity: 1; }
+  100% { transform: rotateX(-98deg); opacity: 0; }
+}
+.rds-folder-cover {
+  animation: folderCover 640ms steps(7, end) 200ms both;
+  transform-origin: top center;
+  backface-visibility: hidden;
+}
+
+@keyframes envTear {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  100% { transform: translate(46px, -34px) rotate(24deg); opacity: 0; }
+}
+.rds-env-tear { animation: envTear 500ms steps(6, end) both; }
+
+@keyframes handStamp {
+  0% { transform: translateY(-220px) rotate(-10deg); opacity: 0; }
+  60% { transform: translateY(0) rotate(-10deg); opacity: 1; }
+  74% { transform: translateY(-22px) rotate(-10deg); }
+  100% { transform: translateY(0) rotate(-10deg); opacity: 1; }
+}

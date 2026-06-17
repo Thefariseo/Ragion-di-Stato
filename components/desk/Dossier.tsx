@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type { CaseDef } from "@/types";
 import { DocumentCard } from "./DocumentCard";
 import { Draggable } from "./Draggable";
+import { FactionEmblem } from "./FactionEmblem";
 import { playClick, playPaper } from "@/lib/sfx";
 
 type Pick = { docId: string; label: string; value: string };
@@ -70,6 +71,27 @@ export function Dossier({ caseDef }: { caseDef: CaseDef }) {
 
   return (
     <div className="absolute inset-0 overflow-hidden">
+      {/* CARTELLA che si apre sulla pratica (consegna + apertura) */}
+      <div
+        key={`cover-${caseDef.id}`}
+        className="absolute left-4 top-10 z-[24] pointer-events-none"
+        style={{ width: 248, height: 152, perspective: "640px" }}
+        aria-hidden
+      >
+        <div className="rds-folder-cover w-full h-full">
+          <div
+            className="w-full h-full border-2 border-[#2c2417] shadow-[4px_6px_0_rgba(0,0,0,0.55)] relative overflow-hidden flex flex-col items-center justify-center gap-2"
+            style={{ backgroundColor: "#9c8a5e", backgroundImage: "var(--noise)", backgroundSize: "140px 140px", backgroundBlendMode: "multiply" }}
+          >
+            {/* linguetta della cartella */}
+            <div className="absolute -top-2 left-8 w-20 h-3 bg-[#8a784e] border-2 border-[#2c2417]" />
+            <span className="rds-classified font-pixel text-[9px] tracking-[0.3em] px-3 py-1">RISERVATO</span>
+            {caseDef.faction && <FactionEmblem faction={caseDef.faction} size={42} />}
+            <span className="font-pixel text-[7px] uppercase tracking-[0.2em] text-[#2c2417]">U.V.A.C. · Sportello 7</span>
+          </div>
+        </div>
+      </div>
+
       <div className="absolute top-2 left-2 right-2 z-30 flex items-center gap-2 flex-wrap">
         <button
           onClick={() => { playClick(); setCompareMode((v) => !v); clearCompare(); }}
