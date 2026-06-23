@@ -50,7 +50,14 @@ export function DeskScreen() {
   const actionItems = useMemo(() => {
     if (!caseDef || !validation) return [];
     const ctx = { caseDef, validation, analysis, flags: game.flags, day: game.day };
-    return caseDef.actions.map((a) => ({ action: a, ...actionAvailability(a, ctx) }));
+    const items = caseDef.actions.map((a) => ({ action: a, ...actionAvailability(a, ctx) }));
+    // fail-safe: se TUTTE le azioni sono bloccate, la pratica diventerebbe
+    // irrisolvibile. In quel caso sblocca tutto (il caso non ha un verdetto
+    // sempre-disponibile). Niente vicoli ciechi.
+    if (items.length > 0 && !items.some((it) => it.available)) {
+      return items.map((it) => ({ ...it, available: true, reason: undefined }));
+    }
+    return items;
   }, [caseDef, validation, analysis, game.flags, game.day]);
 
   // quando il Paese precipita nella crisi: sequenza d'attentato (una volta)

@@ -21,12 +21,47 @@ export const BASE_NEWS: Record<number, NewspaperItem[]> = {
     { headline: "CGL IN PIAZZA: «NON CI FAREMO INTIMIDIRE»", body: "Nuove mobilitazioni mentre il Ministero dispone «controlli rafforzati»." },
     { headline: "LA LIRA SOTTO PRESSIONE", body: "Gli ambienti economici «seguono con apprensione». Tradotto: hanno già spostato i capitali." },
   ],
+  4: [
+    { headline: "CONSULENTI ESTERNI NEI MINISTERI: «PRASSI NORMALE»", body: "Cresce il numero dei «collaboratori a contratto» senza concorso. Nessun elenco è pubblico. Nessuno lo chiede." },
+    { headline: "PORTO, LAVORI FERMI E SUBAPPALTI INTRECCIATI", body: "Una matassa di sigle e prestanome. Sul fondo, un nome che non compare mai." },
+  ],
+  5: [
+    { headline: "AREA EX-DEPOSITO, VIA LIBERA ALLA RICONVERSIONE", body: "Pratica «snella», dicono in Comune. Più snella del solito. Qualcuno ha tolto i lacci, e non si firma." },
+    { headline: "IL PARTITO: «NESSUN FONDO OCCULTO». L'OPPOSIZIONE INSISTE", body: "Smentite di rito. Più si smentisce, più la cifra di cui non si parla sembra precisa." },
+  ],
+  6: [
+    { headline: "INTERCETTAZIONI, LA MAGISTRATURA CHIEDE PIÙ MEZZI", body: "Pochi giudici, molte carte, telefoni che squillano e tacciono. Il giudice Ardenti non rilascia dichiarazioni." },
+    { headline: "ATTENTATO DI PIAZZA DEI TIGLI, INCHIESTA AL PALO", body: "A mesi di distanza, ancora «pista anarchica». Le presenze scomode sul luogo restano fuori dai verbali." },
+  ],
+  7: [
+    { headline: "FERMI E PERQUISIZIONI, «COLPO ALLE STRUTTURE EVERSIVE»", body: "Prelevamenti all'alba. Gli inquirenti lodano «la collaborazione degli uffici». Non dicono quali uffici." },
+    { headline: "ARMI IN UN MAGAZZINO? «FANTAPOLITICA», TAGLIA CORTO IL VIMINALE", body: "Voci di depositi «da attivare». Smentita immediata. Immediata come solo le cose vere sanno essere smentite." },
+  ],
+  8: [
+    { headline: "MAESTRO ELEMENTARE FERMATO E RILASCIATO IN POCHE ORE", body: "«Errore di trascrizione», si apprende. Un errore che qualcuno aveva firmato. Un altro, no." },
+    { headline: "IL MATTINO E LE «MANI INVISIBILI» DEGLI APPARATI", body: "Editoriale prudente, ma per la prima volta una parola: «deviazioni». Stasera, forse, una telefonata al direttore." },
+  ],
+  9: [
+    { headline: "GIORNI DECISIVI PER IL GOVERNO. VELARDI: «PIENA SERENITÀ»", body: "La serenità ostentata di chi sa che una cartella, da qualche parte, può cambiargli la vita." },
+    { headline: "«FONDO R»: TRE LETTERE CHE IL PALAZZO NON VUOLE SENTIRE", body: "Un sigla che circola tra i corridoi. Negata da tutti. Conosciuta da troppi." },
+  ],
+  10: [
+    { headline: "ATTESA PER UNO SCOOP, POI IL SILENZIO. CHE COSA È SUCCESSO?", body: "Una redazione pronta a uscire, poi il vuoto. A volte la notizia più grande è quella che non leggerete." },
+    { headline: "AVVICENDAMENTI NEGLI UFFICI RISERVATI", body: "Trasferimenti «tecnici», promozioni improvvise, una scrivania che cambia padrone. Come sempre. Come per il suo predecessore." },
+  ],
 };
 
 export const SIDEBARS: Record<number, { title: string; body: string }> = {
   1: { title: "IL COMMENTO", body: "«La fermezza dello Stato non è in discussione. Chi semina disordine troverà un argine. E una firma in calce.»" },
   2: { title: "NOTA AI DIRETTORI", body: "Si raccomanda alle testate «sobrietà» nel riferire i fatti di cronaca nera. Nell'interesse superiore di tutti." },
   3: { title: "ULTIM'ORA", body: "Movimenti negli apparati, secondo fonti riservate. Nessuna conferma. Nessuna smentita. Il che, di solito, è una conferma." },
+  4: { title: "IL COMMENTO", body: "«Lo Stato moderno ha bisogno di flessibilità. Anche nei nomi. Soprattutto nei nomi.»" },
+  5: { title: "NOTA AI DIRETTORI", body: "Si invita a non dare credito a «sigle di fantasia» circolanti su presunti fondi. Nell'interesse della piazza finanziaria." },
+  6: { title: "ULTIM'ORA", body: "Un funzionario, secondo voci, avrebbe ricevuto «cortesi raccomandazioni» telefoniche. Le voci, qui, non si verbalizzano." },
+  7: { title: "IL COMMENTO", body: "«La sicurezza ha un prezzo, e si paga in domande non fatte. Chi le fa, di solito, viene accompagnato.»" },
+  8: { title: "NOTA AI DIRETTORI", body: "La parola «deviazioni» è apparsa in un editoriale. Si raccomanda, d'ora in poi, maggiore «equilibrio»." },
+  9: { title: "ULTIM'ORA", body: "Si conferma che nulla è da confermare. Si smentisce che ci sia qualcosa da smentire. Buona giornata." },
+  10: { title: "IL COMMENTO", body: "«La macchina dello Stato non si ferma per un fascicolo. Si ferma, semmai, chi lo tiene in mano.»" },
 };
 
 /** Reattivi ai flag della run: lo Stato che reagisce, tace o manipola. */
@@ -80,5 +115,40 @@ export const NEWS_ITEMS: NewspaperItem[] = [
     requiresFlag: "bechis_segnalato",
     headline: "CRONISTA INDAGATO PER RICETTAZIONE DI ATTI",
     body: "La testata parla di intimidazione. Il Viminale: «Atto dovuto». Il cronista, per ora, non risponde al telefono.",
+  },
+  {
+    requiresFlag: "segnalato_ragioniere",
+    headline: "«CONSULENTE FANTASMA» SEGNALATO, POI IL VUOTO",
+    body: "Un nominativo con due identità sarebbe finito in una segnalazione interna. Della segnalazione, da ieri, non c'è più traccia. Del consulente, nemmeno.",
+  },
+  {
+    requiresFlag: "passato_ragioniere",
+    headline: "NEI MINISTERI ENTRANO ED ESCONO UOMINI SENZA NOME",
+    body: "Tessere di servizio a chi «non risulta». Tutto regolare, assicurano. Regolare come un timbro su una pratica che nessuno rileggerà.",
+  },
+  {
+    requiresFlag: "trattenuto_anello",
+    headline: "PRATICA EDILIZIA BLOCCATA: «MANCA UNA FIRMA»",
+    body: "Un funzionario avrebbe trattenuto una concessione priva di firma valida. In alto, qualcuno ha smesso di sorridere. Annotato, certamente, agli atti.",
+  },
+  {
+    requiresFlag: "deposito_alla_procura",
+    headline: "INDIRIZZO «SENSIBILE» AL VAGLIO DELLA PROCURA",
+    body: "Un magazzino dietro un'iscrizione sportiva. Il giudice Ardenti dispone accertamenti. La struttura, intanto, sposta ciò che può.",
+  },
+  {
+    requiresFlag: "fondoR_procura",
+    headline: "«FONDO R», UN SECONDO RISCONTRO FINISCE AL GIUDICE",
+    body: "Versamenti tra un fondo di partito e un'area in riconversione. La Procura non conferma. Il palazzo, stranamente, neppure smentisce.",
+  },
+  {
+    requiresFlag: "fondoR_distrutto",
+    headline: "«NESSUN FONDO, NESSUNA PRATICA»: IL CASO È CHIUSO",
+    body: "La cartella più scomoda risulta «mai esistita». Negli ambienti di governo, una soddisfazione misurata, e una promozione in arrivo per qualcuno.",
+  },
+  {
+    requiresFlag: "fondoR_coperto",
+    headline: "ATTENTATO E APPALTI, NESSUN COLLEGAMENTO: PAROLA DEL VIMINALE",
+    body: "La versione ufficiale tiene un altro giorno. Le carte che direbbero il contrario restano dove qualcuno le ha rimesse.",
   },
 ];

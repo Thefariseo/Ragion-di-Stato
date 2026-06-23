@@ -59,6 +59,13 @@ distruggi) spostano il fascicolo verso uno di questi destini → **finali**.
 | Cutscene + leitmotiv | l'ingresso in campo di una fazione |
 | Conseguenze | reputazione/sospetto/Paese/giornale/finali |
 
+## Stato di implementazione
+Arco **giocabile per intero (G1–G10)**. Il «fondo R» si assembla per gradi:
+protocollo `R-0455` (G4), sigillo dell'Anello (G5), telefonata (G6), riscontro
+Cardo (G6), deposito Rete (G7), faldone a nudo (G9), reckoning finale (G10). Il
+predecessore «trasferito» è il filo: a G9 ti arriva ciò che lui stava chiudendo.
+Le scelte impostano i flag che i finali valutano alla decima giornata.
+
 ## Finali (destino del Fascicolo + tuo)
 - **Insabbiato** (Anello/Governo): sopravvivi, complice. Verità sepolta.
 - **In tribunale** (Procura): processo, scorta, rischio. Verità parziale.

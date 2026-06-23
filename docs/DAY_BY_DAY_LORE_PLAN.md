@@ -27,9 +27,28 @@
 - La **paura** è regia (eventi animati, attentato), non aggettivi.
 - Il **compromesso** è meccanico: a G9–G10 non esiste la scelta «pulita».
 
-## Stato attuale
-Implementati G1–G3 (compressi: l'Anello arriva già a G1). Da fare: estendere a
-G4–G10 secondo la tabella, spostando la telefonata dell'Anello a G6 e l'arrivo
-del «fondo R» a G9. Impalcature pronte: gating (`game/actions.ts`),
-discrepanze (`game/discrepancies.ts`), voce (`lib/voice.ts`), eventi animati
-(`AmbientVisual`), giornale reattivo (`game/newspaper.ts`), cresta+leitmotiv.
+## Stato attuale — IMPLEMENTATO (G1–G10, `LAST_DAY = 10`)
+Tutte e dieci le giornate sono giocabili (sim headless: la run raggiunge il
+giorno 10 e quattro finali distinti, ~21 pratiche, nessun vicolo cieco).
+
+Mappa giornata → casi / evento (file `data/days.ts`, `data/cases/*`, `data/events.ts`):
+- **G1** d1_* (intro) · ev_telefono_anello
+- **G2** d2_* (servizi/procura/stampa) · ev_ispezione, ev_grazie_renzo
+- **G3** a3_pratica_incompleta, a3_tessera_doppia · *richiedi verifica*
+- **G4** a4_doppia_identita · *foto/identità*, NPC «il Ragioniere», prot. R-0455
+- **G5** a5_nulla_osta_anello · *trattieni*, sigillo dell'Anello
+- **G6** a6_fascicolo_cardo2 · **ev_telefonata_fondo** (telefonata ambigua + voice blip)
+- **G7** a7_porto_armi_rete, d3_documento_cupola · **ev_scorta_g7** (evento animato)
+- **G8** d3_innocente_rete, d3_ordine_conflitto · **giornale reattivo** alle scelte
+- **G9** a9_fondo_r, d3_politico_nota · **scelta morale** (fondo R) + ev_busta
+- **G10** d3_dossier_finale · **reckoning** → finali
+
+Le fazioni si presentano alla PRIMA comparsa (cresta + leitmotiv): Anello a G4,
+SIR/Procura/Stampa già a G1–G2, Rete/Cupola a G7. Il giornale reagisce ai flag
+(`data/newspapers.ts`). Le azioni gravi sono gated (`game/actions.ts`): denuncia
+→ prova; trasmetti/occulta/distruggi → esame.
+
+### Backlog (rifinitura, non bloccante)
+- Più casi per le giornate "magre" (G4–G6 hanno 1 pratica: alzare la quota).
+- Cue audio dedicati per ev_telefonata_fondo / ev_scorta_g7 (file esterni).
+- Diluire ancora la presentazione fazioni (G1–G2 sono dense).
