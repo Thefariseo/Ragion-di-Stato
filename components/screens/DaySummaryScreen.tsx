@@ -46,9 +46,9 @@ export function DaySummaryScreen() {
   const fullReadout = summary.day % 5 === 0 || hasEnding || summary.day >= LAST_DAY;
 
   return (
-    <div className="h-full w-full tex-wood flex items-center justify-center p-6 relative">
+    <div className="h-full w-full tex-wood flex items-start justify-center p-6 relative overflow-y-auto thin-scroll">
       <div className="absolute inset-0 bg-black/45 pointer-events-none" />
-      <div className="max-w-2xl w-full relative">
+      <div className="max-w-2xl w-full relative my-auto">
         <div className="rds-paper p-6 animate-slideUp">
           <div className="rds-classified font-pixel text-[8px] tracking-[0.2em] text-center py-1 mb-3">RESOCONTO · FINE GIORNO {summary.day}</div>
 
@@ -147,8 +147,8 @@ export function DaySummaryScreen() {
 
           {hasEnding && <Typewriter lines={["Qualcosa, stanotte, è arrivato al capolinea."]} speed={22} className="font-read text-stamp-red text-[14px] mb-3" />}
 
-          <div className="flex justify-end">
-            <button onClick={() => { playClick(); continueSummary(); }} className="rds-btn rds-btn--respinto px-5 py-2 text-[11px]">
+          <div className="sticky bottom-0 flex justify-end pt-3 -mx-6 px-6 -mb-6 pb-3 bg-paper-cream border-t-2 border-ink/20">
+            <button onClick={() => { playClick(); continueSummary(); }} className="rds-btn rds-btn--respinto px-5 py-2.5 text-[12px]">
               {hasEnding ? "Affronta le conseguenze »" : "Torna a casa »"}
             </button>
           </div>

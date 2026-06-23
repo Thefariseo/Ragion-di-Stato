@@ -1,11 +1,25 @@
 "use client";
 
+import { useEffect } from "react";
 import { useGameStore } from "@/store/gameStore";
 import { getEnding } from "@/data/endings";
 import { FACTIONS, CORE_FACTIONS } from "@/data/factions";
 import { Typewriter } from "@/components/ui/Typewriter";
 import { Stamp } from "@/components/ui/Stamp";
 import { playStamp } from "@/lib/sfx";
+import { playMusic } from "@/lib/music";
+
+// ogni finale ha un trattamento sonoro dedicato (cue del manifest audio)
+const ENDING_CUE: Record<string, string> = {
+  arrestato: "ending_arrest",
+  scandalo: "ending_scandal",
+  collaboratore_procura: "ending_magistratura",
+  scoperta_rete: "ending_secret",
+  fuga: "ending_secret",
+  complice_anello: "ending_servizi",
+  assorbito: "ending_system",
+  sistema_immutato: "ending_system",
+};
 
 export function EndingScreen() {
   const game = useGameStore((s) => s.game);
@@ -13,6 +27,11 @@ export function EndingScreen() {
   const backToTitle = useGameStore((s) => s.backToTitle);
 
   const ending = game.endingId ? getEnding(game.endingId) : undefined;
+
+  useEffect(() => {
+    if (game.endingId) playMusic(ENDING_CUE[game.endingId] ?? "ending_system");
+  }, [game.endingId]);
+
   if (!ending) return null;
 
   const allies = CORE_FACTIONS.filter((id) => game.factions[id].reputation >= 20).map((id) => FACTIONS[id].name);

@@ -2,10 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useGameStore } from "@/store/gameStore";
-import { playMusic, stopMusic, setMusicEnabled, isMusicEnabled } from "@/lib/music";
-import { setSfxEnabled, isSfxEnabled } from "@/lib/sfx";
-import { setVoiceEnabled, playBlip } from "@/lib/voice";
-import { startAmbient, stopAmbient, setAmbientEnabled } from "@/lib/ambientAudio";
+import { playMusic, stopMusic } from "@/lib/music";
+import { startAmbient, stopAmbient } from "@/lib/ambientAudio";
+import { resumeAudio } from "@/lib/audio/core";
+import { AudioSettings } from "./ui/AudioSettings";
 import type { GamePhase } from "@/types";
 import { GameViewport } from "./GameViewport";
 import { TitleScreen } from "./screens/TitleScreen";
@@ -50,8 +50,6 @@ export default function Game() {
   const hydrated = useGameStore((s) => s.hydrated);
   const phase = useGameStore((s) => s.game.phase);
   const [debugOpen, setDebugOpen] = useState(false);
-  const [audio, setAudio] = useState(true);
-  const [voiceOn, setVoiceOn] = useState(true);
   const phaseRef = useRef(phase);
   phaseRef.current = phase;
 
@@ -66,38 +64,20 @@ export default function Game() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  // audio legato alla fase (musica vs ambiente)
+  // audio legato alla fase (musica vs ambiente). Il volume/mute è nel mixer.
   useEffect(() => {
-    if (audio) routeAudio(phase);
-  }, [phase, audio]);
+    routeAudio(phase);
+  }, [phase]);
 
-  // l'audio parte solo dopo il primo gesto utente (policy del browser)
+  // il contesto audio parte/riprende solo dopo il primo gesto (policy browser)
   useEffect(() => {
     const kick = () => {
-      if (audio) routeAudio(phaseRef.current);
+      resumeAudio();
+      routeAudio(phaseRef.current);
     };
     window.addEventListener("pointerdown", kick, { once: true });
     return () => window.removeEventListener("pointerdown", kick);
-  }, [audio]);
-
-  function toggleAudio() {
-    const v = !audio;
-    setAudio(v);
-    setMusicEnabled(v);
-    setSfxEnabled(v);
-    setAmbientEnabled(v);
-    setVoiceEnabled(v && voiceOn);
-    if (v) routeAudio(phaseRef.current);
-    void isMusicEnabled;
-    void isSfxEnabled;
-  }
-
-  function toggleVoice() {
-    const v = !voiceOn;
-    setVoiceOn(v);
-    setVoiceEnabled(v && audio);
-    if (v && audio) playBlip("comune");
-  }
+  }, []);
 
   return (
     <>
@@ -127,20 +107,7 @@ export default function Game() {
         </div>
       </GameViewport>
 
-      <button
-        onClick={toggleVoice}
-        title="Voce (mormorio dei dialoghi)"
-        className="fixed bottom-1 right-[68px] z-[80] font-pixel text-[8px] uppercase px-1.5 py-0.5 bg-black/70 text-olive-hi hover:text-neon border border-black"
-      >
-        {voiceOn ? "VOCE" : "voce ×"}
-      </button>
-      <button
-        onClick={toggleAudio}
-        title="Audio (musica + effetti)"
-        className="fixed bottom-1 right-9 z-[80] font-pixel text-[8px] uppercase px-1.5 py-0.5 bg-black/70 text-olive-hi hover:text-neon border border-black"
-      >
-        {audio ? "♪" : "×"}
-      </button>
+      <AudioSettings />
       <button
         onClick={() => setDebugOpen((v) => !v)}
         title="Debug (`)"

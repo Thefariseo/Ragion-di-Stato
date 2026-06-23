@@ -294,6 +294,34 @@ canvas {
   animation: blink 1.05s steps(1) infinite;
 }
 
+/* cursore volume pixel (opzioni audio) */
+.rds-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  background: #0a0a08;
+  border: 2px solid #000;
+  image-rendering: pixelated;
+  cursor: pointer;
+}
+.rds-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 8px;
+  height: 14px;
+  background: var(--olive-hi);
+  border: 2px solid #000;
+  border-radius: 0;
+}
+.rds-slider::-moz-range-thumb {
+  width: 8px;
+  height: 14px;
+  background: var(--olive-hi);
+  border: 2px solid #000;
+  border-radius: 0;
+}
+.rds-slider:disabled { opacity: 0.4; }
+
 .thin-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
 .thin-scroll::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.5); }
 .thin-scroll::-webkit-scrollbar-track { background: transparent; }

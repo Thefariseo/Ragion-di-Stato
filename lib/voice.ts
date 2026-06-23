@@ -5,23 +5,20 @@
  * Disattivabile e regolabile dalle opzioni audio (canale separato da musica/sfx).
  */
 
+import { audioCtx, busNode } from "@/lib/audio/core";
+
 let ctx: AudioContext | null = null;
 let enabled = true;
 let volume = 0.5;
 let lastAt = 0;
 
 function ac(): AudioContext | null {
-  if (typeof window === "undefined") return null;
   if (!enabled) return null;
-  if (!ctx) {
-    const AC =
-      window.AudioContext ||
-      (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-    if (!AC) return null;
-    ctx = new AC();
-  }
-  if (ctx.state === "suspended") void ctx.resume();
+  ctx = audioCtx();
   return ctx;
+}
+function out(): AudioNode | null {
+  return busNode("voice");
 }
 
 export function setVoiceEnabled(on: boolean) {
@@ -106,7 +103,7 @@ export function playBlip(profileId: VoiceProfileId = "comune") {
   g.gain.setValueAtTime(0.0001, t);
   g.gain.exponentialRampToValueAtTime(vol, t + 0.006);
   g.gain.exponentialRampToValueAtTime(0.0001, t + p.dur);
-  osc.connect(band).connect(g).connect(c.destination);
+  osc.connect(band).connect(g).connect(out() ?? c.destination);
   osc.start(t);
   osc.stop(t + p.dur + 0.01);
 
@@ -124,7 +121,7 @@ export function playBlip(profileId: VoiceProfileId = "comune") {
     const hp = c.createBiquadFilter();
     hp.type = "bandpass";
     hp.frequency.value = p.band ?? 1000;
-    n.connect(hp).connect(ng).connect(c.destination);
+    n.connect(hp).connect(ng).connect(out() ?? c.destination);
     n.start(t);
   }
 }

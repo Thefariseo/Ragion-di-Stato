@@ -6,6 +6,8 @@
  * fruscio di carta). Volume basso: è un AMBIENTE, non un brano.
  */
 
+import { audioCtx, busNode } from "@/lib/audio/core";
+
 let ctx: AudioContext | null = null;
 let bed: GainNode | null = null;
 let nodes: { stop: () => void }[] = [];
@@ -14,18 +16,15 @@ let enabled = true;
 let running = false;
 
 function ac(): AudioContext | null {
-  if (typeof window === "undefined" || !enabled) return null;
-  if (!ctx) {
-    const AC =
-      window.AudioContext ||
-      (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-    if (!AC) return null;
-    ctx = new AC();
+  if (!enabled) return null;
+  ctx = audioCtx();
+  const bus = busNode("ambience");
+  if (!ctx || !bus) return null;
+  if (!bed) {
     bed = ctx.createGain();
     bed.gain.value = 0.0001;
-    bed.connect(ctx.destination);
+    bed.connect(bus);
   }
-  if (ctx.state === "suspended") void ctx.resume();
   return ctx;
 }
 
