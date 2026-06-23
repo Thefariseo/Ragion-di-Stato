@@ -41,6 +41,9 @@ html,
 body {
   height: 100%;
 }
+html {
+  image-rendering: pixelated;
+}
 body {
   background: var(--env0);
   color: var(--ink);
@@ -50,6 +53,25 @@ body {
 }
 * {
   -webkit-font-smoothing: none;
+}
+img,
+canvas {
+  image-rendering: pixelated;
+}
+
+/* ---- regola 8/16 bit: niente smussi moderni sulle chrome ----
+   I documenti, i pannelli, i bottoni e i timbri NON sono elementi web: spigoli
+   vivi, ombre "a scatto" (offset, mai sfocate). Le forme tonde restano ammesse
+   solo come SPRITE decorativi (occhi, lampade, sigilli), non come UI. */
+.rds-paper,
+.rds-panel,
+.rds-btn,
+.rds-lcd,
+.rds-nameplate,
+.rds-stamp-tool,
+.rds-gauge,
+.foto {
+  border-radius: 0 !important;
 }
 
 .pixelated {

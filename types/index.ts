@@ -146,6 +146,8 @@ export interface ActionRequirement {
   inspected?: boolean;
   /** serve aver trovato almeno una contraddizione */
   discrepancyFound?: boolean;
+  /** serve una PROVA: una contraddizione trovata OPPURE una violazione di regola */
+  evidence?: boolean;
   /** serve almeno una violazione del regolamento */
   ruleViolation?: boolean;
   /** serve piena regolarità (nessuna violazione) */

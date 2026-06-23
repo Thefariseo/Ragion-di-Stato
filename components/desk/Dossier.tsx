@@ -5,6 +5,7 @@ import type { CaseDef } from "@/types";
 import { DocumentCard } from "./DocumentCard";
 import { Draggable } from "./Draggable";
 import { FactionEmblem } from "./FactionEmblem";
+import { matchDiscrepancy, discrepancyKey, discrepancyCount } from "@/game/discrepancies";
 import { playClick, playPaper } from "@/lib/sfx";
 
 type Pick = { docId: string; label: string; value: string };
@@ -42,17 +43,17 @@ export function Dossier({
     onAnalysis?.({ inspected, discrepanciesFound: found.size });
   }, [inspected, found, onAnalysis]);
 
-  const total = caseDef.discrepancies?.length ?? 0;
+  const total = discrepancyCount(caseDef);
 
   function evaluate(a: Pick, b: Pick) {
-    const disc = (caseDef.discrepancies ?? []).find((d) => {
-      const m1 = d.aDocId === a.docId && d.aField === a.label && d.bDocId === b.docId && d.bField === b.label;
-      const m2 = d.aDocId === b.docId && d.aField === b.label && d.bDocId === a.docId && d.bField === a.label;
-      return m1 || m2;
-    });
+    const disc = matchDiscrepancy(
+      caseDef,
+      { docId: a.docId, field: a.label },
+      { docId: b.docId, field: b.label },
+    );
     if (disc) {
       setResult({ note: disc.note, hit: true });
-      setFound((p) => new Set(p).add(`${disc.aField}|${disc.bField}`));
+      setFound((p) => new Set(p).add(discrepancyKey(disc)));
     } else {
       setResult({ note: "Nessuna contraddizione evidente tra questi due campi.", hit: false });
     }

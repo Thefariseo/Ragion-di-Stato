@@ -2,9 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useGameStore } from "@/store/gameStore";
-import { playMusic, setMusicEnabled, isMusicEnabled } from "@/lib/music";
+import { playMusic, stopMusic, setMusicEnabled, isMusicEnabled } from "@/lib/music";
 import { setSfxEnabled, isSfxEnabled } from "@/lib/sfx";
 import { setVoiceEnabled, playBlip } from "@/lib/voice";
+import { startAmbient, stopAmbient, setAmbientEnabled } from "@/lib/ambientAudio";
 import type { GamePhase } from "@/types";
 import { GameViewport } from "./GameViewport";
 import { TitleScreen } from "./screens/TitleScreen";
@@ -20,19 +21,30 @@ import { EndingScreen } from "./screens/EndingScreen";
 import { PhaseTransition } from "./ui/PhaseTransition";
 import { DebugPanel } from "./debug/DebugPanel";
 
-const THEME_FOR: Record<GamePhase, string> = {
+// Le fasi che usano la MUSICA (inno istituzionale). Il gameplay (desk/event)
+// invece NON ha musica: domina il sound design ambientale (lib/ambientAudio).
+const THEME_FOR: Partial<Record<GamePhase, string>> = {
   title: "solenne",
   intro: "solenne",
   cutscene: "solenne",
-  newspaper: "lavoro",
-  briefing: "lavoro",
-  directives: "lavoro",
-  desk: "lavoro",
-  event: "tensione",
-  daySummary: "lavoro",
-  night: "lavoro",
+  newspaper: "solenne",
+  briefing: "solenne",
+  directives: "solenne",
+  daySummary: "solenne",
+  night: "solenne",
   ending: "finale",
 };
+
+/** instrada l'audio in base alla fase: ambiente sul banco, musica altrove. */
+function routeAudio(phase: GamePhase) {
+  if (phase === "desk" || phase === "event") {
+    stopMusic();
+    startAmbient();
+  } else {
+    stopAmbient();
+    playMusic(THEME_FOR[phase] ?? "solenne");
+  }
+}
 
 export default function Game() {
   const hydrated = useGameStore((s) => s.hydrated);
@@ -54,15 +66,15 @@ export default function Game() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  // colonna sonora legata alla fase
+  // audio legato alla fase (musica vs ambiente)
   useEffect(() => {
-    if (audio) playMusic(THEME_FOR[phase] ?? "lavoro");
+    if (audio) routeAudio(phase);
   }, [phase, audio]);
 
   // l'audio parte solo dopo il primo gesto utente (policy del browser)
   useEffect(() => {
     const kick = () => {
-      if (audio) playMusic(THEME_FOR[phaseRef.current] ?? "lavoro");
+      if (audio) routeAudio(phaseRef.current);
     };
     window.addEventListener("pointerdown", kick, { once: true });
     return () => window.removeEventListener("pointerdown", kick);
@@ -73,8 +85,9 @@ export default function Game() {
     setAudio(v);
     setMusicEnabled(v);
     setSfxEnabled(v);
+    setAmbientEnabled(v);
     setVoiceEnabled(v && voiceOn);
-    if (v) playMusic(THEME_FOR[phaseRef.current] ?? "lavoro");
+    if (v) routeAudio(phaseRef.current);
     void isMusicEnabled;
     void isSfxEnabled;
   }

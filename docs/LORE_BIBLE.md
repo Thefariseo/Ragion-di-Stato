@@ -137,3 +137,13 @@ tensione nasce dal **dubbio**: *in regola ≠ giusto*. Nessuna verità è intera
 Ogni nuovo contenuto deve **mostrare** la lore, non spiegarla: in un documento,
 un trafiletto di giornale, una cutscene, uno stemma, un evento del corridoio,
 una nota del superiore, un destino di NPC. Se resta solo descrizione, va rifatto.
+
+## Arco principale e piano giornaliero
+Il filo narrativo che cresce **giorno per giorno** non vive in questo file: vedi
+- **`MAIN_STORY_ARC.md`** — logline, MacGuffin («Fascicolo Velardi / fondo R»),
+  i quattro movimenti (burocrazia → sospetto → paura → compromesso), NPC
+  ricorrenti, finali;
+- **`DAY_BY_DAY_LORE_PLAN.md`** — cosa emerge a ogni giornata (G1–G10) e tramite
+  quale medium (giornale/documento/telefonata/NPC/omissis/ordine/evento/cutscene/
+  conseguenza), una cosa nuova per volta.
+La lore **deve emergere dal gioco**, non da blocchi di testo.

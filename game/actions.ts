@@ -1,4 +1,5 @@
 import type {
+  ActionKind,
   ActionRequirement,
   CaseAction,
   CaseDef,
@@ -35,8 +36,9 @@ export interface ActionAvailability {
 }
 
 const REASON: Record<keyof ActionRequirement, string> = {
-  inspected: "Usa prima la lente di confronto.",
+  inspected: "Esamina prima la pratica con la lente.",
   discrepancyFound: "Serve una contraddizione rilevata.",
+  evidence: "Serve una prova: una contraddizione o un'irregolarità.",
   ruleViolation: "Serve un'irregolarità nei documenti.",
   noViolation: "La pratica deve essere in regola.",
   authLevel: "Serve un atto riservato in pratica.",
@@ -46,21 +48,46 @@ const REASON: Record<keyof ActionRequirement, string> = {
   fromDay: "Non previsto da questo ufficio. Per ora.",
 };
 
+/**
+ * POLITICA DI DEFAULT dell'ActionEngine: anche senza `requires` esplicito, certe
+ * azioni non sono mai "gratis". Denunciare/incastrare richiede una PROVA;
+ * trasmettere/occultare/distruggere/censurare/scagionare richiede di aver prima
+ * ESAMINATO la pratica. Così TUTTI i casi sono sistematici, non solo quelli
+ * annotati a mano. Un caso può forzare la disponibilità con `requires: {}`.
+ */
+export function defaultRequirement(kind: ActionKind): ActionRequirement {
+  switch (kind) {
+    case "segnala":
+    case "incastra":
+      return { evidence: true };
+    case "trasmetti":
+    case "occulta":
+    case "distruggi":
+    case "censura":
+    case "proteggi":
+      return { inspected: true };
+    default:
+      return {};
+  }
+}
+
 function hasAuthLevel(c: CaseDef, level: string): boolean {
   return c.documents.some((d) => d.authLevel === level);
 }
 
 export function actionAvailability(action: CaseAction, ctx: ActionContext): ActionAvailability {
-  const r = action.requires;
-  if (!r) return { available: true };
+  // requisito esplicito del caso, altrimenti la politica di default per tipo
+  const r = action.requires ?? defaultRequirement(action.kind);
 
   const fail = (k: keyof ActionRequirement): ActionAvailability => ({
     available: false,
     reason: action.lockHint ?? REASON[k],
   });
 
+  const hasEvidence = ctx.analysis.discrepanciesFound > 0 || !ctx.validation.inRegola;
   if (r.inspected && !ctx.analysis.inspected) return fail("inspected");
   if (r.discrepancyFound && ctx.analysis.discrepanciesFound <= 0) return fail("discrepancyFound");
+  if (r.evidence && !hasEvidence) return fail("evidence");
   if (r.ruleViolation && ctx.validation.inRegola) return fail("ruleViolation");
   if (r.noViolation && !ctx.validation.inRegola) return fail("noViolation");
   if (r.authLevel && !hasAuthLevel(ctx.caseDef, r.authLevel)) return fail("authLevel");

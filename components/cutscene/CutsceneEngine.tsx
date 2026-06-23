@@ -5,7 +5,7 @@ import type { Cutscene, CutsceneBeat } from "@/types";
 import { Typewriter } from "@/components/ui/Typewriter";
 import { CutsceneStage } from "./CutsceneStage";
 import { playStamp, playTelex, playPaper, playRing, playThud } from "@/lib/sfx";
-import { playMusic } from "@/lib/music";
+import { playMusic, playLeitmotif } from "@/lib/music";
 import { voiceForFaction } from "@/lib/voice";
 
 const SOUND: Record<string, () => void> = {
@@ -42,6 +42,8 @@ export function CutsceneEngine({ cutscene, onDone }: { cutscene: Cutscene; onDon
     if (!beat) return;
     if (beat.sound && SOUND[beat.sound]) SOUND[beat.sound]();
     if (beat.music) playMusic(beat.music);
+    // leitmotiv della fazione alla sua presentazione (scena crest)
+    if (beat.faction && beat.scene === "crest") setTimeout(() => playLeitmotif(beat.faction!), 500);
     const t = setTimeout(advance, duration(beat));
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
