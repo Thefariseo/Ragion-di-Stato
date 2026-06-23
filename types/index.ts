@@ -123,7 +123,43 @@ export type ActionKind =
   | "distruggi"
   | "proteggi"
   | "incastra"
-  | "verifica";
+  | "verifica"
+  | "trattieni"
+  | "censura"
+  | "convoca"
+  | "non_registra";
+
+/** dove inoltrare una pratica (azioni "trasmetti …"). */
+export type ActionTarget =
+  | "ministero"
+  | "magistratura"
+  | "stampa"
+  | "servizi";
+
+/**
+ * Requisito di DISPONIBILITÀ di un'azione: l'azione compare solo quando è
+ * GIUSTIFICATA da documenti, prove, regole o contesto (vedi game/actions.ts).
+ * Senza `requires`, l'azione è sempre disponibile (retrocompatibile).
+ */
+export interface ActionRequirement {
+  /** serve aver usato la lente di confronto su questa pratica */
+  inspected?: boolean;
+  /** serve aver trovato almeno una contraddizione */
+  discrepancyFound?: boolean;
+  /** serve almeno una violazione del regolamento */
+  ruleViolation?: boolean;
+  /** serve piena regolarità (nessuna violazione) */
+  noViolation?: boolean;
+  /** serve in pratica un documento con questo livello di riservatezza */
+  authLevel?: AuthLevel;
+  /** serve un documento di questo tipo nella pratica */
+  hasDocKind?: DocKind;
+  /** serve questo flag attivo / assente */
+  flag?: string;
+  notFlag?: string;
+  /** disponibile solo dal giorno N in poi */
+  fromDay?: number;
+}
 
 export interface Discrepancy {
   aDocId: string;
@@ -137,6 +173,8 @@ export interface CaseAction {
   id: string;
   label: string;
   kind: ActionKind;
+  /** destinatario, per le azioni "trasmetti …" */
+  target?: ActionTarget;
   /** se true, l'azione apporta un timbro (animazione + suono) */
   needsStamp?: boolean;
   /** etichetta del timbro apposto, se diversa dal default per kind */
@@ -144,6 +182,10 @@ export interface CaseAction {
   consequence: Consequence;
   /** suggerimento UI: NON rivela l'esito */
   hint?: string;
+  /** quando l'azione è disponibile (gating procedurale). Vedi game/actions.ts */
+  requires?: ActionRequirement;
+  /** testo mostrato quando l'azione è bloccata (perché non è ancora giustificata) */
+  lockHint?: string;
 }
 
 export interface CaseDef {

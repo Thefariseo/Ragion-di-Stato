@@ -9,12 +9,19 @@ import { playClick, playPaper } from "@/lib/sfx";
 
 type Pick = { docId: string; label: string; value: string };
 
-export function Dossier({ caseDef }: { caseDef: CaseDef }) {
+export function Dossier({
+  caseDef,
+  onAnalysis,
+}: {
+  caseDef: CaseDef;
+  onAnalysis?: (a: { inspected: boolean; discrepanciesFound: number }) => void;
+}) {
   const [compareMode, setCompareMode] = useState(false);
   const [first, setFirst] = useState<Pick | null>(null);
   const [second, setSecond] = useState<Pick | null>(null);
   const [result, setResult] = useState<{ note: string; hit: boolean } | null>(null);
   const [found, setFound] = useState<Set<string>>(new Set());
+  const [inspected, setInspected] = useState(false);
   const [resetKey, setResetKey] = useState(0);
   const zCounter = useRef(10);
 
@@ -24,10 +31,16 @@ export function Dossier({ caseDef }: { caseDef: CaseDef }) {
     setSecond(null);
     setResult(null);
     setFound(new Set());
+    setInspected(false);
     setResetKey((k) => k + 1);
     zCounter.current = 10;
     playPaper();
   }, [caseDef.id]);
+
+  // riporta l'analisi alla scrivania (sblocca le azioni coerenti)
+  useEffect(() => {
+    onAnalysis?.({ inspected, discrepanciesFound: found.size });
+  }, [inspected, found, onAnalysis]);
 
   const total = caseDef.discrepancies?.length ?? 0;
 
@@ -94,7 +107,7 @@ export function Dossier({ caseDef }: { caseDef: CaseDef }) {
 
       <div className="absolute top-2 left-2 right-2 z-30 flex items-center gap-2 flex-wrap">
         <button
-          onClick={() => { playClick(); setCompareMode((v) => !v); clearCompare(); }}
+          onClick={() => { playClick(); setCompareMode((v) => !v); setInspected(true); clearCompare(); }}
           className={`rds-btn ${compareMode ? "rds-btn--neon" : ""} text-[9px] px-2.5 py-1`}
         >
           {compareMode ? "◉ Lente" : "⌕ Confronta"}

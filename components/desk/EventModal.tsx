@@ -7,6 +7,7 @@ import { Typewriter } from "@/components/ui/Typewriter";
 import { OutcomeOverlay } from "@/components/ui/OutcomeOverlay";
 import { EventScene } from "./EventScene";
 import { playRing, playThud, playClick, playTelex } from "@/lib/sfx";
+import { voiceForChannel } from "@/lib/voice";
 
 const CHANNEL_LABEL: Record<string, string> = {
   telefono: "TRASCRIZIONE TELEFONICA",
@@ -65,7 +66,7 @@ export function EventModal() {
       >
         <div className={`rds-paper p-4 ${staged ? "animate-slideUp" : ""}`}>
           {staged && (
-            <Typewriter lines={ev.body} speed={16} className="font-read text-[16px] text-ink mb-3 leading-snug" />
+            <Typewriter lines={ev.body} speed={16} voice={voiceForChannel(ev.channel)} className="font-read text-[16px] text-ink mb-3 leading-snug" />
           )}
           <div className="space-y-2 mt-1">
             {ev.options.map((o, i) => (

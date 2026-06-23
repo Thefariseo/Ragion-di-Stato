@@ -24,16 +24,34 @@ sistema entra quando il precedente è stato assorbito.
 5. **La tensione sale con il Paese.** `caos` e `sospetto` rendono il corridoio
    più affollato/nervoso, le guardie più presenti, fino all'allarme rosso.
 
-## Curva (stato attuale del prototipo — `data/days.ts`)
+## Curva BERSAGLIO — prime 10 giornate (prima burocrazia, poi sospetto, poi paura, poi compromesso)
 
-| Giorno | Cosa si impara | Regole attive | Fazioni introdotte | Evento |
-| --- | --- | --- | --- | --- |
-| 1 | Il lavoro: conforme vs. respinto. Nomi, tessere, protocollo. | 3 | la prima che bussa (es. Sindacato/Brigate) + contatto **Anello** | telefonata Anello |
-| 2 | Il segreto: RISERVATO/SEGRETO, nulla osta, firme. Esistono gli Affari Interni. | 5 | SIR, Procura, Stampa | ispezione interna |
-| 3 | Il peso: provenienza ignota, foto che deve corrispondere, divieti verso la Stampa. Cosa tieni tra le mani a fine giornata. | 7 | Cupola, Rete | busta sotto la porta |
+| Giorno | Si introduce | Meccanica nuova |
+| --- | --- | --- |
+| 1 | Controllo base: approva/respingi. Onboarding diegetico. | verdetto formale |
+| 2 | Date e protocolli. | regola `protocollo` / scadenze |
+| 3 | Documento mancante → **richiedi verifica**. | azione gated `inspected` |
+| 4 | Primo **NPC sospetto** (discrepanza da lente). | loop confronto→segnala |
+| 5 | Primo **riferimento indiretto** a una fazione. | flag di lore |
+| 6 | **Telefonata ambigua** con voice blip. | evento `telefono` + voce |
+| 7 | Primo **evento ambientale animato** rilevante. | `AmbientVisual` scriptato |
+| 8 | Prima **conseguenza sul giornale**. | `newspaper` reattivo |
+| 9 | Prima **scelta morale vera**. | bivio con conseguenze differite |
+| 10 | Prima **fazione presentata** con dossier/cutscene. | `crest` + leitmotiv |
 
-> La struttura è data-driven: aggiungere giornate = aggiungere `DayDef` +
-> `caseIds` + `events`, rispettando "una cosa nuova per volta".
+## Stato attuale (`data/days.ts`)
+
+Implementati 3 giorni (1–3) con ramp di regole (3→5→7) e fazioni. Il prototipo
+**comprime** già parte della curva (l'Anello arriva al G1). Per allinearsi al
+bersaglio sopra va **diluito su 10 giornate**: è il principale lavoro di
+contenuti rimasto (nuovi `DayDef` + `caseIds` + `events`, "una cosa nuova per
+volta"). Le impalcature tecniche per ogni passo esistono già:
+
+- gating azioni (`game/actions.ts`) per i giorni 3–4;
+- voice blip (`lib/voice.ts`) per il giorno 6;
+- eventi ambientali animati (`AmbientVisual`) per il giorno 7;
+- giornale reattivo (`game/newspaper.ts`) per il giorno 8;
+- cutscene di fazione (`crest`) per il giorno 10.
 
 ## Mappa dei meccanismi che servono la progressione
 

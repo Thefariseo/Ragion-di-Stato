@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useGameStore } from "@/store/gameStore";
 import { playMusic, setMusicEnabled, isMusicEnabled } from "@/lib/music";
 import { setSfxEnabled, isSfxEnabled } from "@/lib/sfx";
+import { setVoiceEnabled, playBlip } from "@/lib/voice";
 import type { GamePhase } from "@/types";
 import { GameViewport } from "./GameViewport";
 import { TitleScreen } from "./screens/TitleScreen";
@@ -38,6 +39,7 @@ export default function Game() {
   const phase = useGameStore((s) => s.game.phase);
   const [debugOpen, setDebugOpen] = useState(false);
   const [audio, setAudio] = useState(true);
+  const [voiceOn, setVoiceOn] = useState(true);
   const phaseRef = useRef(phase);
   phaseRef.current = phase;
 
@@ -71,9 +73,17 @@ export default function Game() {
     setAudio(v);
     setMusicEnabled(v);
     setSfxEnabled(v);
+    setVoiceEnabled(v && voiceOn);
     if (v) playMusic(THEME_FOR[phaseRef.current] ?? "lavoro");
     void isMusicEnabled;
     void isSfxEnabled;
+  }
+
+  function toggleVoice() {
+    const v = !voiceOn;
+    setVoiceOn(v);
+    setVoiceEnabled(v && audio);
+    if (v && audio) playBlip("comune");
   }
 
   return (
@@ -105,8 +115,15 @@ export default function Game() {
       </GameViewport>
 
       <button
+        onClick={toggleVoice}
+        title="Voce (mormorio dei dialoghi)"
+        className="fixed bottom-1 right-[68px] z-[80] font-pixel text-[8px] uppercase px-1.5 py-0.5 bg-black/70 text-olive-hi hover:text-neon border border-black"
+      >
+        {voiceOn ? "VOCE" : "voce ×"}
+      </button>
+      <button
         onClick={toggleAudio}
-        title="Audio"
+        title="Audio (musica + effetti)"
         className="fixed bottom-1 right-9 z-[80] font-pixel text-[8px] uppercase px-1.5 py-0.5 bg-black/70 text-olive-hi hover:text-neon border border-black"
       >
         {audio ? "♪" : "×"}

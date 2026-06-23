@@ -6,6 +6,7 @@ import { Typewriter } from "@/components/ui/Typewriter";
 import { CutsceneStage } from "./CutsceneStage";
 import { playStamp, playTelex, playPaper, playRing, playThud } from "@/lib/sfx";
 import { playMusic } from "@/lib/music";
+import { voiceForFaction } from "@/lib/voice";
 
 const SOUND: Record<string, () => void> = {
   stamp: playStamp,
@@ -69,7 +70,7 @@ export function CutsceneEngine({ cutscene, onDone }: { cutscene: Cutscene; onDon
               <div className="font-pixel uppercase text-[11px] tracking-[0.18em] text-olive-hi mb-1">{beat.title}</div>
             )}
             {beat.lines && (
-              <Typewriter key={i} lines={beat.lines} speed={20} className="font-read text-[16px] text-paper-cream/95 leading-relaxed text-center" />
+              <Typewriter key={i} lines={beat.lines} speed={20} voice={beat.faction ? voiceForFaction(beat.faction) : undefined} className="font-read text-[16px] text-paper-cream/95 leading-relaxed text-center" />
             )}
           </div>
         </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { CaseAction, Citation } from "@/types";
 import { useGameStore } from "@/store/gameStore";
 import { getDay } from "@/data/days";
@@ -8,6 +8,7 @@ import { getCase } from "@/data/cases";
 import { getCutscene } from "@/data/cutscenes";
 import { validateCase } from "@/game/rules";
 import { computeCitation } from "@/game/citations";
+import { actionAvailability, type CaseAnalysis } from "@/game/actions";
 import { Booth } from "@/components/desk/Booth";
 import { DeskProps } from "@/components/desk/DeskProps";
 import { Dossier } from "@/components/desk/Dossier";
@@ -36,6 +37,21 @@ export function DeskScreen() {
 
   const [stamping, setStamping] = useState<{ label: string; kind: CaseAction["kind"] } | null>(null);
   const [receipt, setReceipt] = useState<Citation | null>(null);
+  const [analysis, setAnalysis] = useState<CaseAnalysis>({ inspected: false, discrepanciesFound: 0 });
+  const onAnalysis = useCallback((a: CaseAnalysis) => setAnalysis(a), []);
+
+  // valutazione procedurale del caso corrente (per gating azioni + ammenda)
+  const validation = useMemo(
+    () => (caseDef ? validateCase(caseDef, dayDef?.ruleIds ?? [], { day: game.day, flags: game.flags }) : null),
+    [caseDef, dayDef?.ruleIds, game.day, game.flags],
+  );
+
+  // azioni con disponibilità procedurale: compaiono solo se GIUSTIFICATE
+  const actionItems = useMemo(() => {
+    if (!caseDef || !validation) return [];
+    const ctx = { caseDef, validation, analysis, flags: game.flags, day: game.day };
+    return caseDef.actions.map((a) => ({ action: a, ...actionAvailability(a, ctx) }));
+  }, [caseDef, validation, analysis, game.flags, game.day]);
 
   // quando il Paese precipita nella crisi: sequenza d'attentato (una volta)
   const crisis = game.country.caos >= 68 || game.flags["attentato"] === true;
@@ -64,10 +80,11 @@ export function DeskScreen() {
   if (!dayDef) return null;
 
   function handleAction(a: CaseAction) {
-    if (stamping || receipt || !caseDef) return;
+    if (stamping || receipt || !caseDef || !validation) return;
+    // un'azione bloccata non si può eseguire
+    if (!actionAvailability(a, { caseDef, validation, analysis, flags: game.flags, day: game.day }).available) return;
 
     // valutazione procedurale: l'ammenda esce solo per un errore GRAVE
-    const validation = validateCase(caseDef, dayDef?.ruleIds ?? [], { day: game.day, flags: game.flags });
     const cit = computeCitation(caseDef, a, validation, game.day);
     const fine = cit && cit.severity === "grave" && cit.visibleToPlayer ? cit : null;
 
@@ -110,7 +127,7 @@ export function DeskScreen() {
               Coda esaurita. Chiusura giornata…
             </div>
           )}
-          {caseDef && <Dossier caseDef={caseDef} />}
+          {caseDef && <Dossier caseDef={caseDef} onAnalysis={onAnalysis} />}
 
           {stamping && (
             <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
@@ -126,7 +143,7 @@ export function DeskScreen() {
         {/* console destra */}
         <aside className="w-[320px] shrink-0 tex-panel border-l-4 border-black p-2 flex flex-col gap-2 overflow-auto thin-scroll">
           {caseDef && (
-            <ActionBar caseDef={caseDef} onAction={handleAction} disabled={!!stamping || eventActive || !!receipt} />
+            <ActionBar items={actionItems} onAction={handleAction} disabled={!!stamping || eventActive || !!receipt} />
           )}
           <Rulebook dayDef={dayDef} />
           <div className="rds-panel px-2.5 py-2 mt-auto">

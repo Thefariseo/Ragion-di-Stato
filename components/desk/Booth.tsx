@@ -9,7 +9,9 @@ import { playThud, playTelex, playPaper, playRing, playDrawer } from "@/lib/sfx"
 import { portraitSeed } from "./ApplicantPortrait";
 import { NpcSprite } from "./NpcSprite";
 import { WorldScene } from "./WorldScene";
+import { AmbientVisual } from "./AmbientVisual";
 import { Typewriter } from "@/components/ui/Typewriter";
+import { voiceForFaction } from "@/lib/voice";
 
 const AMB_SOUND: Record<string, () => void> = {
   thud: playThud,
@@ -31,6 +33,7 @@ export function Booth({ game, dayDef, caseDef }: { game: GameState; dayDef: DayD
   ctxRef.current = { suspicion: sospetto, caos, day: game.day };
   const [amb, setAmb] = useState<AmbientEvent | null>(null);
   const [ambOn, setAmbOn] = useState(false);
+  const [ambKey, setAmbKey] = useState(0);
   const lastId = useRef<string | undefined>(undefined);
 
   useEffect(() => {
@@ -45,6 +48,7 @@ export function Booth({ game, dayDef, caseDef }: { game: GameState; dayDef: DayD
           lastId.current = e.id;
           setAmb(e);
           setAmbOn(true);
+          setAmbKey((k) => k + 1);
           if (e.sound) AMB_SOUND[e.sound]?.();
           hide = setTimeout(() => setAmbOn(false), 5000);
         }
@@ -62,6 +66,9 @@ export function Booth({ game, dayDef, caseDef }: { game: GameState; dayDef: DayD
   return (
     <div className="relative shrink-0 h-[40%] min-h-[210px] overflow-hidden border-b-4 border-black tex-wall">
       <WorldScene suspicion={sospetto} caos={caos} alarm={alarm} />
+
+      {/* evento ambientale ANIMATO (si vede, non è solo testo) */}
+      {ambOn && amb && <AmbientVisual key={`${amb.id}-${ambKey}`} visual={amb.visual} />}
 
       {/* manifesto a parete */}
       <div className="absolute top-1 left-1/2 -translate-x-1/2 z-[3] rds-panel px-2.5 py-0.5 max-w-[46%]">
@@ -94,7 +101,7 @@ export function Booth({ game, dayDef, caseDef }: { game: GameState; dayDef: DayD
       {caseDef?.intro && (
         <div className="absolute left-[238px] top-3 z-[3] max-w-[330px] rds-paper p-2.5">
           <div className="font-pixel text-[8px] uppercase tracking-wider text-ink/55 mb-0.5">Voce · sportello</div>
-          <Typewriter key={caseDef.id} lines={caseDef.intro} speed={18} className="font-read text-[15px] text-ink leading-snug" />
+          <Typewriter key={caseDef.id} lines={caseDef.intro} speed={18} voice={voiceForFaction(caseDef.faction)} className="font-read text-[15px] text-ink leading-snug" />
         </div>
       )}
 

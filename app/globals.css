@@ -452,6 +452,55 @@ body {
 }
 .cs-lamp { animation: lampOn 1400ms steps(1, end) both; }
 
+/* ===================== eventi ambientali ANIMATI del corridoio ============
+   I vignette del corridoio si VEDONO: sagome che attraversano, plico che cade,
+   luce d'allarme, convoglio che passa. Sopra il canvas del corridoio. */
+@keyframes ambWalk {
+  0% { transform: translateX(0); opacity: 0; }
+  12% { opacity: 0.92; }
+  88% { opacity: 0.92; }
+  100% { transform: translateX(320px); opacity: 0; }
+}
+.amb-walk { animation: ambWalk 4.4s steps(15, end) both; }
+@keyframes ambWalkBack {
+  0% { transform: translateX(0); opacity: 0; }
+  18% { opacity: 0.9; transform: translateX(120px); }
+  46% { transform: translateX(150px); }
+  54% { transform: translateX(150px); }
+  82% { opacity: 0.9; transform: translateX(30px); }
+  100% { transform: translateX(0); opacity: 0; }
+}
+.amb-walkback { animation: ambWalkBack 4.6s steps(16, end) both; }
+@keyframes ambDrop {
+  0% { transform: translateY(-26px) rotate(-7deg); opacity: 0; }
+  70% { transform: translateY(2px) rotate(2deg); opacity: 1; }
+  100% { transform: translateY(0) rotate(0); opacity: 1; }
+}
+.amb-drop { animation: ambDrop 560ms steps(7, end) 600ms both; }
+@keyframes ambSweep {
+  0% { transform: translateX(-20%); opacity: 0; }
+  18%, 82% { opacity: 0.7; }
+  100% { transform: translateX(120%); opacity: 0; }
+}
+.amb-sweep { animation: ambSweep 2.4s steps(12, end) both; }
+@keyframes ambConvoy {
+  0% { transform: translateX(-30%); opacity: 0; }
+  14%, 86% { opacity: 1; }
+  100% { transform: translateX(130%); opacity: 0; }
+}
+.amb-convoy { animation: ambConvoy 4.6s steps(14, end) both; }
+@keyframes ambPeep {
+  0%, 100% { opacity: 0.15; transform: scale(0.9); }
+  40%, 60% { opacity: 1; transform: scale(1); }
+}
+.amb-peep { animation: ambPeep 2.6s steps(3, end) 1; }
+@keyframes ambFlick {
+  0%, 100% { opacity: 0; }
+  10%, 16%, 24% { opacity: 0.85; }
+  13%, 20% { opacity: 0; }
+}
+.amb-flick { animation: ambFlick 2.4s steps(1, end) 1; }
+
 /* giornale che SBATTE in primo piano */
 @keyframes paperSlam {
   0% { transform: scale(2.4) rotate(-7deg); opacity: 0; }
