@@ -144,7 +144,8 @@ export const ARC_CASES: CaseDef[] = [
         factions: { anello: { reputation: 8 } },
         country: { verita: -3 },
         sospetto: -2,
-        setFlags: ["passato_ragioniere"],
+        setFlags: ["passato_ragioniere", "debito_anello"],
+        unlockCases: ["ret_anello_favore"],
         logTitle: "Lasciato passare «il Ragioniere»",
       }),
       segnala(
@@ -153,7 +154,8 @@ export const ARC_CASES: CaseDef[] = [
           factions: { anello: { reputation: -12, suspicion: 14 }, procura: { reputation: 8 } },
           country: { verita: 6 },
           sospetto: 10,
-          setFlags: ["segnalato_ragioniere"],
+          setFlags: ["segnalato_ragioniere", "nemico_anello"],
+          unlockCases: ["ret_anello_minaccia"],
           logTitle: "Segnalata la doppia identità del «Ragioniere»",
         },
         { lockHint: "Confronta tessera e nota: la contraddizione regge la segnalazione." },
@@ -211,7 +213,8 @@ export const ARC_CASES: CaseDef[] = [
         factions: { anello: { reputation: 10 }, governo: { reputation: 6 } },
         country: { verita: -4, compromesso: 4 },
         sospetto: -3,
-        setFlags: ["obbedito_anello", "anello_riferimento"],
+        setFlags: ["obbedito_anello", "anello_riferimento", "debito_anello"],
+        unlockCases: ["ret_anello_favore"],
         logTitle: "Concessione Bramante: obbedito al nulla osta dell'Anello",
       }),
       special(
@@ -223,7 +226,8 @@ export const ARC_CASES: CaseDef[] = [
           factions: { anello: { reputation: -8, suspicion: 10 } },
           country: { verita: 4 },
           sospetto: 8,
-          setFlags: ["trattenuto_anello", "anello_riferimento"],
+          setFlags: ["trattenuto_anello", "anello_riferimento", "nemico_anello"],
+          unlockCases: ["ret_anello_minaccia"],
           logTitle: "Trattenuta la concessione Bramante (firma assente)",
         },
         { requires: { authLevel: "segreto" }, lockHint: "Serve un atto riservato/segreto da trattenere." },
@@ -285,7 +289,8 @@ export const ARC_CASES: CaseDef[] = [
           factions: { procura: { reputation: 12 }, sir: { reputation: -10, suspicion: 10 }, anello: { suspicion: 8 } },
           country: { verita: 8 },
           sospetto: 12,
-          setFlags: ["fondoR_procura", "verbale_alla_procura"],
+          setFlags: ["fondoR_procura", "verbale_alla_procura", "amico_procura"],
+          unlockCases: ["ret_procura_ancora"],
           logTitle: "Collegamento fondo R trasmesso alla Procura",
         },
         { target: "magistratura" },
@@ -440,4 +445,152 @@ export const ARC_CASES: CaseDef[] = [
       }),
     ],
   },
+
+  /* ================== CASI-RITORNO (conseguenze differite) ================
+   * Iniettati dalla scelta precedente (unlockCases) e gated su flag: la fazione
+   * TORNA in base a ciò che hai fatto. Chiudono il cerchio scelta→conseguenza.
+   */
+
+  // Hai SERVITO l'Anello (a4 approva / a5 approva) → ti chiedono un favore peggiore.
+  {
+    id: "ret_anello_favore",
+    subject: "La cortesia dell'Anello",
+    faction: "anello",
+    appearsIfFlag: "debito_anello",
+    summary: "Chi accetta un favore, prima o poi ne deve uno",
+    intro: [
+      "Niente telefono, stavolta. Un fascicolo sottile, lasciato sul bancone da nessuno.",
+      "Dentro, un nome e una data. E un foglietto: «Quel verbale. Lo perda. Come l'altra volta. Grazie.»",
+    ],
+    documents: [
+      {
+        id: "reta_verbale",
+        kind: "verbale",
+        title: "Verbale da «smarrire»",
+        issuer: "—",
+        authLevel: "segreto",
+        protocollo: "R-0712/1974",
+        fields: [
+          { label: "Oggetto", value: "testimone — fatti di Piazza dei Tigli", comparable: true },
+          { label: "Sigillo", value: "anello spezzato", comparable: true },
+        ],
+        body: ["Un testimone scomodo ha parlato. Il verbale non deve esistere. L'Anello conta su di te. Di nuovo."],
+      },
+    ],
+    actions: [
+      special("occulta", "Smarrisci il verbale (come chiedono)", "occulta", {
+        text: "Lo fai sparire. Il testimone non ha mai parlato. Sei sempre più utile, e sempre meno libero. La prossima volta non chiederanno: ordineranno.",
+        factions: { anello: { reputation: 12 } },
+        country: { verita: -6, compromesso: 6 },
+        sospetto: -4,
+        setFlags: ["servito_anello_2", "fondoR_coperto"],
+        clearFlags: ["debito_anello"],
+        logTitle: "Smarrito un verbale per l'Anello (secondo favore)",
+      }, { requires: {} }),
+      special("trasmetti_procura", "Rifiuta: manda il verbale alla Procura", "trasmetti", {
+        text: "Stavolta dici no. E un no, all'Anello, vale come una dichiarazione di guerra. Da domani la macchina sotto casa potrebbe non essere la tua.",
+        factions: { anello: { reputation: -18, suspicion: 16 }, procura: { reputation: 12 } },
+        country: { verita: 8 },
+        sospetto: 12,
+        setFlags: ["nemico_anello", "verbale_alla_procura"],
+        clearFlags: ["debito_anello"],
+        unlockCases: ["ret_anello_minaccia"],
+        logTitle: "Rifiutato il secondo favore all'Anello",
+      }, { requires: {}, target: "magistratura" }),
+    ],
+  },
+
+  // Hai INCRINATO l'Anello (a4 segnala / a5 trattieni / rifiuto) → ritorsione.
+  {
+    id: "ret_anello_minaccia",
+    subject: "Un atto a tuo nome",
+    faction: "anello",
+    appearsIfFlag: "nemico_anello",
+    summary: "Loro non minacciano. Ti incastrano.",
+    intro: [
+      "Tra le pratiche del mattino, una che non hai mai visto. Eppure porta la tua firma.",
+      "È un nulla osta illecito, datato la settimana scorsa, intestato a te. Se resta agli atti, il prossimo fascicolo aperto sarà il tuo.",
+    ],
+    documents: [
+      {
+        id: "retm_nullaosta",
+        kind: "nota",
+        title: "Nulla osta «a tua firma»",
+        issuer: "—",
+        authLevel: "segreto",
+        fields: [
+          { label: "Firma", value: "(la tua, imitata)", comparable: true },
+          { label: "Sigillo", value: "anello spezzato", comparable: true },
+        ],
+        body: ["Un falso costruito bene. Tanto bene che, davanti agli Affari Interni, dovresti dimostrare tu di non averlo scritto."],
+      },
+    ],
+    actions: [
+      special("distruggi", "Distruggi il falso (in silenzio)", "distruggi", {
+        text: "Lo bruci nel posacenere. Nessuno saprà. Ma adesso sai cosa sanno fare, e che possono rifarlo quando vogliono. Dormi con la luce accesa.",
+        player: { lucidita: -5 },
+        sospetto: 4,
+        setFlags: ["sopravvissuto_ricatto"],
+        clearFlags: ["nemico_anello"],
+        logTitle: "Distrutto un falso costruito a tuo nome",
+      }, { requires: {} }),
+      special("trasmetti_procura", "Denuncia il falso alla Procura", "trasmetti", {
+        text: "Porti il falso ad Ardenti come prova del metodo. È coraggio, o incoscienza. Da stanotte, la tua famiglia dorme in casa di un'amica.",
+        factions: { anello: { suspicion: 14 }, procura: { reputation: 14 } },
+        player: { famiglia: -8 },
+        country: { verita: 6 },
+        sospetto: 14,
+        setFlags: ["denunciato_anello", "dossier_procura"],
+        clearFlags: ["nemico_anello"],
+        logTitle: "Denunciato il falso dell'Anello alla Procura",
+      }, { requires: {}, target: "magistratura" }),
+    ],
+  },
+
+  // Hai AIUTATO la Procura → Ardenti torna e chiede di più (la posta sale).
+  {
+    id: "ret_procura_ancora",
+    subject: "Giudice Ardenti — di nuovo",
+    faction: "procura",
+    appearsIfFlag: "amico_procura",
+    summary: "Chi dà una carta al giudice, prima o poi gliene deve un'altra",
+    intro: [
+      "Una richiesta formale, e sotto, due righe a penna: «So che è lei. Mi serve l'ultimo tassello. Dopo, la proteggo. Se posso.»",
+      "Ardenti non promette molto. Ma è l'unico, qui, che non mente.",
+    ],
+    documents: [
+      {
+        id: "retp_richiesta",
+        kind: "lettera",
+        title: "Richiesta integrativa di atti",
+        issuer: "Procura della Repubblica",
+        authLevel: "libero",
+        protocollo: "PR-401/1974",
+        fields: [{ label: "Firma", value: "Ardenti", comparable: true }],
+        body: ["Per chiudere il quadro sul fondo R serve l'intestazione mancante. Senza, l'inchiesta si ferma."],
+      },
+    ],
+    actions: [
+      special("trasmetti_procura", "Dài ad Ardenti l'ultimo tassello", "trasmetti", {
+        text: "Glielo procuri. Adesso il quadro è completo: il giudice può colpire in alto. E tu sei, ufficialmente, una fonte interna. Cioè un bersaglio.",
+        factions: { procura: { reputation: 16 }, governo: { reputation: -10 }, anello: { suspicion: 12 } },
+        player: { famiglia: -8 },
+        country: { verita: 10 },
+        sospetto: 14,
+        setFlags: ["dossier_procura"],
+        unlockEndings: ["collaboratore_procura"],
+        logTitle: "Fornito ad Ardenti l'ultimo tassello",
+      }, { requires: {}, target: "magistratura" }),
+      special("trattieni", "Tirati indietro finché sei in tempo", "trattieni", {
+        text: "Non rispondi alla richiesta. Ardenti capisce. «Ha ragione lei. Si salvi.» L'inchiesta si fermerà a un passo. La verità aspetterà un altro funzionario, un altro decennio.",
+        factions: { procura: { reputation: -8 } },
+        player: { lucidita: -3 },
+        sospetto: -4,
+        setFlags: ["procura_abbandonata"],
+        clearFlags: ["amico_procura"],
+        logTitle: "Tirato indietro con la Procura",
+      }, { requires: {} }),
+    ],
+  },
 ];
+

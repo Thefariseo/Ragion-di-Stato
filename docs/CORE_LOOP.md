@@ -1,66 +1,38 @@
-# Core Loop — minuto per minuto
+# CORE LOOP — minuto per minuto
 
-L'unità è la **giornata lavorativa**. Una sessione = N giornate finché non scatta
-un finale. Stato macchina: `TITLE → BRIEFING → DIRECTIVES → DESK → (EVENT) →
-DAY_SUMMARY → (next day | ENDING)`.
+L'unità è la **giornata lavorativa**. Una run = 10 giornate finché non scatta un
+finale. Macchina a stati:
+`TITLE → INTRO → NEWSPAPER → BRIEFING → DIRECTIVES → DESK ⇄ EVENT → DAY_SUMMARY →
+NIGHT → (giorno dopo) … → ENDING` (+ `CUTSCENE` in overlay).
 
-## 0:00 — Avvio (Title)
-- Schermata iniziale analogica: logo timbrato, neon, opzioni
-  **Nuova Pratica / Continua / Debug**. Mostra il seed corrente.
-- "Nuova Pratica" chiede (o genera) un **seed**, inizializza `GameState`.
+## Il loop del singolo CASO (il cuore)
+1. **Ricevi un caso** (`DeskScreen` → coda della giornata).
+2. **Osservi l'NPC e il contesto**: figura allo sportello (`NpcSprite`), voce con
+   **voice blip** (`Typewriter` + `lib/voice`), nameplate, fazione, carta intestata.
+3. **Controlli i documenti**: li trascini (`Draggable`), leggi campi/omissis/timbri.
+4. **Confronti le informazioni**: lente «Confronta» (`Dossier`), selezioni due campi.
+5. **Trovi le discrepanze** (`game/discrepancies` → `DiscrepancyEngine`): la nota
+   spiega la contraddizione; sblocca le azioni che richiedono una prova.
+6. **Applichi le regole** del giorno (`game/rules` → `RuleEngine`): conforme o no.
+7. **Scegli un'azione coerente**: l'`ActionEngine` (`game/actions`) mostra solo le
+   azioni **giustificate** (denuncia→prova; trasmetti/occulta/distruggi→esame);
+   le altre restano visibili ma **bloccate col motivo**.
+8. **Ricevi conseguenze**: timbro animato + (su errore grave) **ammenda a
+   scontrino**; `Consequence` applicata (`applyConsequence`).
+9. **Il mondo reagisce**: fazioni (reputazione/sospetto), NPC, **flag** che il
+   giorno dopo muovono **giornale**, **eventi**, **casi-ritorno**, **finali**.
 
-## 0:30 — Briefing del mattino
-- Una schermata-comunicato: data, clima del Paese (indicatori), titolo di
-  giornale, eventuali **conseguenze notturne** delle scelte precedenti.
-- Tono da vebaline d'ufficio. Pulsante **Prendi servizio**.
+## Il loop della GIORNATA
+`NEWSPAPER` (specchio delle scelte di ieri) → `BRIEFING`/`DIRECTIVES` (la regola
+nuova) → `DESK` (i casi, gli eventi gated) → `DAY_SUMMARY` (compenso, ammende,
+note del superiore; ogni 5 giorni/ultima la *Scheda riservata*) → `NIGHT`
+(economia familiare) → giorno dopo, che **parte da quei flag**.
 
-## 1:00 — Direttive / Regolamento
-- Vengono presentate le **direttive del giorno**: nuove `Rule` che si aggiungono
-  o sostituiscono le precedenti (es. "I documenti RISERVATO richiedono nulla osta
-  dell'Anello"). Spesso politiche, a volte contraddittorie.
-- Il giocatore può riaprire il **Regolamento** in ogni momento dalla scrivania.
+## La connessione (vedi CONSEQUENCE_PIPELINE.md)
+Ogni passo 8–9 scrive **flag** che alimentano i passi 1–2 dei giorni successivi:
+un NPC torna, una fazione chiede o minaccia, il giornale titola, un finale si
+apre o si chiude. Niente comparti stagni: il giorno N+1 è la conseguenza del N.
 
-## 1:30 → fine giornata — La scrivania (loop centrale)
-Per ogni **caso** nella coda della giornata:
-
-1. **Arriva la pratica.** Un fascicolo scivola sulla scrivania: soggetto +
-   documenti (permesso, tessera, informativa, foto, nota…).
-2. **Lettura.** Il giocatore apre i documenti, legge campi e corpo testo.
-3. **Confronto (lente).** Modalità Confronto: seleziona due campi; se sono in
-   conflitto secondo le regole attive, si rivela la **discrepanza**.
-   Strumenti opzionali: telefono (verifica/voce), telex (interroga registro),
-   schedario (precedenti), regolamento.
-4. **Decisione.** Azioni comuni (**Approva / Respingi / Archivia / Segnala**) +
-   azioni **speciali** del caso (es. *Trasmetti all'Anello*, *Avvisa la
-   Procura*, *Distruggi*, *Proteggi*). Le azioni che timbrano richiedono di
-   apporre un timbro (animazione + suono).
-5. **Conseguenza immediata.** Breve esito narrativo; aggiornamento silenzioso di
-   fazioni, sospetto, risorse, Paese, flag; eventuale sblocco di casi futuri.
-6. **Tempo che scorre.** Ogni azione consuma tempo (orologio 09:00→17:00). La
-   **quota** giornaliera va evasa: pratiche non evase = penalità sullo stipendio.
-
-Durante la giornata può scattare un **evento** (telefono che squilla, ispezione
-interna, busta sotto la porta): interrompe il flusso, propone una micro-scelta,
-applica conseguenze, poi si torna alla coda.
-
-## ~6:30 — Chiusura
-- Esaurita la coda (o finito il tempo), la giornata si chiude.
-
-## Sintesi della giornata
-- **Resoconto**: pratiche evase/quota, stipendio del giorno (− sanzioni),
-  variazioni di sospetto e fazioni, movimenti degli indicatori di Paese.
-- Eventuali **avvisi** (minacce, convocazioni) che preparano il giorno dopo.
-- Pulsante **Torna a casa** → `nextDay` oppure, se scattano condizioni, **finale**.
-
-## Fine run — Finale
-- `evaluateEndings(state)` sceglie il finale a priorità più alta soddisfatto
-  (fallback: *Il sistema sopravvive immutato*). Schermata-epilogo con epitaffio,
-  bilancio della run, seed, e opzioni **Nuova Pratica / Title**.
-
----
-
-### Sensazione momento-per-momento
-Leggere → dubitare → confrontare → decidere sotto pressione → subire una
-conseguenza ambigua → sospettare di aver sbagliato → voler rigiocare.
-La frizione è voluta: la UI è scomoda, il tempo stringe, e *in regola* non
-significa *giusto*.
+## Regia / audio
+Musica solo fuori dal banco (menu/cutscene/crisi/finali); sul banco domina il
+**sound design ambientale** (`lib/ambientAudio`). Transizioni a serranda tra fasi.

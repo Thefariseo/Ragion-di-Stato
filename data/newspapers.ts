@@ -151,4 +151,19 @@ export const NEWS_ITEMS: NewspaperItem[] = [
     headline: "ATTENTATO E APPALTI, NESSUN COLLEGAMENTO: PAROLA DEL VIMINALE",
     body: "La versione ufficiale tiene un altro giorno. Le carte che direbbero il contrario restano dove qualcuno le ha rimesse.",
   },
+  {
+    requiresFlag: "nemico_anello",
+    headline: "FUNZIONARIO «POCO COLLABORATIVO» AL CENTRO DI VOCI",
+    body: "Si mormora di un impiegato degli archivi che «fa troppe domande». Negli ambienti che non esistono, un nome è già su un foglio. Il suo.",
+  },
+  {
+    requiresFlag: "denunciato_anello",
+    headline: "DOCUMENTI FALSI NEGLI UFFICI? LA PROCURA APRE UN FASCICOLO",
+    body: "Un atto contraffatto, una firma imitata, un metodo. Il giudice Ardenti indaga. Da qualche parte, qualcuno cambia i piani su un funzionario.",
+  },
+  {
+    requiresFlag: "servito_anello_2",
+    headline: "TESTIMONE SCOMPARSO, INCHIESTA SUBITO ARCHIVIATA",
+    body: "Aveva visto, aveva parlato. Poi più nulla: né lui, né il verbale. «Non risulta», dicono gli uffici. E hanno ragione: non risulta più.",
+  },
 ];
