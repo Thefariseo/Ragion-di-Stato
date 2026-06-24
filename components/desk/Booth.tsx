@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { CaseDef, DayDef, GameState } from "@/types";
 import { FACTIONS } from "@/data/factions";
-import { formatClock } from "@/lib/format";
 import { pickAmbient, type AmbientEvent } from "@/data/ambient";
 import { playThud, playTelex, playPaper, playRing, playDrawer } from "@/lib/sfx";
 import { portraitSeed } from "./ApplicantPortrait";
@@ -26,7 +25,6 @@ export function Booth({ game, dayDef, caseDef }: { game: GameState; dayDef: DayD
   const caos = game.country.caos;
   const alarm = caos >= 68 || game.flags["attentato"] === true;
   const fac = caseDef?.faction ? FACTIONS[caseDef.faction] : undefined;
-  const sg = sospetto >= 70 ? "#b42b2b" : sospetto >= 40 ? "#9a6b30" : "#53701b";
 
   // ticker degli eventi ambientali del corridoio
   const ctxRef = useRef({ suspicion: sospetto, caos, day: game.day });
@@ -64,7 +62,7 @@ export function Booth({ game, dayDef, caseDef }: { game: GameState; dayDef: DayD
   }, []);
 
   return (
-    <div className="relative shrink-0 h-[40%] min-h-[210px] overflow-hidden border-b-4 border-black tex-wall">
+    <div className="relative shrink-0 h-[34%] min-h-[176px] overflow-hidden border-b-4 border-black tex-wall">
       <WorldScene suspicion={sospetto} caos={caos} alarm={alarm} />
 
       {/* evento ambientale ANIMATO (si vede, non è solo testo) */}
@@ -105,34 +103,12 @@ export function Booth({ game, dayDef, caseDef }: { game: GameState; dayDef: DayD
         </div>
       )}
 
-      {/* STRUMENTI */}
-      <div className="absolute right-2 top-2 z-[3] w-[150px] flex flex-col gap-1.5">
-        <div className="rds-lcd px-2 py-0.5 flex items-baseline justify-between">
-          <span className="text-2xl leading-none neon">{formatClock(game.clock)}</span>
-          <span className="text-[11px]">G{game.day}</span>
+      {/* allarme (l'unico strumento qui: il resto è nella barra di stato) */}
+      {alarm && (
+        <div className="absolute right-2 top-2 z-[4] rds-panel px-2 py-1 border-stamp-red animate-blink">
+          <div className="font-pixel text-[8px] uppercase tracking-widest text-stamp-redhi text-center">● Allarme al piano</div>
         </div>
-        <div className="rds-panel px-2 py-1">
-          <div className="rds-label text-[7px] flex justify-between">
-            <span>Pratiche</span>
-            <span>{game.currentCaseIndex}/{game.queue.length}</span>
-          </div>
-          <div className="font-read text-[11px] text-paper/70">quota {dayDef.quota}</div>
-        </div>
-        <div className="rds-panel px-2 py-1.5">
-          <div className="rds-label text-[7px] flex justify-between mb-1">
-            <span>Sorveglianza</span>
-            <span style={{ color: sg }}>{Math.round(sospetto)}</span>
-          </div>
-          <div className="rds-gauge h-2.5">
-            <div className="rds-gauge__fill" style={{ width: `${sospetto}%`, backgroundColor: sg }} />
-          </div>
-        </div>
-        {alarm && (
-          <div className="rds-panel px-2 py-1 border-stamp-red animate-blink">
-            <div className="font-pixel text-[8px] uppercase tracking-widest text-stamp-redhi text-center">● Allarme</div>
-          </div>
-        )}
-      </div>
+      )}
 
       {/* vignetta ambientale — il corridoio racconta */}
       <div

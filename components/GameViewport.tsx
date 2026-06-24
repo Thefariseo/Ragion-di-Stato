@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 
 /**
- * Cornice a risoluzione logica FISSA (cabinet), centrata su nero e scalata per
- * stare nella finestra (mai oltre 1:1 → niente sfocatura su schermi grandi).
- * Dà la sensazione di un apparecchio pixel, non di una pagina web fluida.
+ * Cornice a risoluzione logica FISSA (cabinet 16:9), centrata e scalata per
+ * RIEMPIRE la finestra mantenendo le proporzioni. Dà la sensazione di un
+ * apparecchio a tutto schermo, non di una finestrella persa nel nero.
  */
 const BASE_W = 1180;
 const BASE_H = 664;
@@ -14,8 +14,7 @@ export function GameViewport({ children }: { children: React.ReactNode }) {
   const [scale, setScale] = useState(1);
 
   useEffect(() => {
-    const fit = () =>
-      setScale(Math.min(1, window.innerWidth / BASE_W, window.innerHeight / BASE_H));
+    const fit = () => setScale(Math.min(window.innerWidth / BASE_W, window.innerHeight / BASE_H));
     fit();
     window.addEventListener("resize", fit);
     return () => window.removeEventListener("resize", fit);

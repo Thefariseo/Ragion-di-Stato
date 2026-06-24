@@ -9,6 +9,7 @@ import { getCutscene } from "@/data/cutscenes";
 import { validateCase } from "@/game/rules";
 import { computeCitation } from "@/game/citations";
 import { actionAvailability, type CaseAnalysis } from "@/game/actions";
+import { TopBar } from "@/components/hud/TopBar";
 import { Booth } from "@/components/desk/Booth";
 import { DeskProps } from "@/components/desk/DeskProps";
 import { Dossier } from "@/components/desk/Dossier";
@@ -118,6 +119,7 @@ export function DeskScreen() {
 
   return (
     <div className="h-full w-full flex flex-col relative">
+      <TopBar game={game} dayDef={dayDef} />
       <Booth game={game} dayDef={dayDef} caseDef={caseDef} />
 
       {/* bancone */}

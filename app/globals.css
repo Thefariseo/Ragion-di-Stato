@@ -294,6 +294,19 @@ canvas {
   animation: blink 1.05s steps(1) infinite;
 }
 
+/* HUD: pop del compenso/quota e tick dell'orologio quando cambiano */
+@keyframes hudPop {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.22); filter: brightness(1.6); }
+  100% { transform: scale(1); }
+}
+.animate-hudPop { animation: hudPop 360ms steps(6, end); transform-origin: left center; display: inline-block; }
+@keyframes hudTick {
+  0% { opacity: 0.55; }
+  100% { opacity: 1; }
+}
+.animate-hudTick { animation: hudTick 280ms steps(4, end); }
+
 /* cursore volume pixel (opzioni audio) */
 .rds-slider {
   -webkit-appearance: none;
