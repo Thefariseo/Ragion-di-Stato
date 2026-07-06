@@ -13,8 +13,9 @@ import { TopBar } from "@/components/hud/TopBar";
 import { Booth } from "@/components/desk/Booth";
 import { DeskProps } from "@/components/desk/DeskProps";
 import { Dossier } from "@/components/desk/Dossier";
-import { ActionBar } from "@/components/desk/ActionBar";
-import { Rulebook } from "@/components/desk/Rulebook";
+import { StampTray } from "@/components/desk/StampTray";
+import { ProtocolFolder } from "@/components/desk/ProtocolFolder";
+import { RulebookDesk } from "@/components/desk/RulebookDesk";
 import { EventModal } from "@/components/desk/EventModal";
 import { FineReceipt } from "@/components/desk/FineReceipt";
 import { Stamp } from "@/components/ui/Stamp";
@@ -64,8 +65,16 @@ export function DeskScreen() {
   const [analysis, setAnalysis] = useState<CaseAnalysis>({ inspected: false, discrepanciesFound: 0 });
   const onAnalysis = useCallback((a: CaseAnalysis) => setAnalysis(a), []);
 
-  // IL TEMPO SCORRE: 1 minuto di gioco al secondo, solo alla scrivania.
-  // Alle 18:00 l'ufficio chiude — pratiche non evase = quota mancata.
+  // COME IN PAPERS, PLEASE: il prossimo non entra da solo. Sportello vuoto,
+  // coda che aspetta, e sei TU a suonare il campanello («Avanti!»).
+  const [awaitingCall, setAwaitingCall] = useState(true);
+  useEffect(() => {
+    if (caseId) setAwaitingCall(true);
+  }, [caseId]);
+  const callNext = useCallback(() => setAwaitingCall(false), []);
+
+  // IL TEMPO SCORRE: 1 minuto di gioco al secondo, solo alla scrivania —
+  // anche mentre esiti a chiamare il prossimo. Alle 18:00 l'ufficio chiude.
   // In pausa durante eventi, timbrata e ammenda (niente chiusure a tradimento).
   const paused = game.phase !== "desk" || !!stamping || !!receipt;
   useEffect(() => {
@@ -86,13 +95,15 @@ export function DeskScreen() {
     const ctx = { caseDef, validation, analysis, flags: game.flags, day: game.day };
     const items = caseDef.actions.map((a) => ({ action: a, ...actionAvailability(a, ctx) }));
     // fail-safe: se TUTTE le azioni sono bloccate, la pratica diventerebbe
-    // irrisolvibile. In quel caso sblocca tutto (il caso non ha un verdetto
-    // sempre-disponibile). Niente vicoli ciechi.
+    // irrisolvibile. In quel caso sblocca tutto. Niente vicoli ciechi.
     if (items.length > 0 && !items.some((it) => it.available)) {
       return items.map((it) => ({ ...it, available: true, reason: undefined }));
     }
     return items;
   }, [caseDef, validation, analysis, game.flags, game.day]);
+
+  const stampItems = useMemo(() => actionItems.filter((it) => it.action.needsStamp), [actionItems]);
+  const folderItems = useMemo(() => actionItems.filter((it) => !it.action.needsStamp), [actionItems]);
 
   // quando il Paese precipita nella crisi: sequenza d'attentato (una volta)
   const crisis = game.country.caos >= 68 || game.flags["attentato"] === true;
@@ -105,9 +116,9 @@ export function DeskScreen() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [crisis, game.phase]);
 
-  // presentazione di una fazione alla sua prima comparsa
+  // presentazione di una fazione alla sua prima comparsa (dopo la chiamata)
   useEffect(() => {
-    if (game.phase !== "desk") return;
+    if (game.phase !== "desk" || awaitingCall) return;
     if (crisis && !game.flags["cs_attentato"]) return; // prima l'attentato
     const f = caseDef?.faction;
     if (!f) return;
@@ -116,7 +127,7 @@ export function DeskScreen() {
     if (!getCutscene(id)) return;
     playCutscene(id, "desk");
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [caseDef?.id]);
+  }, [caseDef?.id, awaitingCall]);
 
   if (!dayDef) return null;
 
@@ -156,27 +167,51 @@ export function DeskScreen() {
   }
 
   const eventActive = game.phase === "event";
+  const caseVisible = !!caseDef && !awaitingCall;
 
   return (
     <div className="h-full w-full flex flex-col relative">
       <TopBar game={game} dayDef={dayDef} />
-      <Booth game={game} dayDef={dayDef} caseDef={caseDef} reaction={reaction} />
+      <Booth
+        game={game}
+        dayDef={dayDef}
+        caseDef={caseVisible ? caseDef : undefined}
+        reaction={reaction}
+        awaitingCall={!!caseDef && awaitingCall}
+        onCall={callNext}
+      />
 
       {/* bancone */}
       <div className="h-2 bg-env-0 border-y-2 border-black shadow-[0_5px_10px_rgba(0,0,0,0.6)] relative z-[3]" />
 
-      <div className={`flex-1 min-h-0 flex ${stamping ? "animate-deskShake" : ""}`}>
-        {/* scrivania (legno cupo, palette del prologo) */}
-        <div className="tex-wood flex-1 relative overflow-hidden">
+      {/* SCRIVANIA a tutto schermo: solo oggetti fisici, nessun pannello web */}
+      <div className={`flex-1 min-h-0 relative ${stamping ? "animate-deskShake" : ""}`}>
+        <div className="tex-wood absolute inset-0 overflow-hidden">
           <DeskProps day={game.day} />
           {/* velo del prologo: vignettatura fredda, sempre presente */}
           <div className="rds-prologue-veil" />
+
           {!caseDef && (
             <div className="h-full flex items-center justify-center text-paper/60 font-pixel uppercase tracking-widest text-sm">
               Coda esaurita. Chiusura giornata…
             </div>
           )}
-          {caseDef && <Dossier caseDef={caseDef} onAnalysis={onAnalysis} />}
+          {caseDef && awaitingCall && (
+            <div className="h-full flex flex-col items-center justify-center gap-2 pointer-events-none">
+              <span className="font-pixel uppercase tracking-[0.25em] text-paper/45 text-sm">Il banco è sgombro</span>
+              <span className="font-read text-[14px] text-paper/35">Suona il campanello per chiamare il prossimo. Il tempo, intanto, passa.</span>
+            </div>
+          )}
+          {caseVisible && <Dossier caseDef={caseDef} onAnalysis={onAnalysis} />}
+
+          {/* oggetti fisici del banco */}
+          {caseVisible && (
+            <StampTray items={stampItems} disabled={!!stamping || eventActive || !!receipt} onStamp={handleAction} />
+          )}
+          {caseVisible && (
+            <ProtocolFolder items={folderItems} disabled={!!stamping || eventActive || !!receipt} onAction={handleAction} />
+          )}
+          <RulebookDesk dayDef={dayDef} />
 
           {stamping && (
             <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
@@ -188,21 +223,6 @@ export function DeskScreen() {
 
           {receipt && <FineReceipt citation={receipt} onClose={() => setReceipt(null)} />}
         </div>
-
-        {/* console destra */}
-        <aside className="w-[320px] shrink-0 tex-panel border-l-4 border-black p-2 flex flex-col gap-2 overflow-auto thin-scroll">
-          {caseDef && (
-            <ActionBar items={actionItems} onAction={handleAction} disabled={!!stamping || eventActive || !!receipt} />
-          )}
-          <Rulebook dayDef={dayDef} />
-          <div className="rds-panel px-2.5 py-2 mt-auto">
-            <div className="rds-label text-[8px] mb-1">Registro decisioni</div>
-            <p className="font-read text-[12px] text-paper/55 leading-snug">
-              Lo Stato non ti mostra i conti durante il turno. Famiglia, lucidità e
-              rapporti con gli apparati li leggerai nel resoconto.
-            </p>
-          </div>
-        </aside>
       </div>
 
       {eventActive && <EventModal />}

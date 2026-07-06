@@ -25,17 +25,23 @@ export function Booth({
   dayDef,
   caseDef,
   reaction,
+  awaitingCall,
+  onCall,
 }: {
   game: GameState;
   dayDef: DayDef;
   caseDef?: CaseDef;
   /** battuta di reazione dell'NPC alla decisione appena presa (con voce) */
   reaction?: { line: string; voice: VoiceProfileId } | null;
+  /** sportello vuoto: c'è gente in coda ma tocca a te chiamare («Avanti!») */
+  awaitingCall?: boolean;
+  onCall?: () => void;
 }) {
   const sospetto = game.player.sospetto;
   const caos = game.country.caos;
   const alarm = caos >= 68 || game.flags["attentato"] === true;
   const fac = caseDef?.faction ? FACTIONS[caseDef.faction] : undefined;
+  const remaining = game.queue.length - game.currentCaseIndex;
 
   // ticker degli eventi ambientali del corridoio
   const ctxRef = useRef({ suspicion: sospetto, caos, day: game.day });
@@ -96,6 +102,26 @@ export function Booth({
                 {fac ? `${fac.name} · ${fac.sigla}` : "pratica in entrata"}
               </div>
             </div>
+          </div>
+        ) : awaitingCall ? (
+          <div className="flex-1 flex flex-col items-center justify-center gap-2.5">
+            <div className="font-pixel uppercase tracking-widest text-paper/50 text-[9px]">Sportello libero</div>
+            <div className="font-read text-[13px] text-paper/70">in attesa: {remaining}</div>
+            {/* IL CAMPANELLO — sei tu a chiamare il prossimo */}
+            <button
+              onClick={() => {
+                playRing();
+                onCall?.();
+              }}
+              className="group flex flex-col items-center"
+              title="Chiama il prossimo"
+            >
+              <div className="w-8 h-5 bg-[#8a7434] border-2 border-black rounded-t-full group-active:translate-y-0.5" />
+              <div className="w-12 h-2 bg-[#5c4d22] border-2 border-black" />
+              <span className="mt-1.5 font-pixel text-[10px] uppercase tracking-[0.2em] text-tan-hi bg-black/60 border-2 border-black px-2.5 py-1 group-hover:text-neon animate-blink">
+                ⨀ Avanti!
+              </span>
+            </button>
           </div>
         ) : (
           <div className="flex-1 flex items-center justify-center">
