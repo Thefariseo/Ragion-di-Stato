@@ -12,7 +12,14 @@ export function buildDayQueue(
   pendingInjects: string[],
 ): string[] {
   const dayDef = getDay(day);
-  const base = dayDef ? [...dayDef.caseIds] : [];
+  // anche i casi BASE della giornata rispettano appearsIfFlag: così una
+  // giornata può avere VARIANTI in base alle scelte passate (NPC che tornano
+  // riconoscenti o ostili a seconda di cosa hai fatto).
+  const base = (dayDef ? [...dayDef.caseIds] : []).filter((id) => {
+    const c = CASES[id];
+    if (!c) return false;
+    return !c.appearsIfFlag || flags[c.appearsIfFlag] === true;
+  });
 
   for (const id of pendingInjects) {
     const c = CASES[id];

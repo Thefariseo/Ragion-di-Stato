@@ -24,6 +24,10 @@ export const SAVE_VERSION = 2;
 
 const MIN_PER_CASE = 40;
 const MIN_PER_EVENT = 15;
+/** chiusura dell'ufficio: 18:00 (minuti dalle 09:00). Il tempo REALE scorre
+ * alla scrivania (tick dal client); allo scadere la giornata chiude comunque,
+ * con la coda incompleta e la quota mancata. La pressione è il gioco. */
+export const DAY_END_MIN = 540;
 
 const DEFAULT_PLAYER: PlayerState = {
   stipendio: 120000,
@@ -162,6 +166,22 @@ export function chooseCaseAction(state: GameState, actionId: string): GameState 
     return endDay(next);
   }
   return { ...next, phase: "desk" };
+}
+
+/* --------------------------------------------------- tempo reale */
+
+/**
+ * Avanza l'orologio del turno (tick dal client, solo in fase desk).
+ * Alle 18:00 l'ufficio CHIUDE: la giornata finisce anche con la coda
+ * incompleta — la quota mancata si paga.
+ */
+export function tickClock(state: GameState, mins: number): GameState {
+  if (state.phase !== "desk") return state;
+  const clock = state.clock + mins;
+  if (clock >= DAY_END_MIN) {
+    return endDay({ ...state, clock: DAY_END_MIN });
+  }
+  return { ...state, clock };
 }
 
 /* --------------------------------------------------- risoluzione evento */

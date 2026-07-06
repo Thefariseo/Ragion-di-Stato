@@ -592,5 +592,140 @@ export const ARC_CASES: CaseDef[] = [
       }, { requires: {} }),
     ],
   },
+
+  /* ============ GIORNO 9 — l'NPC RITORNA e reagisce alla tua scelta ========
+   * Varianti mutuamente esclusive (appearsIfFlag su caseIds base): la giornata
+   * cambia faccia a seconda di cosa hai fatto con Renzo Calabro al Giorno 1–2.
+   */
+
+  // L'hai SCAGIONATO (G1) → Renzo torna di persona, e stavolta è lui ad aiutare te.
+  {
+    id: "ret_renzo_torna",
+    subject: "Renzo Calabro — di ritorno",
+    faction: "brigate",
+    appearsIfFlag: "militante_protetto",
+    summary: "Il ragazzo che hai scagionato è davanti al vetro. E sa qualcosa.",
+    intro: [
+      "Lo riconosci subito: mani ferme, sguardo che non si abbassa. Renzo.",
+      "«Lei mi ha tenuto fuori dal fascicolo. Non lo dimentico. Ho sentito un nome, nei posti che frequento: fondo R. Le interessa?»",
+    ],
+    documents: [
+      {
+        id: "ret9a_biglietto",
+        kind: "nota",
+        title: "Biglietto passato sotto il vetro",
+        issuer: "—",
+        authLevel: "libero",
+        fields: [{ label: "Grafia", value: "minuta, di fretta", comparable: true }],
+        body: [
+          "«I versamenti partivano da un ufficio del porto. Il vostro 'consulente' li firmava con un nome falso.»",
+          "«Se le serve, io questo l'ho visto. E lo posso ripetere.»",
+        ],
+      },
+    ],
+    actions: [
+      special("proteggi", "Accetta la testimonianza (proteggilo)", "proteggi", {
+        text: "Prendi il biglietto e gli dici di sparire per un po'. Ora hai un testimone sul fondo R. E un debito in più verso un ragazzo che doveva essere un nemico.",
+        factions: { brigate: { reputation: 6 }, procura: { reputation: 8 } },
+        country: { verita: 6 },
+        sospetto: 5,
+        setFlags: ["testimone_renzo", "amico_procura"],
+        unlockCases: ["ret_procura_ancora"],
+        logTitle: "Accettata la testimonianza di Renzo sul fondo R",
+      }, { requires: {} }),
+      respingi({
+        text: "«Vada via. Non l'ho mai vista.» Renzo annuisce, piega il biglietto, sparisce. Ha capito. Certe gentilezze si fanno una volta sola.",
+        factions: { brigate: { reputation: -4 } },
+        player: { lucidita: -3 },
+        setFlags: ["renzo_respinto_ritorno"],
+        logTitle: "Rifiutata la testimonianza di Renzo",
+      }),
+    ],
+  },
+
+  // Hai fatto SCARCERARE Renzo su istanza di Giulia (G2) → Giulia torna a avvertirti.
+  {
+    id: "ret_giulia_torna",
+    subject: "Giulia Calabro — di ritorno",
+    faction: "brigate",
+    appearsIfFlag: "renzo_aiutato",
+    summary: "La ragazza che ti aveva implorato. Stavolta è lei che avverte te.",
+    intro: [
+      "Giulia. Gli occhi non sono più rossi: sono attenti.",
+      "«Lei ha scritto quella riga per mio fratello. Ora ascolti me: fanno domande su di lei, negli ambienti sbagliati. Un uomo con una tessera da consulente. Stia attento.»",
+    ],
+    documents: [
+      {
+        id: "ret9b_avviso",
+        kind: "nota",
+        title: "Parole riferite a voce",
+        issuer: "—",
+        authLevel: "libero",
+        fields: [{ label: "Fonte", value: "Giulia Calabro", comparable: true }],
+        body: ["«Chiedevano dei suoi orari. Di che strada fa. Non è il modo in cui si chiede di un impiegato qualsiasi.»"],
+      },
+    ],
+    actions: [
+      archivia({
+        text: "La ringrazi e mandi a mente ogni parola. Sapere prima è metà del vantaggio. L'altra metà è arrivare a stasera.",
+        player: { lucidita: 3 },
+        sospetto: -3,
+        setFlags: ["avvisato_da_giulia"],
+        logTitle: "Avvertimento di Giulia annotato",
+      }, "Ascolta e registra l'avvertimento."),
+      segnala({
+        text: "La segnali: «contatti con ambienti dell'autonomia». Ti ha avvertito, e tu l'hai schedata. C'è una parola per questo, e la sai.",
+        factions: { sir: { reputation: 4 }, brigate: { reputation: -14, suspicion: 10 } },
+        player: { lucidita: -8 },
+        country: { repressione: 2 },
+        setFlags: ["giulia_segnalata"],
+        logTitle: "Segnalata Giulia dopo l'avvertimento",
+      }, { requires: {} }),
+    ],
+  },
+
+  // Hai SEGNALATO anche Giulia (G2) → le Brigate presentano il conto.
+  {
+    id: "ret_conto_brigate",
+    subject: "Volantino con il tuo nome",
+    faction: "brigate",
+    appearsIfFlag: "giulia_segnalata",
+    summary: "Le Brigate non dimenticano chi ha schedato una dei loro",
+    intro: [
+      "Nessuno allo sportello. Solo un volantino ciclostilato, infilato sotto il vetro durante la notte.",
+      "C'è una lista di «servi dello Stato». Il terzo nome è il tuo.",
+    ],
+    documents: [
+      {
+        id: "ret9c_volantino",
+        kind: "lettera",
+        title: "Volantino ciclostilato",
+        issuer: "—",
+        authLevel: "libero",
+        fields: [
+          { label: "Sigla", value: "stella a cinque punte", comparable: true },
+          { label: "Voce 3", value: "il funzionario dello sportello 7", comparable: true },
+        ],
+        body: ["«Chi scheda i compagni risponderà ai compagni. Sappiamo dove timbra. Sappiamo dove torna.»"],
+      },
+    ],
+    actions: [
+      segnala({
+        text: "Consegni il volantino agli Affari Interni e chiedi protezione. Te la concedono: una pattuglia sotto casa. Adesso ti proteggono gli stessi che ti sorvegliano.",
+        factions: { sir: { reputation: 6 }, brigate: { suspicion: 8 } },
+        player: { famiglia: -6 },
+        country: { repressione: 3 },
+        sospetto: 4,
+        setFlags: ["protezione_richiesta"],
+        logTitle: "Chiesta protezione per la minaccia BP",
+      }, { requires: {}, hint: "Consegna la minaccia e chiedi protezione." }),
+      special("distruggi", "Brucialo e non dirlo a nessuno", "distruggi", {
+        text: "Lo bruci nel posacenere. Se lo Stato sapesse, ti «proteggerebbe»: cioè ti userebbe. Meglio la paura privata della custodia pubblica. Forse.",
+        player: { lucidita: -6, famiglia: -4 },
+        setFlags: ["minaccia_taciuta"],
+        logTitle: "Minaccia delle BP taciuta",
+      }, { requires: {} }),
+    ],
+  },
 ];
 

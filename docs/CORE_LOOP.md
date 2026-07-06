@@ -22,6 +22,12 @@ NIGHT → (giorno dopo) … → ENDING` (+ `CUTSCENE` in overlay).
 9. **Il mondo reagisce**: fazioni (reputazione/sospetto), NPC, **flag** che il
    giorno dopo muovono **giornale**, **eventi**, **casi-ritorno**, **finali**.
 
+## Il TEMPO (la pressione)
+Alla scrivania **il tempo scorre da solo** (1 minuto di gioco al secondo);
+ogni pratica evasa costa +40', ogni evento +15'. **Alle 18:00 l'ufficio chiude**
+comunque: le pratiche non evase sono quota mancata, e la quota mancata si paga.
+Leggere tutto, confrontare tutto, ha un costo. È il trade-off centrale del turno.
+
 ## Il loop della GIORNATA
 `NEWSPAPER` (specchio delle scelte di ieri) → `BRIEFING`/`DIRECTIVES` (la regola
 nuova) → `DESK` (i casi, gli eventi gated) → `DAY_SUMMARY` (compenso, ammende,

@@ -10,7 +10,7 @@ import { NpcSprite } from "./NpcSprite";
 import { WorldScene } from "./WorldScene";
 import { AmbientVisual } from "./AmbientVisual";
 import { Typewriter } from "@/components/ui/Typewriter";
-import { voiceForFaction } from "@/lib/voice";
+import { voiceForFaction, type VoiceProfileId } from "@/lib/voice";
 
 const AMB_SOUND: Record<string, () => void> = {
   thud: playThud,
@@ -20,7 +20,18 @@ const AMB_SOUND: Record<string, () => void> = {
   drawer: playDrawer,
 };
 
-export function Booth({ game, dayDef, caseDef }: { game: GameState; dayDef: DayDef; caseDef?: CaseDef }) {
+export function Booth({
+  game,
+  dayDef,
+  caseDef,
+  reaction,
+}: {
+  game: GameState;
+  dayDef: DayDef;
+  caseDef?: CaseDef;
+  /** battuta di reazione dell'NPC alla decisione appena presa (con voce) */
+  reaction?: { line: string; voice: VoiceProfileId } | null;
+}) {
   const sospetto = game.player.sospetto;
   const caos = game.country.caos;
   const alarm = caos >= 68 || game.flags["attentato"] === true;
@@ -95,12 +106,19 @@ export function Booth({ game, dayDef, caseDef }: { game: GameState; dayDef: DayD
         )}
       </div>
 
-      {/* VOCE — fumetto del richiedente */}
-      {caseDef?.intro && (
-        <div className="absolute left-[238px] top-3 z-[3] max-w-[330px] rds-paper p-2.5">
-          <div className="font-pixel text-[8px] uppercase tracking-wider text-ink/55 mb-0.5">Voce · sportello</div>
-          <Typewriter key={caseDef.id} lines={caseDef.intro} speed={18} voice={voiceForFaction(caseDef.faction)} className="font-read text-[15px] text-ink leading-snug" />
+      {/* VOCE — fumetto del richiedente (o la sua REAZIONE alla decisione) */}
+      {reaction ? (
+        <div className="absolute left-[238px] top-3 z-[4] max-w-[330px] rds-paper p-2.5 border-stamp-red">
+          <div className="font-pixel text-[8px] uppercase tracking-wider text-stamp-red mb-0.5">Reazione · sportello</div>
+          <Typewriter key={reaction.line} lines={[reaction.line]} speed={14} voice={reaction.voice} className="font-read text-[15px] text-ink leading-snug" />
         </div>
+      ) : (
+        caseDef?.intro && (
+          <div className="absolute left-[238px] top-3 z-[3] max-w-[330px] rds-paper p-2.5">
+            <div className="font-pixel text-[8px] uppercase tracking-wider text-ink/55 mb-0.5">Voce · sportello</div>
+            <Typewriter key={caseDef.id} lines={caseDef.intro} speed={18} voice={voiceForFaction(caseDef.faction)} className="font-read text-[15px] text-ink leading-snug" />
+          </div>
+        )
       )}
 
       {/* allarme (l'unico strumento qui: il resto è nella barra di stato) */}

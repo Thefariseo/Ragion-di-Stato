@@ -2,6 +2,7 @@
 
 import type { DayDef, GameState } from "@/types";
 import { formatClock, formatLire } from "@/lib/format";
+import { DAY_END_MIN } from "@/game/engine";
 
 /**
  * Barra di stato sempre presente sul banco: il giocatore VEDE muoversi la posta
@@ -16,6 +17,7 @@ export function TopBar({ game, dayDef }: { game: GameState; dayDef: DayDef }) {
   const sosp = Math.round(game.player.sospetto);
   const sospColor = sosp >= 70 ? "#b42b2b" : sosp >= 40 ? "#c9882f" : "#6c8f3a";
   const metQuota = doneToday >= quota;
+  const lastHour = DAY_END_MIN - game.clock <= 60;
 
   return (
     <div className="shrink-0 h-11 bg-env-0 border-b-4 border-black flex items-stretch text-paper-cream relative z-[5]">
@@ -53,10 +55,16 @@ export function TopBar({ game, dayDef }: { game: GameState; dayDef: DayDef }) {
         <span key={earned} className="font-term text-[18px] leading-none text-tan-hi animate-hudPop">₤ {formatLire(earned)}</span>
       </div>
 
-      {/* orologio LCD grande */}
-      <div className="flex-1 flex items-center justify-center">
-        <div className="rds-lcd px-4 py-1 flex items-baseline gap-2">
-          <span key={game.clock} className="text-3xl leading-none neon animate-hudTick">{formatClock(game.clock)}</span>
+      {/* orologio LCD grande — IL TEMPO SCORRE, l'ufficio chiude alle 18:00 */}
+      <div className="flex-1 flex items-center justify-center gap-3">
+        <div className="rds-lcd px-4 py-1 flex items-baseline gap-2" style={lastHour ? { color: "#e05545", textShadow: "0 0 6px rgba(224,85,69,0.6)" } : undefined}>
+          <span key={game.clock} className={`text-3xl leading-none animate-hudTick ${lastHour ? "animate-blink" : "neon"}`}>
+            {formatClock(game.clock)}
+          </span>
+        </div>
+        <div className="flex flex-col justify-center">
+          <span className="font-pixel text-[8px] uppercase tracking-widest text-paper/50 leading-tight">chiusura</span>
+          <span className={`font-term text-[15px] leading-none ${lastHour ? "text-stamp-redhi" : "text-paper/70"}`}>18:00</span>
         </div>
       </div>
 

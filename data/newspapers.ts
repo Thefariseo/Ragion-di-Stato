@@ -166,4 +166,20 @@ export const NEWS_ITEMS: NewspaperItem[] = [
     headline: "TESTIMONE SCOMPARSO, INCHIESTA SUBITO ARCHIVIATA",
     body: "Aveva visto, aveva parlato. Poi più nulla: né lui, né il verbale. «Non risulta», dicono gli uffici. E hanno ragione: non risulta più.",
   },
+  {
+    requiresFlag: "testimone_renzo",
+    headline: "«C'È UN TESTE SUI VERSAMENTI», FILTRA DALLA PROCURA",
+    body: "Un giovane «vicino agli ambienti dell'autonomia» avrebbe visto firmare i bonifici del porto. Se arriva vivo all'aula, cambia tutto.",
+  },
+  {
+    requiresFlag: "protezione_richiesta",
+    headline: "MINACCE A UN FUNZIONARIO, SCATTA LA VIGILANZA",
+    body: "Un volantino, una lista, una pattuglia sotto casa. Il Viminale: «Atto dovuto». I vicini, intanto, hanno smesso di salutare.",
+  },
+  {
+    requiresFlag: "giulia_segnalata",
+    forbidsFlag: "protezione_richiesta",
+    headline: "ALTRI NOMI NEGLI SCHEDARI. «PREVENZIONE», DICONO",
+    body: "Una ragazza incensurata finisce agli atti per «contiguità». Il fratello era già passato di lì. Certe famiglie lo Stato le conosce una pratica alla volta.",
+  },
 ];

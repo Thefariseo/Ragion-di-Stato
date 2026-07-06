@@ -190,7 +190,9 @@ export const DAYS: Record<number, DayDef> = {
       "Restano in vigore tutte le disposizioni precedenti.",
     ],
     ruleIds: R_ALL,
-    caseIds: ["a9_fondo_r", "d3_politico_nota"],
+    // le varianti ret_* sono mutuamente esclusive (appearsIfFlag): l'NPC che
+    // torna — e COME torna — dipende da cosa hai fatto con Renzo e Giulia.
+    caseIds: ["ret_renzo_torna", "ret_giulia_torna", "ret_conto_brigate", "a9_fondo_r", "d3_politico_nota"],
     events: ["ev_busta"],
     quota: 2,
     payPerCase: 32000,

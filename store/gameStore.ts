@@ -11,6 +11,7 @@ import {
   createGame,
   resolveEvent,
   resolveNight,
+  tickClock as engineTickClock,
   playCutscene as enginePlayCutscene,
   endActiveCutscene,
 } from "@/game/engine";
@@ -27,6 +28,7 @@ interface GameStore {
 
   startNewGame: (seed?: number) => void;
   goToPhase: (phase: GamePhase) => void;
+  tickClock: (mins: number) => void;
   chooseAction: (actionId: string) => void;
   resolveEventOption: (optionIndex: number) => void;
   continueSummary: () => void;
@@ -55,6 +57,9 @@ export const useGameStore = create<GameStore>()(
 
       goToPhase: (phase: GamePhase) =>
         set((st) => ({ game: { ...st.game, phase } })),
+
+      tickClock: (mins: number) =>
+        set((st) => ({ game: engineTickClock(st.game, mins) })),
 
       chooseAction: (actionId: string) =>
         set((st) => ({ game: chooseCaseAction(st.game, actionId) })),

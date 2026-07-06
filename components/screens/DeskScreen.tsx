@@ -19,6 +19,7 @@ import { EventModal } from "@/components/desk/EventModal";
 import { FineReceipt } from "@/components/desk/FineReceipt";
 import { Stamp } from "@/components/ui/Stamp";
 import { playStamp, playClick } from "@/lib/sfx";
+import { voiceForFaction, type VoiceProfileId } from "@/lib/voice";
 
 const DEFAULT_STAMP: Record<string, string> = {
   approva: "APPROVATO",
@@ -27,10 +28,31 @@ const DEFAULT_STAMP: Record<string, string> = {
   archivia: "ARCHIVIATO",
 };
 
+/**
+ * La decisione CADE su una persona: reazione dell'NPC al timbro, con voce.
+ * Solo per le azioni che l'interessato percepisce allo sportello.
+ */
+const NPC_REACTIONS: Partial<Record<CaseAction["kind"], string[]>> = {
+  approva: ["«Grazie. Grazie davvero.»", "«Lo sapevo che era tutto in ordine.»", "«Buona giornata a lei.»"],
+  respingi: ["«Non può farmi questo...»", "«E adesso io cosa faccio? Me lo dica lei.»", "«C'è un errore. Ci DEV'ESSERE un errore.»"],
+  segnala: ["«Cosa ha scritto?! Cosa ha scritto lì sopra?»", "«Ve ne pentirete. Tutti quanti.»", "«Io non ho fatto niente. NIENTE.»"],
+  verifica: ["«Va bene. Torno domani. Di nuovo.»", "«Un altro giorno perso. Contento lei...»"],
+  trattieni: ["«Non può trattenerla, è mia!»", "«Voglio parlare con un suo superiore.»"],
+};
+
+function reactionFor(kind: CaseAction["kind"], caseId: string): string | null {
+  const pool = NPC_REACTIONS[kind];
+  if (!pool || pool.length === 0) return null;
+  let h = 0;
+  for (let i = 0; i < caseId.length; i++) h = (h * 31 + caseId.charCodeAt(i)) >>> 0;
+  return pool[h % pool.length] ?? null;
+}
+
 export function DeskScreen() {
   const game = useGameStore((s) => s.game);
   const chooseAction = useGameStore((s) => s.chooseAction);
   const playCutscene = useGameStore((s) => s.playCutscene);
+  const tickClock = useGameStore((s) => s.tickClock);
 
   const dayDef = getDay(game.day);
   const caseId = game.queue[game.currentCaseIndex];
@@ -38,8 +60,19 @@ export function DeskScreen() {
 
   const [stamping, setStamping] = useState<{ label: string; kind: CaseAction["kind"] } | null>(null);
   const [receipt, setReceipt] = useState<Citation | null>(null);
+  const [reaction, setReaction] = useState<{ line: string; voice: VoiceProfileId } | null>(null);
   const [analysis, setAnalysis] = useState<CaseAnalysis>({ inspected: false, discrepanciesFound: 0 });
   const onAnalysis = useCallback((a: CaseAnalysis) => setAnalysis(a), []);
+
+  // IL TEMPO SCORRE: 1 minuto di gioco al secondo, solo alla scrivania.
+  // Alle 18:00 l'ufficio chiude — pratiche non evase = quota mancata.
+  // In pausa durante eventi, timbrata e ammenda (niente chiusure a tradimento).
+  const paused = game.phase !== "desk" || !!stamping || !!receipt;
+  useEffect(() => {
+    if (paused) return;
+    const t = setInterval(() => tickClock(1), 1000);
+    return () => clearInterval(t);
+  }, [paused, tickClock]);
 
   // valutazione procedurale del caso corrente (per gating azioni + ammenda)
   const validation = useMemo(
@@ -96,6 +129,13 @@ export function DeskScreen() {
     const cit = computeCitation(caseDef, a, validation, game.day);
     const fine = cit && cit.severity === "grave" && cit.visibleToPlayer ? cit : null;
 
+    // la decisione cade su una PERSONA: reagisce prima di uscire
+    const line = reactionFor(a.kind, caseDef.id);
+    if (line) {
+      setReaction({ line, voice: voiceForFaction(caseDef.faction) });
+      window.setTimeout(() => setReaction(null), 2400);
+    }
+
     const dispatch = () => {
       chooseAction(a.id);
       if (fine) setReceipt(fine);
@@ -120,7 +160,7 @@ export function DeskScreen() {
   return (
     <div className="h-full w-full flex flex-col relative">
       <TopBar game={game} dayDef={dayDef} />
-      <Booth game={game} dayDef={dayDef} caseDef={caseDef} />
+      <Booth game={game} dayDef={dayDef} caseDef={caseDef} reaction={reaction} />
 
       {/* bancone */}
       <div className="h-2 bg-env-0 border-y-2 border-black shadow-[0_5px_10px_rgba(0,0,0,0.6)] relative z-[3]" />
