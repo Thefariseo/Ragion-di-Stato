@@ -69,3 +69,13 @@ Sindacato/Loggia/Avanguardia (sfondo, casi futuri).
 Ogni fazione deve avere **almeno un caso-ritorno o evento gated** sulla tua
 reputazione/flag con essa: se la servi → ti chiede un favore più sporco; se la
 incrini → ti minaccia o ti incastra. Vedi CONSEQUENCE_PIPELINE.md.
+
+## Copertura nei giorni centrali (tessitura G3–G6) — FATTO
+- **Stampa** genera pratica a G3 (visto/censura del trafiletto) oltre a G2/G10.
+- **Sindacato** genera pratica a G4 (Baldan: la pressione morale).
+- **Governo** genera pratica a G5 (la velina: la censura come ordine).
+- **SIR** genera pratica a G6 (nastro 44-B: la copertura come appunto).
+Ogni fazione principale ora produce almeno una pratica, una pressione e una
+reazione di giornale nella prima settimana. Ritorni attivi: Anello (favore/
+ritorsione), Procura (Ardenti chiede di più), Brigate (Renzo/Giulia a G9).
+Backlog: ritorni dedicati per SIR, Stampa e Rete.

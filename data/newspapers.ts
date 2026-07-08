@@ -182,4 +182,40 @@ export const NEWS_ITEMS: NewspaperItem[] = [
     headline: "ALTRI NOMI NEGLI SCHEDARI. «PREVENZIONE», DICONO",
     body: "Una ragazza incensurata finisce agli atti per «contiguità». Il fratello era già passato di lì. Certe famiglie lo Stato le conosce una pratica alla volta.",
   },
+  // —— tessitura G3–G6: il giornale rispecchia anche le pratiche minori ——
+  {
+    requiresFlag: "trafiletto_integrale",
+    headline: "«PORTO, LA GARA CHE NON C'È MAI STATA»: IL PEZZO ESCE INTERO",
+    body: "Compreso l'inciso su un «fondo di partito». Al Ministero, stamattina, i telefoni sono bollenti. In tipografia, invece, si stappa.",
+  },
+  {
+    requiresFlag: "trafiletto_censurato",
+    headline: "PORTO, UN TRAFILETTO «EQUILIBRATO». MANCA UNA RIGA",
+    body: "Il pezzo esce pulito, senza l'inciso che tutti in redazione avevano letto. Il direttore non commenta. La matita rossa nemmeno.",
+  },
+  {
+    requiresFlag: "trafiletto_bloccato",
+    headline: "PAGINA TRE, UN BUCO BIANCO DOVE DOVEVA ESSERCI UN ARTICOLO",
+    body: "Nessun visto, nessun pezzo. All'estero i buchi bianchi li chiamano notizie. Qui li chiamano «disguidi tipografici».",
+  },
+  {
+    requiresFlag: "baldan_aiutato",
+    headline: "LA PENSIONE DELLA VEDOVA BALDAN ARRIVA PUNTUALE",
+    body: "Un funzionario ha rinnovato «in deroga» una tessera scaduta durante un ricovero. Nove giorni di ritardo, una firma, una cena calda. Non farà giurisprudenza. Farà cena.",
+  },
+  {
+    requiresFlag: "velina_trasmessa",
+    headline: "TUTTE LE TESTATE, OGGI, USANO LA STESSA PAROLA: «EQUILIBRIO»",
+    body: "Identica, alla stessa ora, sulla stessa sigla che nessuno nomina. Le coincidenze editoriali, in questo Paese, hanno il protocollo.",
+  },
+  {
+    requiresFlag: "velina_a_bechis",
+    headline: "«ORDINE DI TACERE», UN DOCUMENTO IMBARAZZA IL GABINETTO",
+    body: "Una nota di indirizzo senza firma finisce sul tavolo di un cronista. Il Gabinetto: «Falso grossolano». Il protocollo, però, è vero.",
+  },
+  {
+    requiresFlag: "nastro_verbalizzato",
+    headline: "UN NASTRO, DUE VERSIONI: APERTO UN FASCICOLO INTERNO",
+    body: "Una trascrizione lega un «consulente» ai fondi di un attentato; un appunto ordinava di ignorarlo. Ora c'è un verbale che li mette a confronto. Firmato.",
+  },
 ];

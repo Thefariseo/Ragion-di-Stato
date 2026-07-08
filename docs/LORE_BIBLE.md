@@ -147,3 +147,23 @@ Il filo narrativo che cresce **giorno per giorno** non vive in questo file: vedi
   quale medium (giornale/documento/telefonata/NPC/omissis/ordine/evento/cutscene/
   conseguenza), una cosa nuova per volta.
 La lore **deve emergere dal gioco**, non da blocchi di testo.
+
+## Come la lore è ENTRATA nel gioco (stato della vertical slice)
+Il filo del «fondo R» non è testo: è una catena di OGGETTI che il giocatore
+maneggia, giorno per giorno —
+- G2 il protocollo `R-0455` compare su un fascicolo del SIR;
+- G3 un trafiletto da vistare cita «un fondo di partito» (censurabile: la
+  censura è una PRATICA, non un tema);
+- G4 la tessera del «consulente» Lendi porta lo stesso protocollo; la nota lo
+  chiama «il Ragioniere»;
+- G5 una velina ministeriale ordina alle testate di non nominare il «fondo R»
+  (prima volta per iscritto) e un nulla osta col sigillo dell'anello spezzato
+  passa sul banco;
+- G6 la Voce telefona («quel fascicolo con la R...») e il nastro 44-B lega il
+  Ragioniere ai soldi «della piazza»;
+- G7 l'ATTENTATO (cutscene) — la paura entra;
+- G9 la RIVELAZIONE (cutscene): il faldone si ricompone sul banco, e Renzo o
+  Giulia tornano secondo le tue scelte;
+- G10 il reckoning: stampa, procura, fuoco o fuga.
+Ogni passo è una pratica, un timbro, una telefonata o una prima pagina. Mai un
+blocco di testo.

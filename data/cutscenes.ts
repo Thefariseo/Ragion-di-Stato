@@ -193,10 +193,48 @@ export const ATTENTATO: Cutscene = {
   ],
 };
 
+/**
+ * LA RIVELAZIONE del «fondo R»: scatta quando il faldone arriva sul banco (G9).
+ * I fili raccolti in nove giorni si ricompongono in sequenza — dossier che si
+ * apre, telex che batte, timbro. La lore si mostra, non si spiega.
+ */
+export const FONDO_R_REVEAL: Cutscene = {
+  id: "fondoR_reveal",
+  beats: [
+    {
+      bg: "black",
+      scene: "dossier",
+      emblems: [{ faction: "governo", caption: "" }],
+      lines: ["Protocollo R-0455. Lo conosci da nove giorni.", "Adesso sai anche cosa contiene."],
+      sound: "paper",
+      music: "tensione",
+      durationMs: 3400,
+    },
+    {
+      bg: "black",
+      scene: "telex",
+      lines: [
+        "I versamenti del partito. L'area Bramante. La fonte Cardo.",
+        "Il Ragioniere che «paga in anticipo. Come per la piazza.»",
+      ],
+      sound: "telex",
+      durationMs: 4200,
+    },
+    {
+      bg: "black",
+      scene: "stampfall",
+      stampLabel: "FONDO R",
+      lines: ["Il tuo predecessore lo stava chiudendo, quando è stato «trasferito».", "Ora è sulla tua scrivania."],
+      sound: "stamp",
+    },
+  ],
+};
+
 export const CUTSCENES: Record<string, Cutscene> = {
   intro: INTRO,
   end_generic: END_GENERIC,
   attentato: ATTENTATO,
+  fondoR_reveal: FONDO_R_REVEAL,
   ...FAC_CUTSCENES,
 };
 

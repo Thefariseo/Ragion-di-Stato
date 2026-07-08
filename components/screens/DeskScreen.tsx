@@ -105,8 +105,9 @@ export function DeskScreen() {
   const stampItems = useMemo(() => actionItems.filter((it) => it.action.needsStamp), [actionItems]);
   const folderItems = useMemo(() => actionItems.filter((it) => !it.action.needsStamp), [actionItems]);
 
-  // quando il Paese precipita nella crisi: sequenza d'attentato (una volta)
-  const crisis = game.country.caos >= 68 || game.flags["attentato"] === true;
+  // L'ATTENTATO: il movimento della "paura" entra a G7 (o prima, se il caos
+  // precipita). Una sola volta per run.
+  const crisis = game.day >= 7 || game.country.caos >= 68 || game.flags["attentato"] === true;
   useEffect(() => {
     if (game.phase !== "desk") return;
     if (!crisis) return;
@@ -115,6 +116,16 @@ export function DeskScreen() {
     playCutscene("attentato", "desk");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [crisis, game.phase]);
+
+  // LA RIVELAZIONE del fondo R: quando il faldone arriva sul banco (G9)
+  useEffect(() => {
+    if (game.phase !== "desk" || awaitingCall) return;
+    if (caseDef?.id !== "a9_fondo_r") return;
+    if (game.flags["cs_fondoR_reveal"]) return;
+    if (game.activeCutscene) return;
+    playCutscene("fondoR_reveal", "desk");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [caseDef?.id, awaitingCall, game.phase]);
 
   // presentazione di una fazione alla sua prima comparsa (dopo la chiamata)
   useEffect(() => {

@@ -31,7 +31,14 @@ Curva: **burocrazia (G1–3) → sospetto (G4–6) → paura (G7–8) → compro
 - [ ] una conseguenza futura (giornale/evento/caso-ritorno/finale);
 - [ ] una reazione del mondo (giornale o evento animato).
 
-## Densità (backlog noto)
-G4–G6 hanno 1 pratica: vanno infoltite con un secondo caso ciascuna **collegato**
-(favore/minaccia di fazione), non riempitivo. I casi-ritorno dell'Anello/Procura
-sono la priorità: chiudono il cerchio scelta→conseguenza→ritorno.
+## Densità — FATTO
+G3–G6 infoltite con pratiche di TESSITURA collegate (data/cases/texture.ts):
+- **G3** `t3_visto_stampa` (Stampa): il visto sul trafiletto del porto — la
+  censura come pratica; 3 esiti, 3 prime pagine diverse il giorno dopo.
+- **G4** `t4_pensionato` (Sindacato): la tessera scaduta di Baldan — la regola
+  contro la pietà; l'ammenda arriva davvero se timbri in deroga.
+- **G5** `t5_velina` (Governo): l'ordine di non nominare il «fondo R» — puoi
+  trasmetterla, trattenerla (regola firma) o passarla a Bechis.
+- **G6** `t6_intercettazione` (SIR): il nastro 44-B contro l'appunto di
+  massima — la contraddizione a verbale apre il ritorno della Procura.
+Beat cinematici fissi: **attentato a G7**, **rivelazione del fondo R a G9**.

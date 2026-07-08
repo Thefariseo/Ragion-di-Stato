@@ -52,3 +52,10 @@ Una `Consequence` che non tocca NESSUNO dei campi sopra **non è una scelta**: �
 un click. Ogni azione dei casi è verificata: deve cambiare almeno fazione,
 sospetto, paese, o un flag con effetto a valle. (Eventi puramente atmosferici
 ammessi SOLO come `AmbientVisual` del corridoio, non come scelte.)
+
+## Audit completato (vertical slice)
+Le scelte senza peso sono state bonificate (ultima: l'archivia del telex G2,
+ora `registro_rinviato` + sospetto). Regola operativa confermata: ogni azione
+tocca fazioni, sospetto, paese, player o un flag con effetto a valle; i flag
+nuovi della tessitura (trafiletto_*, velina_*, baldan_*, nastro_*) hanno tutti
+il loro trafiletto reattivo in data/newspapers.ts.

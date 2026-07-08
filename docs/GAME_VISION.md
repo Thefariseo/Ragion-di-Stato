@@ -53,8 +53,12 @@ deciso così».** Se non lo sente, abbiamo fallito. Operativamente significa:
 - gli stessi volti tornano, cambiati da ciò che hai fatto;
 - due run con scelte opposte divergono in eventi, giornali e finale.
 
-## 7. Stato attuale e priorità
-Impalcatura completa (10 giorni giocabili, gating azioni, discrepanze, voce,
-eventi animati, giornale reattivo, audio a bus). Il lavoro vivo è la **densità
-delle connessioni**: più casi-conseguenza che riportano NPC/fazioni, più
-reazioni del mondo, audit delle scelte senza peso. Vedi CONSEQUENCE_PIPELINE.md.
+## 7. Stato attuale
+La vertical slice G1–G10 è **integrata**: ritmo PP al banco (campanello,
+rastrelliera dei timbri, tempo reale con chiusura alle 18:00, reazioni NPC con
+voce), gating procedurale delle azioni, casi-ritorno (Anello, Procura,
+Renzo/Giulia), giornate centrali dense (2–3 pratiche G3–G6 con Stampa, Governo,
+Sindacato, SIR), giornale-specchio (~30 trafiletti reattivi), beat cinematici
+fissi (attentato a G7, rivelazione del fondo R a G9) e finali che leggono la
+somma dei flag. Il lavoro vivo ora è ESPANSIONE, non integrazione: più casi per
+fazione, più ritorni (SIR/Stampa/Rete), audio esterno, densità oltre G10.
