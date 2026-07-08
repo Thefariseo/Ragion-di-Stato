@@ -11,6 +11,7 @@ export const TEXTURE_CASES: CaseDef[] = [
   /* ============ G3 — la CENSURA come pratica quotidiana (Stampa) ========== */
   {
     id: "t3_visto_stampa",
+    specialActionId: "censura",
     subject: "Bozza in attesa di visto",
     faction: "stampa",
     summary: "Un trafiletto sull'appalto del porto attende il «visto, si stampi»",
@@ -67,6 +68,7 @@ export const TEXTURE_CASES: CaseDef[] = [
   /* ====== G4 — il costo umano della regola (Sindacato, pressione morale) === */
   {
     id: "t4_pensionato",
+    specialActionId: "richiedi_verifica",
     subject: "Ettore Baldan",
     faction: "sindacato",
     summary: "Tessera di reversibilità scaduta da nove giorni. Ottant'anni.",

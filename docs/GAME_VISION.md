@@ -62,3 +62,15 @@ Sindacato, SIR), giornale-specchio (~30 trafiletti reattivi), beat cinematici
 fissi (attentato a G7, rivelazione del fondo R a G9) e finali che leggono la
 somma dei flag. Il lavoro vivo ora è ESPANSIONE, non integrazione: più casi per
 fazione, più ritorni (SIR/Stampa/Rete), audio esterno, densità oltre G10.
+
+## 8. La PROCEDURA (semplificazione del loop)
+Il gioco è una procedura semplice dentro un mondo profondo. Regola dura:
+- il turno-tipo offre SOLO **ACCETTA** e **RIFIUTA** (due timbri);
+- **ARRESTA** esiste solo dove il caso lo dichiara (`arrestActionId`) — minacce,
+  falsi gravi, ordini espliciti, terrorismo, servizi, nodi di trama;
+- al massimo **UNA azione speciale** per caso (`specialActionId`), contestuale;
+- un caso senza verdetto è un **nodo della trama**: le sue poche opzioni SONO
+  la decisione;
+- un'azione senza conseguenze narrative o sistemiche NON ESISTE.
+Facile da giocare, difficile da decidere: la complessità sta in documenti,
+incongruenze, fazioni, NPC, giornali e conseguenze — mai nella UI.

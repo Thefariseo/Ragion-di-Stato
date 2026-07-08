@@ -12,13 +12,18 @@ const DEFAULT_STAMP: Record<string, string> = {
   archivia: "ARCHIVIATO",
 };
 
-function inkColor(a: CaseAction): string {
+function inkColor(a: CaseAction, display?: string): string {
+  if (display === "accetta") return "#86b42b";
+  if (display === "rifiuta") return "#b42b2b";
+  if (display === "arresta") return "#ca9038";
   const l = (a.stampLabel ?? a.kind).toUpperCase();
   if (a.kind === "approva" || l.includes("APPROV")) return "#86b42b";
   if (a.kind === "respingi" || l.includes("RESPINT") || l.includes("NON ESIB")) return "#b42b2b";
   if (a.kind === "segnala" || l.includes("SEGNAL")) return "#ca9038";
   return "#9aa6c4";
 }
+
+type TrayItem = ActionItem & { display?: string };
 
 /**
  * La RASTRELLIERA DEI TIMBRI, come in Papers, Please: una maniglia sopra la
@@ -31,7 +36,7 @@ export function StampTray({
   disabled,
   onStamp,
 }: {
-  items: ActionItem[];
+  items: TrayItem[];
   disabled?: boolean;
   onStamp: (a: CaseAction) => void;
 }) {
@@ -53,7 +58,7 @@ export function StampTray({
               Nessun verdetto a timbro per questa pratica
             </div>
           )}
-          {items.map(({ action: a, available, reason }) => (
+          {items.map(({ action: a, available, reason, display }) => (
             <button
               key={a.id}
               disabled={disabled || !available}
@@ -70,17 +75,20 @@ export function StampTray({
                 style={{ clipPath: "polygon(25% 0, 75% 0, 100% 100%, 0 100%)" }}
               />
               <div className={`w-12 h-3 border-2 border-black -mt-0.5 ${available ? "bg-wood" : "bg-[#2c2822]"}`} />
-              {/* corpo di gomma con targhetta */}
+              {/* corpo di gomma con targhetta: la PROCEDURA in grande */}
               <div
-                className={`w-24 h-12 border-2 border-black flex items-center justify-center px-1 transition-transform ${
+                className={`w-24 h-14 border-2 border-black flex flex-col items-center justify-center px-1 transition-transform ${
                   available ? "bg-[#171410] group-hover:translate-y-1 group-active:translate-y-3" : "bg-[#14120e] opacity-60"
                 }`}
               >
                 <span
-                  className="font-pixel text-[11px] leading-tight text-center"
-                  style={{ color: available ? inkColor(a) : "#5c584e" }}
+                  className="font-pixel text-[13px] leading-tight text-center uppercase"
+                  style={{ color: available ? inkColor(a, display) : "#5c584e" }}
                 >
-                  {a.stampLabel ?? DEFAULT_STAMP[a.kind] ?? a.label.toUpperCase()}
+                  {display && display !== "speciale" ? display : (a.stampLabel ?? DEFAULT_STAMP[a.kind] ?? a.label)}
+                </span>
+                <span className="font-read text-[8px] uppercase tracking-wider text-paper/45 leading-none mt-0.5">
+                  {a.stampLabel ?? DEFAULT_STAMP[a.kind] ?? ""}
                 </span>
               </div>
               {!available && reason && (

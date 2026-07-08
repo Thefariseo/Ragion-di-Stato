@@ -195,6 +195,14 @@ export interface CaseDef {
   subject: string;
   faction?: FactionId;
   summary: string;
+  /**
+   * PRESENTAZIONE SEMPLIFICATA (vedi game/actions.ts → simplifyActions).
+   * Il loop è ACCETTA/RIFIUTA; queste due dichiarazioni aggiungono, SOLO dove
+   * la trama lo giustifica, il timbro ARRESTA e UNA azione speciale. Tutte le
+   * altre azioni del caso restano nel motore ma non vengono mostrate.
+   */
+  arrestActionId?: string;
+  specialActionId?: string;
   /** breve descrizione di chi/cosa si presenta alla scrivania */
   intro?: string[];
   documents: GameDocument[];

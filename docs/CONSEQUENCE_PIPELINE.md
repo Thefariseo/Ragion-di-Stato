@@ -59,3 +59,13 @@ ora `registro_rinviato` + sospetto). Regola operativa confermata: ogni azione
 tocca fazioni, sospetto, paese, player o un flag con effetto a valle; i flag
 nuovi della tessitura (trafiletto_*, velina_*, baldan_*, nastro_*) hanno tutti
 il loro trafiletto reattivo in data/newspapers.ts.
+
+## Blueprint del caso (presentazione semplificata)
+Contratto di ogni `CaseDef` (il nostro CASE_BLUEPRINT — vedi anche DATA_MODEL.md):
+- azioni nel motore: quante servono alla narrativa;
+- azioni MOSTRATE: `approva`→ACCETTA, `respingi`→RIFIUTA, `arrestActionId`→
+  ARRESTA (rara), `specialActionId`→ UNA speciale. Il resto è invisibile.
+- caso senza verdetto = nodo di trama (le sue opzioni compaiono come
+  «decisione straordinaria»);
+- OGNI azione mostrata deve toccare fazioni, sospetto, paese, player o un flag
+  con effetto a valle (giornale/evento/caso-ritorno/finale). Se no, si taglia.

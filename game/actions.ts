@@ -103,3 +103,52 @@ export function actionAvailability(action: CaseAction, ctx: ActionContext): Acti
 export function availableActions(actions: CaseAction[], ctx: ActionContext): CaseAction[] {
   return actions.filter((a) => actionAvailability(a, ctx).available);
 }
+
+/* ------------------------- presentazione SEMPLIFICATA ---------------------
+ * Il loop è una PROCEDURA: quasi sempre solo ACCETTA e RIFIUTA. ARRESTA e
+ * l'unica AZIONE SPECIALE compaiono solo se il caso le dichiara
+ * (arrestActionId / specialActionId). Un caso SENZA verdetto accetta/rifiuta
+ * è per definizione un NODO DELLA TRAMA: mostra le sue (poche) decisioni
+ * straordinarie. Tutto il resto resta nel motore ma non si vede: la
+ * complessità sta nei documenti, non nei pulsanti.
+ */
+export interface PresentedAction<T> {
+  item: T;
+  /** etichetta di procedura mostrata sotto il timbro */
+  display: "accetta" | "rifiuta" | "arresta" | "speciale";
+}
+
+export interface SimplifiedActions<T> {
+  /** timbri: accetta / rifiuta / (raro) arresta */
+  tray: PresentedAction<T>[];
+  /** l'unica azione speciale del caso, se dichiarata */
+  speciale?: T;
+  /** nodo della trama: nessun verdetto → decisioni straordinarie del caso */
+  crossroads: T[];
+}
+
+export function simplifyActions<T extends { action: CaseAction }>(
+  caseDef: CaseDef,
+  items: T[],
+): SimplifiedActions<T> {
+  const accetta = items.find((it) => it.action.kind === "approva");
+  const rifiuta = items.find((it) => it.action.kind === "respingi");
+
+  // nessun verdetto: è un nodo della trama, le sue azioni SONO la decisione
+  if (!accetta && !rifiuta) {
+    return { tray: items.filter((it) => it.action.needsStamp).map((item) => ({ item, display: "speciale" as const })), speciale: undefined, crossroads: items.filter((it) => !it.action.needsStamp) };
+  }
+
+  const tray: PresentedAction<T>[] = [];
+  if (accetta) tray.push({ item: accetta, display: "accetta" });
+  if (rifiuta) tray.push({ item: rifiuta, display: "rifiuta" });
+  if (caseDef.arrestActionId) {
+    const arresta = items.find((it) => it.action.id === caseDef.arrestActionId);
+    if (arresta) tray.push({ item: arresta, display: "arresta" });
+  }
+  const speciale = caseDef.specialActionId
+    ? items.find((it) => it.action.id === caseDef.specialActionId)
+    : undefined;
+
+  return { tray, speciale, crossroads: [] };
+}

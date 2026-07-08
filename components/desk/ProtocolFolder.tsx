@@ -20,10 +20,12 @@ function btnMod(kind: string): string {
  */
 export function ProtocolFolder({
   items,
+  title = "Azione speciale",
   disabled,
   onAction,
 }: {
   items: ActionItem[];
+  title?: string;
   disabled?: boolean;
   onAction: (a: CaseAction) => void;
 }) {
@@ -48,7 +50,7 @@ export function ProtocolFolder({
         >
           <div className="absolute -top-2 left-3 w-14 h-2.5 bg-[#8a784e] border-2 border-[#2c2417]" />
           <div className="h-full flex flex-col items-center justify-center">
-            <span className="font-pixel text-[8px] uppercase tracking-widest text-[#2c2417]">Protocolli speciali</span>
+            <span className="font-pixel text-[8px] uppercase tracking-widest text-[#2c2417]">{title}</span>
             <span className="font-term text-[12px] text-[#4a3f2a] leading-none">{availableCount}/{items.length} disponibili</span>
           </div>
         </div>
@@ -62,7 +64,7 @@ export function ProtocolFolder({
             style={{ backgroundColor: "#a7956a", backgroundImage: "var(--noise)", backgroundSize: "140px 140px", backgroundBlendMode: "multiply" }}
           >
             <div className="flex items-center justify-between mb-2 border-b-2 border-[#2c2417]/40 pb-1">
-              <span className="font-pixel text-[9px] uppercase tracking-widest text-[#2c2417]">Protocolli speciali · pratica corrente</span>
+              <span className="font-pixel text-[9px] uppercase tracking-widest text-[#2c2417]">{title} · pratica corrente</span>
               <button onClick={() => setOpen(false)} className="font-pixel text-[10px] text-[#2c2417] px-1 hover:text-stamp-red">✕</button>
             </div>
             <div className="space-y-1.5">

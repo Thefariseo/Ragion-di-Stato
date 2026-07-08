@@ -77,6 +77,7 @@ export const CLIMAX_CASES: CaseDef[] = [
   /* ---------------------------------------------------------------- 2 */
   {
     id: "d3_innocente_rete",
+    specialActionId: "trasmetti_procura",
     subject: "Elia Conti",
     faction: "rete",
     summary: "Un maestro elementare il cui nome compare su una lista che non dovrebbe esistere",
@@ -172,6 +173,7 @@ export const CLIMAX_CASES: CaseDef[] = [
   /* ---------------------------------------------------------------- 3 */
   {
     id: "d3_documento_cupola",
+    specialActionId: "trasmetti_procura",
     subject: "Esposto anonimo",
     faction: "cupola",
     summary: "Sembra un falso. Ma dice il vero.",

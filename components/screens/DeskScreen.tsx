@@ -8,7 +8,7 @@ import { getCase } from "@/data/cases";
 import { getCutscene } from "@/data/cutscenes";
 import { validateCase } from "@/game/rules";
 import { computeCitation } from "@/game/citations";
-import { actionAvailability, type CaseAnalysis } from "@/game/actions";
+import { actionAvailability, simplifyActions, type CaseAnalysis } from "@/game/actions";
 import { TopBar } from "@/components/hud/TopBar";
 import { Booth } from "@/components/desk/Booth";
 import { DeskProps } from "@/components/desk/DeskProps";
@@ -89,21 +89,31 @@ export function DeskScreen() {
     [caseDef, dayDef?.ruleIds, game.day, game.flags],
   );
 
-  // azioni con disponibilità procedurale: compaiono solo se GIUSTIFICATE
-  const actionItems = useMemo(() => {
-    if (!caseDef || !validation) return [];
+  // PRESENTAZIONE SEMPLIFICATA: la procedura è ACCETTA/RIFIUTA. ARRESTA e
+  // l'unica azione speciale compaiono solo se il caso le dichiara; un caso
+  // senza verdetto è un NODO della trama. Tutto il resto non si vede.
+  const { trayItems, folderItems, folderTitle } = useMemo(() => {
+    if (!caseDef || !validation) return { trayItems: [], folderItems: [], folderTitle: "" };
     const ctx = { caseDef, validation, analysis, flags: game.flags, day: game.day };
     const items = caseDef.actions.map((a) => ({ action: a, ...actionAvailability(a, ctx) }));
-    // fail-safe: se TUTTE le azioni sono bloccate, la pratica diventerebbe
-    // irrisolvibile. In quel caso sblocca tutto. Niente vicoli ciechi.
-    if (items.length > 0 && !items.some((it) => it.available)) {
-      return items.map((it) => ({ ...it, available: true, reason: undefined }));
+    const s = simplifyActions(caseDef, items);
+    const tray = s.tray.map(({ item, display }) => ({ ...item, display }));
+    const folder = s.crossroads.length > 0 ? s.crossroads : s.speciale ? [s.speciale] : [];
+    // fail-safe sui soli elementi VISIBILI: niente pratiche irrisolvibili
+    const visible = [...tray, ...folder];
+    if (visible.length > 0 && !visible.some((it) => it.available)) {
+      return {
+        trayItems: tray.map((it) => ({ ...it, available: true, reason: undefined })),
+        folderItems: folder.map((it) => ({ ...it, available: true, reason: undefined })),
+        folderTitle: s.crossroads.length > 0 ? "Decisione straordinaria" : "Azione speciale",
+      };
     }
-    return items;
+    return {
+      trayItems: tray,
+      folderItems: folder,
+      folderTitle: s.crossroads.length > 0 ? "Decisione straordinaria" : "Azione speciale",
+    };
   }, [caseDef, validation, analysis, game.flags, game.day]);
-
-  const stampItems = useMemo(() => actionItems.filter((it) => it.action.needsStamp), [actionItems]);
-  const folderItems = useMemo(() => actionItems.filter((it) => !it.action.needsStamp), [actionItems]);
 
   // L'ATTENTATO: il movimento della "paura" entra a G7 (o prima, se il caos
   // precipita). Una sola volta per run.
@@ -217,10 +227,10 @@ export function DeskScreen() {
 
           {/* oggetti fisici del banco */}
           {caseVisible && (
-            <StampTray items={stampItems} disabled={!!stamping || eventActive || !!receipt} onStamp={handleAction} />
+            <StampTray items={trayItems} disabled={!!stamping || eventActive || !!receipt} onStamp={handleAction} />
           )}
           {caseVisible && (
-            <ProtocolFolder items={folderItems} disabled={!!stamping || eventActive || !!receipt} onAction={handleAction} />
+            <ProtocolFolder items={folderItems} title={folderTitle} disabled={!!stamping || eventActive || !!receipt} onAction={handleAction} />
           )}
           <RulebookDesk dayDef={dayDef} />
 

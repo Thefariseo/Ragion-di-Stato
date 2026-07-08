@@ -12,6 +12,7 @@ export const ARC_CASES: CaseDef[] = [
   /* ===================== GIORNO 3 — documento mancante ==================== */
   {
     id: "a3_pratica_incompleta",
+    specialActionId: "richiedi_verifica",
     subject: "Ditta Sabelli",
     summary: "Permesso di trasporto — manca un allegato",
     intro: [
@@ -93,6 +94,8 @@ export const ARC_CASES: CaseDef[] = [
   /* ============ GIORNO 4 — prima incongruenza seria (NPC ricorrente) ====== */
   {
     id: "a4_doppia_identita",
+    arrestActionId: "segnala",
+    specialActionId: "richiedi_verifica",
     subject: "«Marco Lendi»",
     faction: "anello",
     summary: "Due documenti, due uomini, una sola faccia",
@@ -172,6 +175,7 @@ export const ARC_CASES: CaseDef[] = [
   /* ========= GIORNO 5 — primo riferimento indiretto a una fazione ========= */
   {
     id: "a5_nulla_osta_anello",
+    specialActionId: "trattieni",
     subject: "Pratica edilizia 0418-bis",
     faction: "anello",
     summary: "Un nulla osta che non hai chiesto, da nessuno che si firmi",
@@ -306,6 +310,7 @@ export const ARC_CASES: CaseDef[] = [
   /* ============ GIORNO 7 — caso accanto all'evento animato (scorta) ======= */
   {
     id: "a7_porto_armi_rete",
+    specialActionId: "trasmetti_procura",
     subject: "Tessera del poligono",
     faction: "rete",
     summary: "Un'altra tessera, lo stesso «deposito» che non dovrebbe esistere",
@@ -601,6 +606,7 @@ export const ARC_CASES: CaseDef[] = [
   // L'hai SCAGIONATO (G1) → Renzo torna di persona, e stavolta è lui ad aiutare te.
   {
     id: "ret_renzo_torna",
+    specialActionId: "proteggi",
     subject: "Renzo Calabro — di ritorno",
     faction: "brigate",
     appearsIfFlag: "militante_protetto",

@@ -14,9 +14,15 @@ NIGHT → (giorno dopo) … → ENDING` (+ `CUTSCENE` in overlay).
 5. **Trovi le discrepanze** (`game/discrepancies` → `DiscrepancyEngine`): la nota
    spiega la contraddizione; sblocca le azioni che richiedono una prova.
 6. **Applichi le regole** del giorno (`game/rules` → `RuleEngine`): conforme o no.
-7. **Scegli un'azione coerente**: l'`ActionEngine` (`game/actions`) mostra solo le
-   azioni **giustificate** (denuncia→prova; trasmetti/occulta/distruggi→esame);
-   le altre restano visibili ma **bloccate col motivo**.
+7. **Decidi con la PROCEDURA**: quasi sempre solo **ACCETTA / RIFIUTA** (i due
+   timbri della rastrelliera). **ARRESTA** compare solo dove il caso lo
+   dichiara (minacce, documenti falsi gravi, terrorismo, servizi); l'unica
+   **AZIONE SPECIALE** — decisa dal caso — sta nella cartella sul tavolo. Un
+   caso senza verdetto è un **nodo della trama** e mostra le sue poche
+   decisioni straordinarie. Le azioni giustificabili ma non provate restano
+   bloccate col motivo (`simplifyActions` + gating, `game/actions.ts`). La
+   complessità sta nei DOCUMENTI, non nei pulsanti: pochi gesti, decisioni
+   difficili.
 8. **Ricevi conseguenze**: timbro animato + (su errore grave) **ammenda a
    scontrino**; `Consequence` applicata (`applyConsequence`).
 9. **Il mondo reagisce**: fazioni (reputazione/sospetto), NPC, **flag** che il

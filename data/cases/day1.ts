@@ -130,6 +130,7 @@ export const DAY1_CASES: CaseDef[] = [
   /* ---------------------------------------------------------------- 3 */
   {
     id: "d1_fascicolo_foto",
+    specialActionId: "verifica",
     subject: "Sergio Mauri (?)",
     summary: "Verifica identità — il nome non torna",
     intro: [
@@ -210,6 +211,8 @@ export const DAY1_CASES: CaseDef[] = [
   /* ---------------------------------------------------------------- 4 */
   {
     id: "d1_militante",
+    arrestActionId: "segnala",
+    specialActionId: "proteggi",
     subject: "Renzo Calabro",
     faction: "brigate",
     summary: "Permesso di espatrio — sospetto vicino agli ambienti dell'autonomia",

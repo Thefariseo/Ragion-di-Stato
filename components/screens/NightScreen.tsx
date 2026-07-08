@@ -94,9 +94,14 @@ export function NightScreen() {
             })}
           </div>
 
-          <div className="flex items-center justify-between mt-3">
-            <div className="font-read text-[12px] text-ink/80">
-              Spesa: <span className="font-term">₤ {formatLire(totalPaga)}</span>
+          <div className="flex items-center justify-between mt-3 border-t-2 border-ink/30 pt-2">
+            <div className="font-read text-[13px] text-ink/80">
+              Spendi <span className="font-term text-[16px]">₤ {formatLire(totalPaga)}</span>
+              <span className="mx-1.5 text-ink/40">·</span>
+              ti restano{" "}
+              <span className={`font-term text-[16px] ${game.player.stipendio - totalPaga < 0 ? "text-stamp-red" : "text-stamp-green"}`}>
+                ₤ {formatLire(game.player.stipendio - totalPaga)}
+              </span>
             </div>
             <button onClick={() => { playStamp(); resolveNightChoices(decisions); }} className="rds-btn rds-btn--respinto px-5 py-2 text-[11px]">
               Vai a dormire »
