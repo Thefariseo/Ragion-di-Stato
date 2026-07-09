@@ -27,7 +27,7 @@ export function CutsceneStage({ beat }: { beat: CutsceneBeat }) {
       {scene === "dossier" && <Dossier emblems={beat.emblems ?? []} />}
       {scene === "newspaper" && <Newspaper headline={beat.headline ?? "EDIZIONE STRAORDINARIA"} />}
       {scene === "archive" && <Archive />}
-      {scene === "door" && <Door />}
+      {scene === "door" && <Door stampLabel={beat.stampLabel} solo={beat.variant === "solo"} />}
       {scene === "office_open" && <OfficeOpen />}
       {scene === "attentato" && <Attentato headline={beat.headline} />}
     </div>
@@ -261,19 +261,31 @@ function Attentato({ headline }: { headline?: string }) {
   );
 }
 
-function Door() {
+function Door({ stampLabel, solo }: { stampLabel?: string; solo?: boolean }) {
+  // porta sulla luce: due agenti che entrano (arresto) o UNA figura che esce
+  // (fuga/scomparsa). Il timbro cala solo se il beat lo dichiara.
   return (
     <div className="relative w-72 h-48 flex items-end justify-center">
       <div className="absolute left-1/2 top-0 -translate-x-1/2 w-28 h-44 bg-[#d8cdb0] overflow-hidden">
         <div className="cs-door absolute inset-0 bg-[#1b1712]" />
       </div>
-      <div className="animate-npcEnter flex gap-2 relative z-[2]" style={{ animationDelay: "900ms" }}>
-        <div><div className="w-3 h-3 bg-[#0e0f0a] mx-auto" /><div className="w-4 h-12 bg-[#0e0f0a]" /></div>
-        <div><div className="w-3 h-3 bg-[#0e0f0a] mx-auto" /><div className="w-4 h-12 bg-[#0e0f0a]" /></div>
-      </div>
-      <div className="cs-stamp-drop absolute" style={{ animationDelay: "1600ms" }}>
-        <Stamp label="RADIATO" kind="respingi" big rotate={-9} solid />
-      </div>
+      {solo ? (
+        <div className="animate-npcEnter relative z-[2]" style={{ animationDelay: "900ms" }}>
+          <div className="w-3 h-3 bg-[#0e0f0a] mx-auto" />
+          <div className="w-4 h-12 bg-[#0e0f0a]" />
+          <div className="w-6 h-3 bg-[#2c2417] mt-0.5" /> {/* valigia */}
+        </div>
+      ) : (
+        <div className="animate-npcEnter flex gap-2 relative z-[2]" style={{ animationDelay: "900ms" }}>
+          <div><div className="w-3 h-3 bg-[#0e0f0a] mx-auto" /><div className="w-4 h-12 bg-[#0e0f0a]" /></div>
+          <div><div className="w-3 h-3 bg-[#0e0f0a] mx-auto" /><div className="w-4 h-12 bg-[#0e0f0a]" /></div>
+        </div>
+      )}
+      {stampLabel && (
+        <div className="cs-stamp-drop absolute" style={{ animationDelay: "1600ms" }}>
+          <Stamp label={stampLabel} kind="respingi" big rotate={-9} solid />
+        </div>
+      )}
     </div>
   );
 }

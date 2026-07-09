@@ -14,4 +14,6 @@ Struttura:
 - `sfx/` paper, stamps, phone, doors, drawer, typewriter
 - `voice/blips` (opzionale: campioni di mormorio low-res)
 
-I file audio NON sono committati: questa cartella contiene solo placeholder .gitkeep.
+Tracce REALI già in repo: music/main-theme/main-theme.mp3 (tema del titolo) e
+music/endings/negative-ending.mp3 (marcia funebre del bad ending). Gli altri cue
+restano su fallback procedurale finché non arrivano i file.

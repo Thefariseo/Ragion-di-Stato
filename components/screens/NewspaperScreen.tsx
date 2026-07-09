@@ -1,22 +1,31 @@
 "use client";
 
+import { useEffect } from "react";
 import { useGameStore } from "@/store/gameStore";
 import { getDay } from "@/data/days";
 import { buildNewspaper } from "@/game/newspaper";
 import { Photo } from "@/components/desk/Photo";
-import { playClick } from "@/lib/sfx";
+import { playClick, playPaper, playThud } from "@/lib/sfx";
 
 export function NewspaperScreen() {
   const game = useGameStore((s) => s.game);
   const goToPhase = useGameStore((s) => s.goToPhase);
   const dayDef = getDay(game.day);
+
+  // il giornale ARRIVA: sbatte sul tavolo (cs-slam) con il suo suono
+  useEffect(() => {
+    playPaper();
+    const t = setTimeout(playThud, 260);
+    return () => clearTimeout(t);
+  }, [game.day]);
+
   if (!dayDef) return null;
   const p = buildNewspaper(game, dayDef);
 
   return (
     <div className="h-full w-full tex-wood flex items-center justify-center p-5 overflow-auto thin-scroll">
       <div className="max-w-3xl w-full my-3">
-        <div className="rds-paper p-5 animate-slideUp">
+        <div className="rds-paper p-5 cs-slam">
           {/* testata */}
           <div className="flex items-end justify-between border-b-4 border-double border-ink/60 pb-1">
             <span className="font-pixel uppercase tracking-[0.1em] text-ink text-3xl leading-none">{p.masthead}</span>

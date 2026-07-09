@@ -415,6 +415,8 @@ export interface CutsceneBeat {
   visual?: CutsceneVisual;
   /** scena animata della sequenza (timeline + oggetti animati) */
   scene?: CutsceneScene;
+  /** variante della scena (es. door: "solo" = una figura che esce con valigia) */
+  variant?: string;
   headline?: string;
   /** fazione protagonista del beat (cresta, leitmotiv, pattern) */
   faction?: FactionId;

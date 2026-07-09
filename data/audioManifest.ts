@@ -32,7 +32,8 @@ const T = (p: Partial<TrackDef> & Pick<TrackDef, "fallback">): TrackDef => ({
 
 export const AUDIO_MANIFEST: Record<string, TrackDef> = {
   // —— musica principale / contesti ——
-  main_theme: T({ file: "/audio/music/main-theme/main-theme.ogg", fallback: "solenne", gain: 0.8, priority: 5 }),
+  // TRACCIA REALE: tema principale minimale/marziale/istituzionale (mp3 in repo)
+  main_theme: T({ file: "/audio/music/main-theme/main-theme.mp3", fallback: "solenne", gain: 0.8, priority: 5 }),
   intro: T({ file: "/audio/music/intro/intro-ministero.ogg", fallback: "solenne", loop: false, gain: 0.85, priority: 5 }),
   gameplay_ambient: T({ file: "/audio/music/gameplay-ambient/gameplay-ambient.ogg", fallback: "lavoro", gain: 0.4, fadeIn: 2.5, fadeOut: 2.0 }),
   tension: T({ file: "/audio/music/tension/tension.ogg", fallback: "tensione", loop: false, gain: 0.8, fadeIn: 0.4, priority: 6 }),
@@ -50,7 +51,8 @@ export const AUDIO_MANIFEST: Record<string, TrackDef> = {
 
   // —— finali (trattamento sonoro dedicato) ——
   ending_system: T({ file: "/audio/music/endings/system.ogg", fallback: "finale", loop: false, gain: 0.85, priority: 7 }),
-  ending_arrest: T({ file: "/audio/music/endings/arrest.ogg", fallback: "finale", loop: false, gain: 0.85, priority: 7 }),
+  // TRACCIA REALE: marcia lenta, funebre, istituzionale — il BAD ENDING (mp3 in repo)
+  ending_arrest: T({ file: "/audio/music/endings/negative-ending.mp3", fallback: "finale", loop: true, gain: 0.85, priority: 7 }),
   ending_scandal: T({ file: "/audio/music/endings/scandal.ogg", fallback: "tensione", loop: false, gain: 0.85, priority: 7 }),
   ending_secret: T({ file: "/audio/music/endings/secret.ogg", fallback: "finale", loop: false, gain: 0.8, priority: 7 }),
   ending_magistratura: T({ file: "/audio/music/endings/magistratura.ogg", fallback: "finale", loop: false, gain: 0.85, priority: 7 }),

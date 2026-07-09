@@ -1,6 +1,7 @@
 import { getDay, LAST_DAY } from "@/data/days";
 import { getCase } from "@/data/cases";
 import { getEvent } from "@/data/events";
+import { getCutscene } from "@/data/cutscenes";
 import { FACTIONS } from "@/data/factions";
 import { clamp } from "@/lib/format";
 import type {
@@ -273,7 +274,12 @@ export function endDay(state: GameState): GameState {
 /* --------------------------------------------------- avanzamento giorno */
 
 export function continueFromSummary(state: GameState): GameState {
-  if (state.endingId) return playCutscene(state, "end_generic", "ending");
+  if (state.endingId) {
+    // ogni finale ha la SUA sequenza animata; end_generic è solo il fallback
+    const dedicated = `end_${state.endingId}`;
+    const id = getCutscene(dedicated) ? dedicated : "end_generic";
+    return playCutscene(state, id, "ending");
+  }
   return { ...state, phase: "night" };
 }
 

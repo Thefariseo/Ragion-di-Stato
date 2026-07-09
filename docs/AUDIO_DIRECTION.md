@@ -42,7 +42,7 @@ Helm / bfxr (sfx) o librerie royalty-free (CC0).
 
 | # | Cue (id) | File | Durata | Loop | Mood / strumenti | Dove | Prio |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | `main_theme` | music/main-theme/main-theme.ogg | 45–70 s | sì | inno marziale, ottoni bassi/synth brass, percussione secca, drone | Titolo | 5 |
+| 1 | `main_theme` | **music/main-theme/main-theme.mp3 ✅ INTEGRATA** | 45–70 s | sì | inno marziale, ottoni bassi/synth brass, percussione secca, drone | Titolo | 5 |
 | 2 | `intro` | music/intro/intro-ministero.ogg | 30–45 s | no | solenne, freddo, organo/archi gravi | Intro/nomina | 5 |
 | 3 | `gameplay_ambient` | music/gameplay-ambient/gameplay-ambient.ogg | 60–120 s | sì | quasi impercettibile, drone+pulsazione, vol. basso | (opz.) sul banco | 1 |
 | 4 | `tension` | music/tension/tension.ogg | 20–40 s | no | marcia che stringe, percussione secca | Eventi gravi/crisi | 6 |
@@ -55,7 +55,7 @@ Helm / bfxr (sfx) o librerie royalty-free (CC0).
 | – | `faction_rete` | music/factions/rete.ogg | 8–15 s | no | texture misteriosa, fruscio, microfilm, nota ricorrente | Rete | 4 |
 | – | `faction_brigate` | music/factions/armati.ogg | 8–15 s | no | ritmo instabile, percussione secca, tensione breve | Gruppi armati | 4 |
 | 10 | `ending_system` | music/endings/system.ogg | 30–60 s | no | freddo, ordinato, vuoto | Finale: assorbito dal sistema | 7 |
-| 11 | `ending_arrest` | music/endings/arrest.ogg | 30–60 s | no | passi, porta, timbro, silenzio | Finale: arresto | 7 |
+| 11 | `ending_arrest` | **music/endings/negative-ending.mp3 ✅ INTEGRATA** | 30–60 s | no | passi, porta, timbro, silenzio | Finale: arresto | 7 |
 | 12 | `ending_scandal` | music/endings/scandal.ogg | 30–60 s | no | rotative, caos lontano, tema spezzato | Finale: scandalo | 7 |
 | 13 | `ending_secret` | music/endings/secret.ogg | 30–60 s | no | quasi silenzio, simbolo ricorrente, inquietudine | Finale: segreto | 7 |
 | – | `ending_magistratura` | music/endings/magistratura.ogg | 30–60 s | no | lento, verbali, timbri, solennità ambigua | Finale: magistratura | 7 |

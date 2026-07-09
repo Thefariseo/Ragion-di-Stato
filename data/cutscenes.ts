@@ -230,11 +230,106 @@ export const FONDO_R_REVEAL: Cutscene = {
   ],
 };
 
+/* ------------------------- FINALI ANIMATI ---------------------------------
+ * Ogni finale ha la SUA sequenza (id: end_<endingId>): il giocatore VEDE cosa
+ * gli succede — porta, scorta, rotative, treno, archivio. Il testo (epitaffio)
+ * arriva dopo, nella schermata di chiusura. I cue audio vengono dal manifest
+ * (ending_arrest = la marcia funebre reale).
+ */
+export const ENDING_CUTSCENES: Record<string, Cutscene> = {
+  // RADIATO — il bad ending: bussano che è ancora buio.
+  end_arrestato: {
+    id: "end_arrestato",
+    beats: [
+      {
+        bg: "black",
+        scene: "door",
+        lines: ["Bussano che è ancora buio.", "Due uomini, una formula: «verifica preventiva»."],
+        sound: "thud",
+        music: "ending_arrest",
+        durationMs: 3600,
+      },
+      {
+        bg: "black",
+        scene: "door",
+        stampLabel: "RADIATO",
+        lines: ["Sul tuo fascicolo, l'unico che non hai potuto toccare,", "cala un timbro rosso."],
+        sound: "stamp",
+        durationMs: 3400,
+      },
+      { bg: "archive", scene: "archive", lines: ["L'Archivio continua senza di te. Come sempre. Come con il tuo predecessore."], sound: "thud", durationMs: 3800 },
+    ],
+  },
+  // EDIZIONE STRAORDINARIA — lo scandalo pubblico.
+  end_scandalo: {
+    id: "end_scandalo",
+    beats: [
+      { bg: "black", scene: "telex", lines: ["Le rotative girano tre ore prima del sequestro.", "Abbastanza per uscire in quattro città."], sound: "telex", music: "ending_scandal", durationMs: 3600 },
+      { bg: "black", scene: "newspaper", headline: "«LO STATO CONTRO SÉ STESSO»", lines: ["Il Paese vede in faccia un pezzo di sé."], sound: "paper", durationMs: 3600 },
+      { bg: "corridor", scene: "corridor", lines: ["Cadono due sottosegretari e un editore.", "Di te scrivono: «una fonte interna». È un onore. È una condanna."], sound: "thud", durationMs: 4000 },
+    ],
+  },
+  // IL TESTIMONE — collaborazione con la Procura.
+  end_collaboratore_procura: {
+    id: "end_collaboratore_procura",
+    beats: [
+      { bg: "black", scene: "dossier", emblems: [{ faction: "procura", caption: "" }], lines: ["Una stanza senza finestre. Verbali su verbali.", "Accanto, un giudice che non si arrende."], sound: "paper", music: "ending_magistratura", durationMs: 3600 },
+      { bg: "black", scene: "stampfall", stampLabel: "AGLI ATTI", lines: ["Le tue carte diventano capi d'imputazione.", "Qualcuno, stavolta, cade davvero."], sound: "stamp", durationMs: 3400 },
+      { bg: "black", scene: "door", variant: "solo", lines: ["Per la famiglia, un nome nuovo e una città di provincia.", "Per te, la luce sempre accesa."], sound: "thud", durationMs: 3600 },
+    ],
+  },
+  // LA QUERCIA — la rete scoperta (finale segreto).
+  end_scoperta_rete: {
+    id: "end_scoperta_rete",
+    beats: [
+      { bg: "black", scene: "telex", lines: ["La lista esisteva. Nomi, depositi, recapiti «da attivare»."], sound: "telex", music: "ending_secret", durationMs: 3400 },
+      { bg: "archive", scene: "archive", lines: ["Per qualche settimana pare che il velo cada.", "Poi cadono, invece, le inchieste."], sound: "thud", durationMs: 3800 },
+      { bg: "black", scene: "stampfall", stampLabel: "OMISSIS", lines: ["Sai una cosa che non puoi dire.", "È il modo più sicuro perché tu non la dica mai più."], sound: "stamp", durationMs: 3400 },
+    ],
+  },
+  // LA LUCE ACCESA — la fuga.
+  end_fuga: {
+    id: "end_fuga",
+    beats: [
+      { bg: "black", scene: "office_open", lines: ["Lasci la lampada accesa e la giacca sulla sedia.", "Che credano che ci sei."], sound: "thud", music: "ending_secret", durationMs: 3400 },
+      { bg: "black", scene: "door", variant: "solo", lines: ["Un treno notturno. Una frontiera distratta.", "Una copia cucita nella fodera del cappotto."], sound: "thud", durationMs: 3600 },
+      { bg: "corridor", scene: "corridor", lines: ["Non un eroe, non un traditore:", "un uomo che ha deciso di restare vivo."], durationMs: 3600 },
+    ],
+  },
+  // UNO DI LORO — complice dell'Anello.
+  end_complice_anello: {
+    id: "end_complice_anello",
+    beats: [
+      { bg: "black", scene: "crest", faction: "anello", lines: ["Smettono di chiamarti al telefono.", "Cominciano a invitarti a pranzo."], sound: "ring", music: "ending_servizi", durationMs: 3600 },
+      { bg: "black", scene: "dossier", emblems: [{ faction: "anello", caption: "" }], lines: ["Impari a far sparire le cose prima che diventino un problema.", "«Conservi solo la copia conforme.»"], sound: "paper", durationMs: 3800 },
+      { bg: "black", scene: "stampfall", stampLabel: "CONFORME", lines: ["Dormi bene.", "È la cosa più inquietante di tutte."], sound: "stamp", durationMs: 3200 },
+    ],
+  },
+  // IL PIANO SUPERIORE — assorbito dal sistema.
+  end_assorbito: {
+    id: "end_assorbito",
+    beats: [
+      { bg: "black", scene: "stampfall", stampLabel: "PROMOSSO", lines: ["Il fascicolo si chiude con firma conforme.", "Nessuno lo cercherà più."], sound: "stamp", music: "ending_system", durationMs: 3400 },
+      { bg: "black", scene: "office_open", lines: ["Stessa scrivania, porta migliore, una pianta finta.", "Da lassù i corridoi sembrano più silenziosi."], sound: "thud", durationMs: 3600 },
+      { bg: "archive", scene: "archive", lines: ["La verità è una pratica come le altre.", "E si archivia."], sound: "thud", durationMs: 3600 },
+    ],
+  },
+  // LA MACCHINA GIRA — il finale neutro.
+  end_sistema_immutato: {
+    id: "end_sistema_immutato",
+    beats: [
+      { bg: "black", scene: "stampfall", stampLabel: "ARCHIVIATO", lines: ["Pratiche evase, pratiche arretrate.", "Domani altre carte, altre facce allo sportello."], sound: "stamp", music: "ending_system", durationMs: 3400 },
+      { bg: "archive", scene: "archive", lines: ["Un altro funzionario, un giorno, siederà a questa scrivania.", "E non saprà nulla di te.", "La macchina gira. La macchina gira sempre."], sound: "thud", durationMs: 4400 },
+    ],
+  },
+};
+
 export const CUTSCENES: Record<string, Cutscene> = {
   intro: INTRO,
   end_generic: END_GENERIC,
   attentato: ATTENTATO,
   fondoR_reveal: FONDO_R_REVEAL,
+  ...ENDING_CUTSCENES,
   ...FAC_CUTSCENES,
 };
 
