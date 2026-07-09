@@ -1,53 +1,61 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { CaseDef } from "@/types";
 import { DocumentCard } from "./DocumentCard";
-import { Typewriter } from "@/components/ui/Typewriter";
-import { playClick } from "@/lib/sfx";
+import { Draggable } from "./Draggable";
+import { FactionEmblem } from "./FactionEmblem";
+import { matchDiscrepancy, discrepancyKey, discrepancyCount } from "@/game/discrepancies";
+import { playClick, playPaper } from "@/lib/sfx";
 
 type Pick = { docId: string; label: string; value: string };
 
-export function Dossier({ caseDef }: { caseDef: CaseDef }) {
+export function Dossier({
+  caseDef,
+  onAnalysis,
+}: {
+  caseDef: CaseDef;
+  onAnalysis?: (a: { inspected: boolean; discrepanciesFound: number }) => void;
+}) {
   const [compareMode, setCompareMode] = useState(false);
   const [first, setFirst] = useState<Pick | null>(null);
   const [second, setSecond] = useState<Pick | null>(null);
   const [result, setResult] = useState<{ note: string; hit: boolean } | null>(null);
   const [found, setFound] = useState<Set<string>>(new Set());
+  const [inspected, setInspected] = useState(false);
+  const [resetKey, setResetKey] = useState(0);
+  const zCounter = useRef(10);
 
-  // reset quando cambia il caso
   useEffect(() => {
     setCompareMode(false);
     setFirst(null);
     setSecond(null);
     setResult(null);
     setFound(new Set());
+    setInspected(false);
+    setResetKey((k) => k + 1);
+    zCounter.current = 10;
+    playPaper();
   }, [caseDef.id]);
 
-  const totalDiscrepancies = caseDef.discrepancies?.length ?? 0;
+  // riporta l'analisi alla scrivania (sblocca le azioni coerenti)
+  useEffect(() => {
+    onAnalysis?.({ inspected, discrepanciesFound: found.size });
+  }, [inspected, found, onAnalysis]);
+
+  const total = discrepancyCount(caseDef);
 
   function evaluate(a: Pick, b: Pick) {
-    const disc = (caseDef.discrepancies ?? []).find((d) => {
-      const m1 =
-        d.aDocId === a.docId &&
-        d.aField === a.label &&
-        d.bDocId === b.docId &&
-        d.bField === b.label;
-      const m2 =
-        d.aDocId === b.docId &&
-        d.aField === b.label &&
-        d.bDocId === a.docId &&
-        d.bField === a.label;
-      return m1 || m2;
-    });
+    const disc = matchDiscrepancy(
+      caseDef,
+      { docId: a.docId, field: a.label },
+      { docId: b.docId, field: b.label },
+    );
     if (disc) {
       setResult({ note: disc.note, hit: true });
-      setFound((prev) => new Set(prev).add(`${disc.aField}|${disc.bField}`));
+      setFound((p) => new Set(p).add(discrepancyKey(disc)));
     } else {
-      setResult({
-        note: "Nessuna contraddizione evidente tra questi due campi.",
-        hit: false,
-      });
+      setResult({ note: "Nessuna contraddizione evidente tra questi due campi.", hit: false });
     }
   }
 
@@ -76,90 +84,76 @@ export function Dossier({ caseDef }: { caseDef: CaseDef }) {
   }
 
   return (
-    <div className="h-full flex flex-col">
-      {/* intestazione pratica */}
-      <div className="mb-3 shrink-0">
-        <div className="font-stencil uppercase tracking-widest text-carta text-lg">
-          {caseDef.subject}
-        </div>
-        <div className="text-carta/70 text-sm">{caseDef.summary}</div>
-        {caseDef.intro && (
-          <div className="paper paper-edge mt-2 p-3 max-w-2xl">
-            <Typewriter
-              lines={caseDef.intro}
-              speed={14}
-              className="font-doc text-[15px] text-inchiostro"
-            />
+    <div className="absolute inset-0 overflow-hidden">
+      {/* CARTELLA che si apre sulla pratica (consegna + apertura) */}
+      <div
+        key={`cover-${caseDef.id}`}
+        className="absolute left-4 top-10 z-[24] pointer-events-none"
+        style={{ width: 248, height: 152, perspective: "640px" }}
+        aria-hidden
+      >
+        <div className="rds-folder-cover w-full h-full">
+          <div
+            className="w-full h-full border-2 border-[#2c2417] shadow-[4px_6px_0_rgba(0,0,0,0.55)] relative overflow-hidden flex flex-col items-center justify-center gap-2"
+            style={{ backgroundColor: "#9c8a5e", backgroundImage: "var(--noise)", backgroundSize: "140px 140px", backgroundBlendMode: "multiply" }}
+          >
+            {/* linguetta della cartella */}
+            <div className="absolute -top-2 left-8 w-20 h-3 bg-[#8a784e] border-2 border-[#2c2417]" />
+            <span className="rds-classified font-pixel text-[9px] tracking-[0.3em] px-3 py-1">RISERVATO</span>
+            {caseDef.faction && <FactionEmblem faction={caseDef.faction} size={42} />}
+            <span className="font-pixel text-[7px] uppercase tracking-[0.2em] text-[#2c2417]">U.V.A.C. · Sportello 7</span>
           </div>
-        )}
+        </div>
       </div>
 
-      {/* barra lente */}
-      <div className="flex items-center gap-3 mb-2 shrink-0">
+      <div className="absolute top-2 left-2 right-2 z-30 flex items-center gap-2 flex-wrap">
         <button
-          onClick={() => {
-            playClick();
-            setCompareMode((v) => !v);
-            clearCompare();
-          }}
-          className={`font-stencil uppercase tracking-wider text-xs px-3 py-1 border ${
-            compareMode
-              ? "bg-ocra text-inchiostro border-ocra"
-              : "bg-black/30 text-carta border-carta/30 hover:bg-black/50"
-          }`}
+          onClick={() => { playClick(); setCompareMode((v) => !v); setInspected(true); clearCompare(); }}
+          className={`rds-btn ${compareMode ? "rds-btn--neon" : ""} text-[9px] px-2.5 py-1`}
         >
-          {compareMode ? "Lente attiva" : "Confronta (lente)"}
+          {compareMode ? "◉ Lente" : "⌕ Confronta"}
+        </button>
+        <button onClick={() => { playClick(); setResetKey((k) => k + 1); }} className="rds-btn text-[9px] px-2.5 py-1">
+          ⤺ Riordina
         </button>
         {compareMode && (
-          <>
-            <span className="text-carta/60 text-xs">
-              Seleziona due campi per confrontarli.
-            </span>
-            {totalDiscrepancies > 0 && (
-              <span className="text-ocra text-xs">
-                Contraddizioni trovate: {found.size}/{totalDiscrepancies}
-              </span>
-            )}
-          </>
+          <span className="font-pixel text-[7px] uppercase tracking-wide text-paper bg-black/50 px-2 py-1">
+            due campi{total > 0 ? ` · contraddizioni ${found.size}/${total}` : ""}
+          </span>
+        )}
+        {result && (
+          <span
+            className={`font-read text-[12px] px-2 py-1 max-w-[58%] ${
+              result.hit ? "bg-stamp-red/40 text-paper-cream border-2 border-stamp-red" : "bg-black/50 text-paper/80"
+            }`}
+          >
+            {result.hit ? "⚠ " : ""}
+            {result.note}
+            <button onClick={clearCompare} className="ml-2 underline text-[10px] opacity-70">pulisci</button>
+          </span>
         )}
       </div>
 
-      {/* esito confronto */}
-      {result && (
-        <div
-          className={`mb-2 p-2 text-sm font-doc border shrink-0 ${
-            result.hit
-              ? "bg-rossomin/20 border-rossomin text-carta"
-              : "bg-black/30 border-carta/20 text-carta/70"
-          }`}
+      {caseDef.documents.map((doc, i) => (
+        <Draggable
+          key={`${doc.id}-${resetKey}`}
+          initialX={26 + i * 50}
+          initialY={46 + i * 28}
+          rotate={i % 2 === 0 ? -1.2 : 1.4}
+          bringToFront={() => ++zCounter.current}
         >
-          {result.hit ? "⚠ " : ""}
-          {result.note}
-          <button
-            onClick={clearCompare}
-            className="ml-3 underline text-xs text-carta/60"
-          >
-            pulisci
-          </button>
-        </div>
-      )}
-
-      {/* documenti */}
-      <div className="flex-1 overflow-auto thin-scroll">
-        <div className="flex flex-wrap gap-5 pb-6">
-          {caseDef.documents.map((doc, i) => (
+          <div className="animate-slideUp" style={{ animationDelay: `${i * 60}ms` }}>
             <DocumentCard
-              key={doc.id}
               doc={doc}
+              faction={caseDef.faction}
               compareMode={compareMode}
               selected={first ? { docId: first.docId, label: first.label } : null}
               selectedPair={second ? { docId: second.docId, label: second.label } : null}
               onSelectField={onSelectField}
-              rotate={i % 2 === 0 ? -0.8 : 0.9}
             />
-          ))}
-        </div>
-      </div>
+          </div>
+        </Draggable>
+      ))}
     </div>
   );
 }

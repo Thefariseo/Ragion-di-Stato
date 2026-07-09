@@ -130,6 +130,7 @@ export const DAY1_CASES: CaseDef[] = [
   /* ---------------------------------------------------------------- 3 */
   {
     id: "d1_fascicolo_foto",
+    specialActionId: "verifica",
     subject: "Sergio Mauri (?)",
     summary: "Verifica identità — il nome non torna",
     intro: [
@@ -210,6 +211,8 @@ export const DAY1_CASES: CaseDef[] = [
   /* ---------------------------------------------------------------- 4 */
   {
     id: "d1_militante",
+    arrestActionId: "segnala",
+    specialActionId: "proteggi",
     subject: "Renzo Calabro",
     faction: "brigate",
     summary: "Permesso di espatrio — sospetto vicino agli ambienti dell'autonomia",
@@ -285,37 +288,60 @@ export const DAY1_CASES: CaseDef[] = [
         country: { repressione: 2 },
         logTitle: "Espatrio negato",
       }),
-      segnala({
-        text: "Segnali Renzo. All'alba la Digos lo preleva. Hai fatto il tuo dovere, dicono. Una sorella, da qualche parte, la pensa diversamente.",
-        factions: {
-          sir: { reputation: 10 },
-          anello: { reputation: 5 },
-          brigate: { reputation: -15, suspicion: 10 },
+      segnala(
+        {
+          text: "Segnali Renzo. All'alba la Digos lo preleva. Hai fatto il tuo dovere, dicono. Una sorella, da qualche parte, la pensa diversamente.",
+          factions: {
+            sir: { reputation: 10 },
+            anello: { reputation: 5 },
+            brigate: { reputation: -15, suspicion: 10 },
+          },
+          country: { repressione: 5 },
+          sospetto: -3,
+          setFlags: ["militante_segnalato"],
+          unlockCases: ["d2_sorella_renzo"],
+          logTitle: "Sospetto BP segnalato e arrestato",
         },
-        country: { repressione: 5 },
-        sospetto: -3,
-        setFlags: ["militante_segnalato"],
-        unlockCases: ["d2_sorella_renzo"],
-        logTitle: "Sospetto BP segnalato e arrestato",
-      }),
-      special("proteggi", "Proteggi (scagiona)", "proteggi", {
-        text: "Scrivi di tuo pugno: «non risultano elementi di militanza». Lo scagioni. Ti sei esposto, e qualcuno se ne accorgerà.",
-        factions: { brigate: { reputation: 12 }, sir: { suspicion: 8 } },
-        sospetto: 6,
-        setFlags: ["militante_protetto"],
-        logTitle: "Sospetto BP scagionato",
-      }),
-      special("trasmetti_anello", "Trasmetti all'Anello", "trasmetti", {
-        text: "Giri il fascicolo all'Anello. Da quel momento non saprai più cosa accade a Renzo Calabro. È il bello, e l'orrore, di lavorare con loro.",
-        factions: {
-          anello: { reputation: 12, suspicion: -5 },
-          brigate: { reputation: -10 },
+        {
+          requires: { discrepancyFound: true },
+          lockHint: "Confronta i documenti: serve una contraddizione per segnalarlo.",
+          hint: "Una contraddizione regge l'accusa.",
         },
-        country: { verita: -3 },
-        sospetto: -2,
-        setFlags: ["dato_anello_renzo"],
-        logTitle: "Fascicolo girato all'Anello",
-      }),
+      ),
+      special(
+        "proteggi",
+        "Proteggi (scagiona)",
+        "proteggi",
+        {
+          text: "Scrivi di tuo pugno: «non risultano elementi di militanza». Lo scagioni. Ti sei esposto, e qualcuno se ne accorgerà.",
+          factions: { brigate: { reputation: 12 }, sir: { suspicion: 8 } },
+          sospetto: 6,
+          setFlags: ["militante_protetto"],
+          logTitle: "Sospetto BP scagionato",
+        },
+        { requires: { inspected: true }, lockHint: "Esamina la pratica prima di scagionarlo." },
+      ),
+      special(
+        "trasmetti_anello",
+        "Trasmetti all'Anello",
+        "trasmetti",
+        {
+          text: "Giri il fascicolo all'Anello. Da quel momento non saprai più cosa accade a Renzo Calabro. È il bello, e l'orrore, di lavorare con loro.",
+          factions: {
+            anello: { reputation: 12, suspicion: -5 },
+            brigate: { reputation: -10 },
+          },
+          country: { verita: -3 },
+          sospetto: -2,
+          setFlags: ["dato_anello_renzo"],
+          logTitle: "Fascicolo girato all'Anello",
+        },
+        {
+          target: "servizi",
+          requires: { authLevel: "riservato" },
+          lockHint: "Serve un atto riservato da girare all'Anello.",
+        },
+      ),
     ],
   },
 
@@ -338,8 +364,9 @@ export const DAY1_CASES: CaseDef[] = [
         authLevel: "riservato",
         fields: [{ label: "Firma", value: "Velardi", comparable: true }],
         body: [
-          "Caro funzionario, il verbale 0418 non serve agli archivi.",
-          "Lei mi capisce. Sarà ricordato.",
+          "Funzionario, il verbale 0418 non risulta necessario agli archivi.",
+          "Provveda di conseguenza. Ogni copia non conforme è materiale non autorizzato.",
+          "Lei mi capisce. E io ricordo chi mi capisce.",
         ],
       },
       {
@@ -354,7 +381,8 @@ export const DAY1_CASES: CaseDef[] = [
           { label: "Impresa", value: "Bramante S.p.A.", comparable: true },
         ],
         body: [
-          "Si dà atto che l'impresa Bramante ha ottenuto l'appalto in assenza di gara.",
+          "Si dà atto che l'aggiudicazione all'impresa Bramante è avvenuta in via d'urgenza.",
+          "Gara non esperita. Nessun rilievo agli atti.",
         ],
       },
     ],

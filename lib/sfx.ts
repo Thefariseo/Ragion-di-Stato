@@ -3,22 +3,18 @@
  * Sicuri per SSR (guardano `window`). Disattivabili globalmente.
  */
 
+import { audioCtx, busNode } from "@/lib/audio/core";
+
 let ctx: AudioContext | null = null;
 let enabled = true;
 
 function ac(): AudioContext | null {
-  if (typeof window === "undefined") return null;
   if (!enabled) return null;
-  if (!ctx) {
-    const AC =
-      window.AudioContext ||
-      (window as unknown as { webkitAudioContext?: typeof AudioContext })
-        .webkitAudioContext;
-    if (!AC) return null;
-    ctx = new AC();
-  }
-  if (ctx.state === "suspended") void ctx.resume();
+  ctx = audioCtx();
   return ctx;
+}
+function out(): AudioNode | null {
+  return busNode("sfx");
 }
 
 export function setSfxEnabled(on: boolean) {
@@ -44,7 +40,7 @@ export function playStamp() {
   g.gain.setValueAtTime(0.0001, t);
   g.gain.exponentialRampToValueAtTime(0.5, t + 0.005);
   g.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
-  osc.connect(g).connect(c.destination);
+  osc.connect(g).connect(out() ?? c.destination);
   osc.start(t);
   osc.stop(t + 0.2);
 
@@ -57,7 +53,7 @@ export function playStamp() {
   const ng = c.createGain();
   ng.gain.setValueAtTime(0.25, t);
   ng.gain.exponentialRampToValueAtTime(0.0001, t + 0.06);
-  noise.connect(ng).connect(c.destination);
+  noise.connect(ng).connect(out() ?? c.destination);
   noise.start(t);
 }
 
@@ -72,7 +68,7 @@ export function playClick() {
   osc.frequency.setValueAtTime(420, t);
   g.gain.setValueAtTime(0.18, t);
   g.gain.exponentialRampToValueAtTime(0.0001, t + 0.05);
-  osc.connect(g).connect(c.destination);
+  osc.connect(g).connect(out() ?? c.destination);
   osc.start(t);
   osc.stop(t + 0.06);
 }
@@ -95,7 +91,7 @@ export function playRing() {
     g.gain.setValueAtTime(0.0001, t0 + off);
     g.gain.exponentialRampToValueAtTime(0.22, t0 + off + 0.02);
     g.gain.exponentialRampToValueAtTime(0.0001, t0 + off + 0.14);
-    osc.connect(g).connect(c.destination);
+    osc.connect(g).connect(out() ?? c.destination);
     osc.start(t0 + off);
     lfo.start(t0 + off);
     osc.stop(t0 + off + 0.16);
@@ -116,7 +112,82 @@ export function playThud() {
   g.gain.setValueAtTime(0.0001, t);
   g.gain.exponentialRampToValueAtTime(0.4, t + 0.02);
   g.gain.exponentialRampToValueAtTime(0.0001, t + 0.6);
-  osc.connect(g).connect(c.destination);
+  osc.connect(g).connect(out() ?? c.destination);
   osc.start(t);
   osc.stop(t + 0.62);
+}
+
+/** Fruscio di carta (documento che scivola sulla scrivania). */
+export function playPaper() {
+  const c = ac();
+  if (!c) return;
+  const t = c.currentTime;
+  const noise = c.createBufferSource();
+  const len = Math.floor(c.sampleRate * 0.22);
+  const buf = c.createBuffer(1, len, c.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / len);
+  noise.buffer = buf;
+  const hp = c.createBiquadFilter();
+  hp.type = "highpass";
+  hp.frequency.value = 1800;
+  const g = c.createGain();
+  g.gain.setValueAtTime(0.12, t);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + 0.2);
+  noise.connect(hp).connect(g).connect(out() ?? c.destination);
+  noise.start(t);
+}
+
+/** Telescrivente che batte (telex). */
+export function playTelex() {
+  const c = ac();
+  if (!c) return;
+  const t0 = c.currentTime;
+  for (let i = 0; i < 7; i++) {
+    const t = t0 + i * 0.05;
+    const osc = c.createOscillator();
+    const g = c.createGain();
+    osc.type = "square";
+    osc.frequency.setValueAtTime(320 + (i % 2) * 80, t);
+    g.gain.setValueAtTime(0.07, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.03);
+    osc.connect(g).connect(out() ?? c.destination);
+    osc.start(t);
+    osc.stop(t + 0.04);
+  }
+}
+
+/** Cassetto dello schedario. */
+export function playDrawer() {
+  const c = ac();
+  if (!c) return;
+  const t = c.currentTime;
+  const osc = c.createOscillator();
+  const g = c.createGain();
+  osc.type = "sawtooth";
+  osc.frequency.setValueAtTime(160, t);
+  osc.frequency.linearRampToValueAtTime(90, t + 0.18);
+  g.gain.setValueAtTime(0.12, t);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + 0.22);
+  osc.connect(g).connect(out() ?? c.destination);
+  osc.start(t);
+  osc.stop(t + 0.24);
+}
+
+/* ------------------------------- SFXRegistry ------------------------------- */
+/** Registro nominale degli effetti, per trigger data-driven (es. eventi). */
+export const SFX = {
+  stamp: playStamp,
+  click: playClick,
+  ring: playRing,
+  thud: playThud,
+  paper: playPaper,
+  telex: playTelex,
+  drawer: playDrawer,
+} as const;
+
+export type SfxName = keyof typeof SFX;
+
+export function playSfx(name: SfxName) {
+  SFX[name]?.();
 }

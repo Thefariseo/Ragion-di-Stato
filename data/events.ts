@@ -104,6 +104,79 @@ export const EVENTS: Record<string, GameEvent> = {
     ],
   },
 
+  // GIORNO 6 — la telefonata ambigua sul «fondo R» (voce dell'Anello)
+  ev_telefonata_fondo: {
+    id: "ev_telefonata_fondo",
+    trigger: "scripted",
+    day: 6,
+    afterCaseIndex: 1,
+    channel: "telefono",
+    title: "La voce, di nuovo",
+    body: [
+      "Il telefono squilla mentre hai ancora una pratica aperta. È la stessa voce di settimane fa. Più bassa, oggi.",
+      "«Bravo. Sta imparando. Quel fascicolo con la R... lo lasci dov'è. Anzi, lo faccia sparire. Pensi alla sua bambina, alla scuola nuova. Noi ci pensiamo già.»",
+    ],
+    options: [
+      {
+        label: "«Non so di cosa parla.»",
+        consequence: {
+          text: "Lo dici piano, e riattacchi. Dall'altra parte, un silenzio che vale una minaccia. Sai di cosa parla. E loro sanno che lo sai.",
+          factions: { anello: { suspicion: 8 } },
+          player: { lucidita: -3 },
+          sospetto: 4,
+          setFlags: ["fondoR_avvisato", "anello_riferimento"],
+          logTitle: "Riattaccato sulla telefonata del fondo R",
+        },
+      },
+      {
+        label: "Ascolti in silenzio, e annoti.",
+        consequence: {
+          text: "Non dici nulla. Prendi nota della frase su un foglietto che non finirà in nessun archivio. Adesso hai anche tu qualcosa su di loro. È un equilibrio che pesa.",
+          factions: { anello: { reputation: 4 } },
+          player: { lucidita: 2 },
+          setFlags: ["fondoR_avvisato", "anello_riferimento", "annotato_anello"],
+          logTitle: "Annotata la telefonata sul fondo R",
+        },
+      },
+    ],
+  },
+
+  // GIORNO 7 — evento ANIMATO: una scorta preleva qualcuno nel corridoio
+  ev_scorta_g7: {
+    id: "ev_scorta_g7",
+    trigger: "scripted",
+    day: 7,
+    afterCaseIndex: 1,
+    channel: "ispezione",
+    title: "Nel corridoio",
+    body: [
+      "Due agenti attraversano il corridoio scortando un uomo che non oppone resistenza. Per un attimo, dietro il vetro, i suoi occhi trovano i tuoi.",
+      "Lo riconosci: è uno di quelli a cui, giorni fa, hai timbrato una carta. Poi la porta in fondo si chiude.",
+    ],
+    options: [
+      {
+        label: "Abbassa lo sguardo, continua",
+        consequence: {
+          text: "Torni alla pratica. Le mani ti tremano appena. È così che funziona: si tiene la testa bassa, e si va avanti. Ti dici che non dipende da te.",
+          country: { repressione: 2 },
+          player: { lucidita: -2 },
+          setFlags: ["vista_scorta"],
+          logTitle: "Una scorta nel corridoio, sguardo abbassato",
+        },
+      },
+      {
+        label: "Sostieni il suo sguardo",
+        consequence: {
+          text: "Non distogli gli occhi. È poco, è inutile, è tutto quello che puoi fare. Lui annuisce, piano. Poi sparisce oltre la porta. Te lo ricorderai.",
+          player: { lucidita: 3, famiglia: -2 },
+          sospetto: 3,
+          setFlags: ["vista_scorta", "sguardo_sostenuto"],
+          logTitle: "Sostenuto lo sguardo del prelevato",
+        },
+      },
+    ],
+  },
+
   // GIORNO 3 — la busta sotto la porta (tangente o minaccia)
   ev_busta: {
     id: "ev_busta",

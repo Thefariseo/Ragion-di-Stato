@@ -289,7 +289,9 @@ export const DAY2_CASES: CaseDef[] = [
         logTitle: "Registro convalidato in blocco",
       }),
       archivia({
-        text: "Rimandi la quadratura a domani. Il telex tace, soddisfatto.",
+        text: "Rimandi la quadratura a domani. Il telex tace. Il registro non torna, e i registri che non tornano, qui, hanno la memoria lunga.",
+        sospetto: 2,
+        setFlags: ["registro_rinviato"],
         logTitle: "Quadratura registro rinviata",
       }),
     ],
@@ -298,6 +300,8 @@ export const DAY2_CASES: CaseDef[] = [
   /* ------------------------------------ INJECT: se hai segnalato Renzo (G1) */
   {
     id: "d2_sorella_renzo",
+    arrestActionId: "segnala",
+    specialActionId: "proteggi",
     subject: "Giulia Calabro",
     faction: "brigate",
     summary: "Istanza per il fratello arrestato",

@@ -2,11 +2,11 @@ import type { CaseDef } from "@/types";
 import { respingi, archivia, segnala, special } from "./helpers";
 
 /**
- * GIORNO 3 — Sabato 17 marzo. Stretta repressiva.
+ * Casi della FASE FINALE (giorni 7–10): i nodi vengono al pettine.
  * Nuove regole (provenienza, foto). I nodi vengono al pettine.
  * L'ultimo caso, d3_dossier_finale, indirizza i finali.
  */
-export const DAY3_CASES: CaseDef[] = [
+export const CLIMAX_CASES: CaseDef[] = [
   /* ---------------------------------------------------------------- 1 */
   {
     id: "d3_politico_nota",
@@ -77,6 +77,7 @@ export const DAY3_CASES: CaseDef[] = [
   /* ---------------------------------------------------------------- 2 */
   {
     id: "d3_innocente_rete",
+    specialActionId: "trasmetti_procura",
     subject: "Elia Conti",
     faction: "rete",
     summary: "Un maestro elementare il cui nome compare su una lista che non dovrebbe esistere",
@@ -172,6 +173,7 @@ export const DAY3_CASES: CaseDef[] = [
   /* ---------------------------------------------------------------- 3 */
   {
     id: "d3_documento_cupola",
+    specialActionId: "trasmetti_procura",
     subject: "Esposto anonimo",
     faction: "cupola",
     summary: "Sembra un falso. Ma dice il vero.",
@@ -320,7 +322,7 @@ export const DAY3_CASES: CaseDef[] = [
     summary: "A fine giornata, sulla scrivania, c'è tutto. E una sola scelta.",
     intro: [
       "Le luci del ministero si spengono piano per piano. Resti tu.",
-      "Davanti hai tutto quello che hai visto in tre giorni: il fondo del partito, l'Anello, la lista della Rete, la fonte Cardo.",
+      "Davanti hai tutto quello che hai visto in queste settimane: il fondo del partito, l'Anello, la lista della Rete, la fonte Cardo.",
       "Puoi farne una cosa sola.",
     ],
     documents: [

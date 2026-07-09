@@ -2,187 +2,573 @@
 @tailwind components;
 @tailwind utilities;
 
+/* =====================================================================
+   RAGION DI STATO — sistema estetico pixel (palette estratta da PP).
+   Materiali piatti, bordi e ombre "a scatto", niente smoothing da web app.
+   Vedi docs/AESTHETIC_AUDIT.md e docs/VISUAL_DIRECTION.md.
+   ===================================================================== */
+
 :root {
-  --carta: #d8c9a6;
-  --inchiostro: #1b1712;
-  --rossomin: #7c241c;
-  --cemento-notte: #26241f;
+  --env0: #191212;
+  --env1: #26221c;
+  --env2: #352d29;
+  --env3: #564e43;
+  --wood: #46341f;
+  --wood-hi: #6a522f;
+  --wood-lo: #2c2013;
+  --tan: #9c7f4f;
+  --tan-hi: #b89a64;
+  --olive: #676c54;
+  --olive-hi: #848a6b;
+  --olive-lo: #3d4232;
+  --paper: #e6e0c8;
+  --paper-cream: #efeddc;
+  --paper-green: #e0e9c7;
+  --paper-rose: #ecd8dd;
+  --paper-edge: #b3a37a;
+  --ink: #574848;
+  --ink-blu: #201c3c;
+  --ink-dark: #14110d;
+  --stamp-green: #53701b;
+  --stamp-red: #701b1b;
+  --ochre: #9a6b30;
+  --neon: #8fb9ad;
+
+  --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
 }
 
 html,
 body {
   height: 100%;
 }
-
+html {
+  image-rendering: pixelated;
+}
 body {
-  background-color: #1a1813;
-  color: var(--inchiostro);
-  font-family: var(--font-typewriter), "Courier New", monospace;
-  -webkit-font-smoothing: antialiased;
+  background: var(--env0);
+  color: var(--ink);
+  font-family: var(--font-read), "Courier New", monospace;
   overflow: hidden;
+  image-rendering: pixelated;
+}
+* {
+  -webkit-font-smoothing: none;
+}
+img,
+canvas {
+  image-rendering: pixelated;
 }
 
-/* ------------------------------------------------------------ scrivania */
-
-.scrivania {
-  background-color: #2a2620;
-  background-image:
-    radial-gradient(circle at 50% 0%, rgba(120, 110, 80, 0.18), transparent 60%),
-    repeating-linear-gradient(
-      90deg,
-      rgba(0, 0, 0, 0.16) 0px,
-      rgba(0, 0, 0, 0.16) 2px,
-      rgba(255, 255, 255, 0.015) 2px,
-      rgba(255, 255, 255, 0.015) 5px
-    ),
-    linear-gradient(180deg, #322c24 0%, #211d18 100%);
-  box-shadow: inset 0 0 160px rgba(0, 0, 0, 0.65);
+/* ---- regola 8/16 bit: niente smussi moderni sulle chrome ----
+   I documenti, i pannelli, i bottoni e i timbri NON sono elementi web: spigoli
+   vivi, ombre "a scatto" (offset, mai sfocate). Le forme tonde restano ammesse
+   solo come SPRITE decorativi (occhi, lampade, sigilli), non come UI. */
+.rds-paper,
+.rds-panel,
+.rds-btn,
+.rds-lcd,
+.rds-nameplate,
+.rds-stamp-tool,
+.rds-gauge,
+.foto {
+  border-radius: 0 !important;
 }
 
-/* feltro verde del sottomano */
-.feltro {
-  background-color: #2c3a2c;
-  background-image:
-    radial-gradient(circle at 30% 20%, rgba(80, 110, 80, 0.25), transparent 55%),
-    linear-gradient(180deg, #33432f 0%, #243021 100%);
-  box-shadow:
-    inset 0 0 60px rgba(0, 0, 0, 0.55),
-    0 2px 0 rgba(0, 0, 0, 0.4);
+.pixelated {
+  image-rendering: pixelated;
 }
 
-/* --------------------------------------------------------------- CRT/grana */
+/* ----------------------------------------------------------- palco + CRT */
 
-.crt {
-  position: relative;
+.rds-stage {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--env0);
 }
-
-.crt::before {
-  /* scanline */
+.rds-stage::before {
   content: "";
-  position: fixed;
+  position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 60;
   background: repeating-linear-gradient(
     0deg,
-    rgba(0, 0, 0, 0.12) 0px,
-    rgba(0, 0, 0, 0.12) 1px,
+    rgba(0, 0, 0, 0.22) 0,
+    rgba(0, 0, 0, 0.22) 1px,
     transparent 1px,
     transparent 3px
   );
   mix-blend-mode: multiply;
   opacity: 0.5;
 }
-
-.crt::after {
-  /* grana + vignetta */
+.rds-stage::after {
   content: "";
-  position: fixed;
+  position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 61;
   background-image:
-    radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.55) 100%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+    radial-gradient(ellipse at center, transparent 58%, rgba(0, 0, 0, 0.6) 100%),
+    var(--noise);
   background-size: cover, 140px 140px;
-  opacity: 0.35;
+  opacity: 0.28;
   mix-blend-mode: overlay;
 }
 
-/* ------------------------------------------------------------------ carta */
+/* ------------------------------------------------------------- materiali */
 
-.paper {
-  background-color: var(--carta);
+/* Materiali nella PALETTE DEL PROLOGO: cupi, freddi, desaturati, con una
+   pozza di luce centrale come nella cutscene d'apertura. */
+.tex-wall {
+  background-color: #101108;
   background-image:
-    radial-gradient(circle at 18% 12%, rgba(255, 250, 230, 0.5), transparent 40%),
-    radial-gradient(circle at 85% 90%, rgba(120, 95, 50, 0.18), transparent 45%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)' opacity='0.06'/%3E%3C/svg%3E");
-  color: var(--inchiostro);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.25) inset,
-    0 2px 1px rgba(0, 0, 0, 0.25),
-    0 14px 26px rgba(0, 0, 0, 0.5);
+    var(--noise),
+    repeating-linear-gradient(90deg, #191b12 0, #191b12 26px, #14160d 26px, #14160d 54px),
+    linear-gradient(180deg, #1f221a 0%, #0b0c06 100%);
+  background-size: 140px 140px, auto, auto;
+  background-blend-mode: overlay, multiply, normal;
+}
+.tex-wood {
+  background-color: #110f0a;
+  background-image:
+    var(--noise),
+    repeating-linear-gradient(91deg, #17130c 0, #1c180f 7px, #131009 12px, #181308 17px),
+    radial-gradient(125% 118% at 50% 24%, rgba(60, 56, 42, 0.55) 0%, rgba(0, 0, 0, 0) 60%);
+  background-size: 140px 140px, auto, auto;
+  background-blend-mode: overlay, soft-light, screen;
+}
+.tex-panel {
+  background-color: var(--env2);
+  background-image: var(--noise), linear-gradient(180deg, #3a342b, #221d16);
+  background-size: 140px 140px, auto;
+  background-blend-mode: overlay, normal;
 }
 
-.paper-edge {
-  border: 1px solid rgba(80, 60, 30, 0.35);
-}
+/* ----------------------------------------------------------------- carta */
 
-/* riservato/segreto: banda rossa */
-.classified-band {
-  background: repeating-linear-gradient(
+.rds-paper {
+  position: relative;
+  background-color: var(--paper-cream);
+  background-image: var(--noise);
+  background-size: 140px 140px;
+  background-blend-mode: multiply;
+  color: var(--ink);
+  border: 2px solid var(--paper-edge);
+  box-shadow: 3px 4px 0 rgba(0, 0, 0, 0.45);
+}
+.rds-paper--green { background-color: var(--paper-green); }
+.rds-paper--rose { background-color: var(--paper-rose); }
+.rds-paper--white { background-color: var(--paper-white, #fffddc); }
+
+.rds-classified {
+  background-image: repeating-linear-gradient(
     45deg,
-    var(--rossomin),
-    var(--rossomin) 12px,
-    #5a160f 12px,
-    #5a160f 24px
+    var(--stamp-red),
+    var(--stamp-red) 9px,
+    #4e1410 9px,
+    #4e1410 18px
   );
+  color: #efeddc;
+  text-shadow: 1px 1px 0 #000;
+}
+.rds-doc-head {
+  border-bottom: 2px solid rgba(20, 17, 13, 0.6);
+}
+.rds-rule {
+  border-top: 1px dashed rgba(20, 17, 13, 0.35);
 }
 
-/* ----------------------------------------------------------------- timbri */
-
-.stamp {
-  font-family: var(--font-stencil), Impact, sans-serif;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  border: 4px double currentColor;
-  border-radius: 6px;
-  padding: 0.15em 0.5em;
-  display: inline-block;
-  opacity: 0.86;
-  mix-blend-mode: multiply;
-  text-shadow: 0 0 1px currentColor;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5' numOctaves='2'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 -1.4 1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23s)'/%3E%3C/svg%3E");
-}
-
-.stamp-approvato {
-  color: #2f5d3a;
-}
-.stamp-respinto {
-  color: var(--rossomin);
-}
-.stamp-segnalato {
-  color: #8a5a12;
-}
-.stamp-neutral {
-  color: #34302a;
-}
-
-/* macchina da scrivere: cursore lampeggiante */
-.caret::after {
-  content: "▮";
-  margin-left: 2px;
-  animation: caretBlink 1s steps(1) infinite;
-}
-@keyframes caretBlink {
-  50% {
-    opacity: 0;
-  }
-}
-
-/* neon che tremola */
-.neon {
-  text-shadow:
-    0 0 4px rgba(159, 217, 192, 0.8),
-    0 0 12px rgba(159, 217, 192, 0.4);
-}
-
-/* scrollbar discreta */
-.thin-scroll::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-.thin-scroll::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.35);
-  border-radius: 4px;
-}
-.thin-scroll::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-/* foto sgranata (bg generato inline via style) */
 .foto {
   image-rendering: pixelated;
-  filter: contrast(1.1) saturate(0.55) sepia(0.18);
-  box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.45);
+  border: 2px solid var(--ink-dark);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.4);
 }
+
+/* -------------------------------------------------------------- timbri */
+
+.rds-stamp {
+  font-family: var(--font-pixel), monospace;
+  text-transform: uppercase;
+  border: 3px solid currentColor;
+  padding: 0.1em 0.4em;
+  display: inline-block;
+  opacity: 0.9;
+  mix-blend-mode: multiply;
+  -webkit-mask-image: var(--noise);
+  mask-image: var(--noise);
+  -webkit-mask-size: 80px 80px;
+  mask-size: 80px 80px;
+}
+.rds-stamp--approvato { color: var(--stamp-green); }
+.rds-stamp--respinto { color: var(--stamp-red); }
+.rds-stamp--segnalato { color: var(--ochre); }
+.rds-stamp--blu { color: var(--ink-blu); }
+
+.rds-stamp-tool {
+  background: var(--wood-hi);
+  border: 2px solid var(--wood-lo);
+  border-top-color: #8a6c42;
+  box-shadow: 0 4px 0 var(--wood-lo), 0 6px 6px rgba(0, 0, 0, 0.5);
+  image-rendering: pixelated;
+}
+.rds-stamp-tool:hover { transform: translateY(1px); }
+.rds-stamp-tool:active:not(:disabled),
+.rds-stamp-tool[data-pressed="true"] {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 var(--wood-lo);
+}
+.rds-stamp-tool:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ---------------------------------------------------------- chrome / UI */
+
+.rds-panel {
+  background-color: var(--env2);
+  background-image: var(--noise);
+  background-size: 140px 140px;
+  background-blend-mode: overlay;
+  border: 2px solid var(--env0);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.rds-label {
+  font-family: var(--font-pixel), monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--olive-hi);
+  text-shadow: 1px 1px 0 #000;
+}
+
+.rds-btn {
+  font-family: var(--font-pixel), monospace;
+  text-transform: uppercase;
+  background: var(--env3);
+  color: var(--paper-cream);
+  border: 2px solid var(--env0);
+  border-top-color: #6a6356;
+  box-shadow: 2px 3px 0 rgba(0, 0, 0, 0.5);
+  image-rendering: pixelated;
+  transition: none;
+}
+.rds-btn:hover { background: #62594b; }
+.rds-btn:active:not(:disabled) { transform: translate(2px, 3px); box-shadow: 0 0 0 #000; }
+.rds-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.rds-btn--approvato { background: #2f4019; border-top-color: var(--stamp-green); color: #d6e7b8; }
+.rds-btn--approvato:hover { background: #3a5020; }
+.rds-btn--respinto { background: #45140f; border-top-color: var(--stamp-red); color: #e9cabf; }
+.rds-btn--respinto:hover { background: #571a12; }
+.rds-btn--ochre { background: #4a3414; border-top-color: var(--ochre); color: #e6cfa0; }
+.rds-btn--neon { background: #1d3630; border-top-color: var(--neon); color: #cdeee2; }
+
+.rds-lcd {
+  font-family: var(--font-term), monospace;
+  background: #0b1410;
+  color: var(--neon);
+  border: 2px solid #000;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 0 5px rgba(143, 185, 173, 0.5);
+}
+
+.rds-gauge {
+  background: #0a0a08;
+  border: 2px solid #000;
+  overflow: hidden;
+}
+.rds-gauge__fill {
+  height: 100%;
+  transition: width 420ms steps(8);
+}
+
+.rds-nameplate {
+  background: var(--env3);
+  border: 2px solid var(--env0);
+  border-top-color: #6a6356;
+  color: var(--paper-cream);
+}
+
+.neon {
+  text-shadow: 0 0 5px rgba(143, 185, 173, 0.8), 0 0 12px rgba(143, 185, 173, 0.35);
+}
+.caret::after {
+  content: "_";
+  animation: blink 1.05s steps(1) infinite;
+}
+
+/* HUD: pop del compenso/quota e tick dell'orologio quando cambiano */
+@keyframes hudPop {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.22); filter: brightness(1.6); }
+  100% { transform: scale(1); }
+}
+.animate-hudPop { animation: hudPop 360ms steps(6, end); transform-origin: left center; display: inline-block; }
+@keyframes hudTick {
+  0% { opacity: 0.55; }
+  100% { opacity: 1; }
+}
+.animate-hudTick { animation: hudTick 280ms steps(4, end); }
+
+/* cursore volume pixel (opzioni audio) */
+.rds-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  background: #0a0a08;
+  border: 2px solid #000;
+  image-rendering: pixelated;
+  cursor: pointer;
+}
+.rds-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 8px;
+  height: 14px;
+  background: var(--olive-hi);
+  border: 2px solid #000;
+  border-radius: 0;
+}
+.rds-slider::-moz-range-thumb {
+  width: 8px;
+  height: 14px;
+  background: var(--olive-hi);
+  border: 2px solid #000;
+  border-radius: 0;
+}
+.rds-slider:disabled { opacity: 0.4; }
+
+.thin-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+.thin-scroll::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.5); }
+.thin-scroll::-webkit-scrollbar-track { background: transparent; }
+
+/* ============================ cutscene (sequenze animate) ============== */
+@keyframes csPaperUp {
+  0% { transform: translateY(80px) scale(0.94); opacity: 0; }
+  55% { opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+.cs-paper-up { animation: csPaperUp 600ms steps(8, end) both; }
+
+@keyframes csStampDrop {
+  0% { transform: translateY(-280px) scale(1.6) rotate(-8deg); opacity: 0; }
+  55% { transform: translateY(0) scale(0.92) rotate(-8deg); opacity: 1; }
+  72% { transform: translateY(-18px) scale(1) rotate(-8deg); }
+  100% { transform: translateY(0) scale(1) rotate(-8deg); opacity: 1; }
+}
+.cs-stamp-drop { animation: csStampDrop 720ms steps(7, end) both; }
+
+@keyframes csInk {
+  0% { transform: scale(1.7); opacity: 0; }
+  60% { opacity: 0.85; }
+  100% { transform: scale(1); opacity: 0.8; }
+}
+.cs-ink { animation: csInk 520ms ease-out 320ms both; }
+
+@keyframes csEmblem {
+  0% { transform: scale(0); opacity: 0; }
+  70% { transform: scale(1.3); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.cs-emblem { animation: csEmblem 340ms steps(5, end) both; }
+
+@keyframes csSlideRight {
+  0% { transform: translateX(-30px); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+.cs-slide { animation: csSlideRight 300ms steps(5, end) both; }
+
+@keyframes csDoor { 0% { transform: scaleX(1); } 100% { transform: scaleX(0.06); } }
+.cs-door { animation: csDoor 1300ms steps(7, end) 500ms both; transform-origin: left center; }
+
+@keyframes csPhoto {
+  0% { transform: translate(80px, -50px) rotate(36deg); opacity: 0; }
+  100% { transform: translate(0, 0) rotate(-5deg); opacity: 1; }
+}
+.cs-photo { animation: csPhoto 540ms steps(6, end) 360ms both; }
+
+@keyframes csFolder { 0% { transform: rotateX(0deg); } 100% { transform: rotateX(-82deg); } }
+.cs-folder { animation: csFolder 640ms steps(6, end) 250ms both; transform-origin: top center; }
+
+@keyframes csTelex { 0% { height: 0; } 100% { height: var(--csh, 96px); } }
+.cs-telex { animation: csTelex 1000ms steps(10, end) both; height: 0; overflow: hidden; }
+
+@keyframes csHeadline {
+  0% { transform: scale(1.4); opacity: 0; }
+  70% { opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.cs-headline { animation: csHeadline 380ms steps(5, end) 220ms both; }
+
+@keyframes csRowOut { to { opacity: 0.1; } }
+.cs-row-out { animation: csRowOut 180ms steps(1, end) both; }
+
+@keyframes csShake {
+  0%,100% { transform: translate(0,0); }
+  25% { transform: translate(-3px,2px); }
+  50% { transform: translate(3px,-2px); }
+  75% { transform: translate(-2px,1px); }
+}
+.cs-shake { animation: csShake 220ms steps(4, end) 0.36s 1; }
+
+@keyframes csFadeIn { from { opacity: 0; } to { opacity: 1; } }
+.cs-fade { animation: csFadeIn 700ms ease-out both; }
+
+/* ammenda a scontrino che esce da sotto la scrivania */
+@keyframes receiptUp {
+  0% { transform: translateY(130%); opacity: 0; }
+  55% { opacity: 1; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+.rds-receipt { animation: receiptUp 540ms steps(7, end) both; }
+
+/* ===================== velo del prologo (sempre sulla scrivania) =========
+   Vignettatura fredda e pozza di luce: la scrivania è sempre cupa e sinistra,
+   i documenti restano l'unica cosa illuminata. pointer-events: none. */
+.rds-prologue-veil {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 6;
+  background:
+    radial-gradient(ellipse 82% 76% at 50% 30%, rgba(0, 0, 0, 0) 36%, rgba(5, 7, 6, 0.66) 100%),
+    linear-gradient(180deg, rgba(9, 13, 11, 0.16) 0%, rgba(5, 6, 4, 0.46) 100%);
+  mix-blend-mode: multiply;
+}
+
+/* ===================== animazioni scrivania (consegna/cartella/busta) =====
+   #5: più movimento di NPC e oggetti — la pratica viene consegnata, la cartella
+   si apre, la busta si strappa. Tutto a scatti pixel (steps). */
+@keyframes dossierDeliver {
+  0% { transform: translate(-130px, -72px) rotate(-9deg); opacity: 0; }
+  68% { transform: translate(7px, 5px) rotate(1.5deg); opacity: 1; }
+  100% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+}
+.rds-deliver { animation: dossierDeliver 540ms steps(8, end) both; }
+
+@keyframes folderCover {
+  0% { transform: rotateX(0deg); opacity: 1; }
+  58% { opacity: 1; }
+  100% { transform: rotateX(-98deg); opacity: 0; }
+}
+.rds-folder-cover {
+  animation: folderCover 640ms steps(7, end) 200ms both;
+  transform-origin: top center;
+  backface-visibility: hidden;
+}
+
+@keyframes envTear {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  100% { transform: translate(46px, -34px) rotate(24deg); opacity: 0; }
+}
+.rds-env-tear { animation: envTear 500ms steps(6, end) both; }
+
+@keyframes handStamp {
+  0% { transform: translateY(-220px) rotate(-10deg); opacity: 0; }
+  60% { transform: translateY(0) rotate(-10deg); opacity: 1; }
+  74% { transform: translateY(-22px) rotate(-10deg); }
+  100% { transform: translateY(0) rotate(-10deg); opacity: 1; }
+}
+
+/* ===================== transizione cinematografica tra fasi ===============
+   Una serranda/persiana ministeriale che cala e si rialza tra una fase e
+   l'altra: dà respiro e regia al passaggio. pointer-events: none. */
+@keyframes shutterTop {
+  0% { transform: translateY(-100%); }
+  42% { transform: translateY(0); }
+  58% { transform: translateY(0); }
+  100% { transform: translateY(-100%); }
+}
+@keyframes shutterBottom {
+  0% { transform: translateY(100%); }
+  42% { transform: translateY(0); }
+  58% { transform: translateY(0); }
+  100% { transform: translateY(100%); }
+}
+@keyframes seamFlash {
+  0%, 100% { opacity: 0; }
+  44%, 56% { opacity: 0.9; }
+}
+.rds-shutter-top { animation: shutterTop 760ms steps(9, end) both; }
+.rds-shutter-bottom { animation: shutterBottom 760ms steps(9, end) both; }
+.rds-shutter-seam { animation: seamFlash 760ms steps(9, end) both; }
+
+/* lampeggio rosso d'allarme (attentato) */
+@keyframes redAlarm {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 0.55; }
+}
+.cs-alarm { animation: redAlarm 0.7s steps(2, end) infinite; }
+
+/* lampo d'esplosione */
+@keyframes blastFlash {
+  0% { transform: scale(0.2); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+.cs-blast { animation: blastFlash 900ms steps(8, end) 300ms both; }
+
+/* lampada da ufficio che si accende (apertura) */
+@keyframes lampOn {
+  0%, 30% { opacity: 0; }
+  34% { opacity: 0.9; }
+  40% { opacity: 0.25; }
+  46% { opacity: 1; }
+  100% { opacity: 1; }
+}
+.cs-lamp { animation: lampOn 1400ms steps(1, end) both; }
+
+/* ===================== eventi ambientali ANIMATI del corridoio ============
+   I vignette del corridoio si VEDONO: sagome che attraversano, plico che cade,
+   luce d'allarme, convoglio che passa. Sopra il canvas del corridoio. */
+@keyframes ambWalk {
+  0% { transform: translateX(0); opacity: 0; }
+  12% { opacity: 0.92; }
+  88% { opacity: 0.92; }
+  100% { transform: translateX(320px); opacity: 0; }
+}
+.amb-walk { animation: ambWalk 4.4s steps(15, end) both; }
+@keyframes ambWalkBack {
+  0% { transform: translateX(0); opacity: 0; }
+  18% { opacity: 0.9; transform: translateX(120px); }
+  46% { transform: translateX(150px); }
+  54% { transform: translateX(150px); }
+  82% { opacity: 0.9; transform: translateX(30px); }
+  100% { transform: translateX(0); opacity: 0; }
+}
+.amb-walkback { animation: ambWalkBack 4.6s steps(16, end) both; }
+@keyframes ambDrop {
+  0% { transform: translateY(-26px) rotate(-7deg); opacity: 0; }
+  70% { transform: translateY(2px) rotate(2deg); opacity: 1; }
+  100% { transform: translateY(0) rotate(0); opacity: 1; }
+}
+.amb-drop { animation: ambDrop 560ms steps(7, end) 600ms both; }
+@keyframes ambSweep {
+  0% { transform: translateX(-20%); opacity: 0; }
+  18%, 82% { opacity: 0.7; }
+  100% { transform: translateX(120%); opacity: 0; }
+}
+.amb-sweep { animation: ambSweep 2.4s steps(12, end) both; }
+@keyframes ambConvoy {
+  0% { transform: translateX(-30%); opacity: 0; }
+  14%, 86% { opacity: 1; }
+  100% { transform: translateX(130%); opacity: 0; }
+}
+.amb-convoy { animation: ambConvoy 4.6s steps(14, end) both; }
+@keyframes ambPeep {
+  0%, 100% { opacity: 0.15; transform: scale(0.9); }
+  40%, 60% { opacity: 1; transform: scale(1); }
+}
+.amb-peep { animation: ambPeep 2.6s steps(3, end) 1; }
+@keyframes ambFlick {
+  0%, 100% { opacity: 0; }
+  10%, 16%, 24% { opacity: 0.85; }
+  13%, 20% { opacity: 0; }
+}
+.amb-flick { animation: ambFlick 2.4s steps(1, end) 1; }
+
+/* giornale che SBATTE in primo piano */
+@keyframes paperSlam {
+  0% { transform: scale(2.4) rotate(-7deg); opacity: 0; }
+  55% { transform: scale(0.95) rotate(1deg); opacity: 1; }
+  70% { transform: scale(1.04) rotate(-1deg); }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+.cs-slam { animation: paperSlam 520ms steps(7, end) both; }

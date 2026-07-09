@@ -2,7 +2,7 @@
 
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import type { GamePhase, GameState } from "@/types";
+import type { GamePhase, GameState, NightDecision } from "@/types";
 import {
   SAVE_VERSION,
   advanceDay,
@@ -10,6 +10,10 @@ import {
   continueFromSummary,
   createGame,
   resolveEvent,
+  resolveNight,
+  tickClock as engineTickClock,
+  playCutscene as enginePlayCutscene,
+  endActiveCutscene,
 } from "@/game/engine";
 import { randomSeed } from "@/lib/rng";
 
@@ -24,9 +28,13 @@ interface GameStore {
 
   startNewGame: (seed?: number) => void;
   goToPhase: (phase: GamePhase) => void;
+  tickClock: (mins: number) => void;
   chooseAction: (actionId: string) => void;
   resolveEventOption: (optionIndex: number) => void;
   continueSummary: () => void;
+  resolveNightChoices: (decisions: Record<string, NightDecision>) => void;
+  playCutscene: (id: string, ret: GamePhase) => void;
+  endCutscene: () => void;
   backToTitle: () => void;
 
   // debug
@@ -50,6 +58,9 @@ export const useGameStore = create<GameStore>()(
       goToPhase: (phase: GamePhase) =>
         set((st) => ({ game: { ...st.game, phase } })),
 
+      tickClock: (mins: number) =>
+        set((st) => ({ game: engineTickClock(st.game, mins) })),
+
       chooseAction: (actionId: string) =>
         set((st) => ({ game: chooseCaseAction(st.game, actionId) })),
 
@@ -58,6 +69,14 @@ export const useGameStore = create<GameStore>()(
 
       continueSummary: () =>
         set((st) => ({ game: continueFromSummary(st.game) })),
+
+      resolveNightChoices: (decisions: Record<string, NightDecision>) =>
+        set((st) => ({ game: resolveNight(st.game, decisions) })),
+
+      playCutscene: (id: string, ret: GamePhase) =>
+        set((st) => ({ game: enginePlayCutscene(st.game, id, ret) })),
+
+      endCutscene: () => set((st) => ({ game: endActiveCutscene(st.game) })),
 
       backToTitle: () => set({ game: titleState() }),
 

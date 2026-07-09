@@ -1,35 +1,38 @@
 import type { Metadata, Viewport } from "next";
-import { Special_Elite, Oswald, Crimson_Text } from "next/font/google";
+import { Silkscreen, Pixelify_Sans, VT323 } from "next/font/google";
 import "./globals.css";
 
-const typewriter = Special_Elite({
+// Pixel "duro" — targhette, sigle, timbri, intestazioni
+const pixel = Silkscreen({
+  weight: ["400", "700"],
+  subsets: ["latin"],
+  variable: "--font-pixel",
+  display: "swap",
+});
+
+// Pixel leggibile — corpo documenti e UI
+const read = Pixelify_Sans({
+  subsets: ["latin"],
+  variable: "--font-read",
+  display: "swap",
+});
+
+// Terminale / LCD — numeri, orologio, telex
+const term = VT323({
   weight: "400",
   subsets: ["latin"],
-  variable: "--font-typewriter",
-  display: "swap",
-});
-
-const stencil = Oswald({
-  subsets: ["latin"],
-  variable: "--font-stencil",
-  display: "swap",
-});
-
-const doc = Crimson_Text({
-  weight: ["400", "600", "700"],
-  subsets: ["latin"],
-  variable: "--font-doc",
+  variable: "--font-term",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Ragion di Stato",
+  title: "RAGION DI STATO — Ufficio Validazione e Archivio Centrale",
   description:
     "Un thriller burocratico nell'Italia della Prima Repubblica. Ogni giorno decidi quale verità entra negli archivi dello Stato.",
 };
 
 export const viewport: Viewport = {
-  themeColor: "#1a1813",
+  themeColor: "#191212",
   width: "device-width",
   initialScale: 1,
 };
@@ -41,9 +44,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="it">
-      <body
-        className={`${typewriter.variable} ${stencil.variable} ${doc.variable}`}
-      >
+      <body className={`${pixel.variable} ${read.variable} ${term.variable}`}>
         {children}
       </body>
     </html>

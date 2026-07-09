@@ -123,7 +123,45 @@ export type ActionKind =
   | "distruggi"
   | "proteggi"
   | "incastra"
-  | "verifica";
+  | "verifica"
+  | "trattieni"
+  | "censura"
+  | "convoca"
+  | "non_registra";
+
+/** dove inoltrare una pratica (azioni "trasmetti …"). */
+export type ActionTarget =
+  | "ministero"
+  | "magistratura"
+  | "stampa"
+  | "servizi";
+
+/**
+ * Requisito di DISPONIBILITÀ di un'azione: l'azione compare solo quando è
+ * GIUSTIFICATA da documenti, prove, regole o contesto (vedi game/actions.ts).
+ * Senza `requires`, l'azione è sempre disponibile (retrocompatibile).
+ */
+export interface ActionRequirement {
+  /** serve aver usato la lente di confronto su questa pratica */
+  inspected?: boolean;
+  /** serve aver trovato almeno una contraddizione */
+  discrepancyFound?: boolean;
+  /** serve una PROVA: una contraddizione trovata OPPURE una violazione di regola */
+  evidence?: boolean;
+  /** serve almeno una violazione del regolamento */
+  ruleViolation?: boolean;
+  /** serve piena regolarità (nessuna violazione) */
+  noViolation?: boolean;
+  /** serve in pratica un documento con questo livello di riservatezza */
+  authLevel?: AuthLevel;
+  /** serve un documento di questo tipo nella pratica */
+  hasDocKind?: DocKind;
+  /** serve questo flag attivo / assente */
+  flag?: string;
+  notFlag?: string;
+  /** disponibile solo dal giorno N in poi */
+  fromDay?: number;
+}
 
 export interface Discrepancy {
   aDocId: string;
@@ -137,6 +175,8 @@ export interface CaseAction {
   id: string;
   label: string;
   kind: ActionKind;
+  /** destinatario, per le azioni "trasmetti …" */
+  target?: ActionTarget;
   /** se true, l'azione apporta un timbro (animazione + suono) */
   needsStamp?: boolean;
   /** etichetta del timbro apposto, se diversa dal default per kind */
@@ -144,6 +184,10 @@ export interface CaseAction {
   consequence: Consequence;
   /** suggerimento UI: NON rivela l'esito */
   hint?: string;
+  /** quando l'azione è disponibile (gating procedurale). Vedi game/actions.ts */
+  requires?: ActionRequirement;
+  /** testo mostrato quando l'azione è bloccata (perché non è ancora giustificata) */
+  lockHint?: string;
 }
 
 export interface CaseDef {
@@ -151,6 +195,14 @@ export interface CaseDef {
   subject: string;
   faction?: FactionId;
   summary: string;
+  /**
+   * PRESENTAZIONE SEMPLIFICATA (vedi game/actions.ts → simplifyActions).
+   * Il loop è ACCETTA/RIFIUTA; queste due dichiarazioni aggiungono, SOLO dove
+   * la trama lo giustifica, il timbro ARRESTA e UNA azione speciale. Tutte le
+   * altre azioni del caso restano nel motore ma non vengono mostrate.
+   */
+  arrestActionId?: string;
+  specialActionId?: string;
   /** breve descrizione di chi/cosa si presenta alla scrivania */
   intro?: string[];
   documents: GameDocument[];
@@ -174,6 +226,8 @@ export interface PlayerState {
   famiglia: number;
   lucidita: number;
   sospetto: number;
+  /** debiti accumulati saltando le spese della notte */
+  debiti: number;
 }
 
 export interface CountryState {
@@ -244,6 +298,143 @@ export interface DayDef {
   payPerCase: number;
 }
 
+/* --------------------------------------------------------------- Citazioni */
+
+export type CitationSeverity = "lieve" | "grave";
+
+export interface Citation {
+  id: string;
+  day: number;
+  caseId: string;
+  reason: string;
+  severity: CitationSeverity;
+  fine: number;
+  ruleId?: string;
+  /** se false, la multa arriva senza spiegazione (giorni più opachi) */
+  visibleToPlayer: boolean;
+}
+
+/* ----------------------------------------------------------- Notte/economia */
+
+export interface NightNeed {
+  id: string;
+  label: string;
+  desc: string;
+  cost: number;
+  /** conseguenza se NON pagata */
+  skipText: string;
+  skip: {
+    famiglia?: number;
+    lucidita?: number;
+    sospetto?: number;
+    debiti?: number;
+    setFlags?: string[];
+  };
+  /** conseguenza se pagata (oltre alla spesa) */
+  payFamiglia?: number;
+  payLucidita?: number;
+}
+
+export type NightDecision = "paga" | "salta";
+
+export interface NightSummary {
+  day: number;
+  speso: number;
+  saltate: string[];
+  note: string[];
+}
+
+/* ----------------------------------------------------------------- Giornale */
+
+export interface NewspaperItem {
+  headline: string;
+  body?: string;
+  /** appare solo se il flag è attivo (o assente se forbid) */
+  requiresFlag?: string;
+  forbidsFlag?: string;
+}
+
+export interface NewspaperView {
+  masthead: string;
+  date: string;
+  lead: string;
+  leadBody: string;
+  photoSeed: number;
+  items: { headline: string; body?: string }[];
+  sidebar: { title: string; body: string };
+}
+
+/* --------------------------------------------------------------------- NPC */
+
+export interface NpcDef {
+  id: string;
+  name: string;
+  role: string;
+  faction?: FactionId;
+  /** mappa flag → etichetta di stato (il primo flag attivo vince) */
+  statusByFlag: { flag: string; status: string; tone: "buono" | "cattivo" | "neutro" }[];
+  defaultStatus: string;
+}
+
+export interface NpcView {
+  id: string;
+  name: string;
+  role: string;
+  status: string;
+  tone: "buono" | "cattivo" | "neutro";
+}
+
+/* --------------------------------------------------------------- Cutscene */
+
+export type CutsceneBg = "black" | "corridor" | "archive" | "paper" | "desk";
+export type CutsceneVisual =
+  | "none"
+  | "letter"
+  | "stamp"
+  | "newspaper"
+  | "emblems"
+  | "telex"
+  | "folder";
+
+export type CutsceneScene =
+  | "stampfall"
+  | "letter"
+  | "corridor"
+  | "emblems"
+  | "crest"
+  | "telex"
+  | "dossier"
+  | "newspaper"
+  | "archive"
+  | "door"
+  | "office_open"
+  | "attentato";
+
+export interface CutsceneBeat {
+  bg?: CutsceneBg;
+  visual?: CutsceneVisual;
+  /** scena animata della sequenza (timeline + oggetti animati) */
+  scene?: CutsceneScene;
+  /** variante della scena (es. door: "solo" = una figura che esce con valigia) */
+  variant?: string;
+  headline?: string;
+  /** fazione protagonista del beat (cresta, leitmotiv, pattern) */
+  faction?: FactionId;
+  emblems?: { faction: FactionId; caption: string }[];
+  title?: string;
+  lines?: string[];
+  stampLabel?: string;
+  sound?: "type" | "stamp" | "telex" | "thud" | "paper" | "ring";
+  music?: string;
+  /** se impostata, avanza da sola; altrimenti attende il click */
+  durationMs?: number;
+}
+
+export interface Cutscene {
+  id: string;
+  beats: CutsceneBeat[];
+}
+
 /* ------------------------------------------------------------------ Finali */
 
 export interface EndingDef {
@@ -258,11 +449,15 @@ export interface EndingDef {
 
 export type GamePhase =
   | "title"
+  | "intro"
+  | "cutscene"
+  | "newspaper"
   | "briefing"
   | "directives"
   | "desk"
   | "event"
   | "daySummary"
+  | "night"
   | "ending";
 
 export interface ProcessedCase {
@@ -298,9 +493,16 @@ export interface GameState {
   firedEvents: string[];
   /** evento attivo in attesa di scelta del giocatore */
   activeEventId?: string;
+  /** cutscene attiva e fase a cui tornare quando finisce */
+  activeCutscene?: string;
+  cutsceneReturn?: GamePhase;
   log: LogEntry[];
+  /** citazioni/multe accumulate nella run */
+  citations: Citation[];
   /** resoconto dell'ultima giornata chiusa */
   lastSummary?: DaySummary;
+  /** resoconto dell'ultima notte */
+  lastNight?: NightSummary;
   endingId?: string;
 }
 
@@ -310,5 +512,9 @@ export interface DaySummary {
   quota: number;
   pay: number;
   penalty: number;
+  /** numero di citazioni della giornata */
+  citationsCount: number;
+  /** totale multe della giornata */
+  fines: number;
   notes: string[];
 }

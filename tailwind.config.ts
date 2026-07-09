@@ -1,9 +1,10 @@
 import type { Config } from "tailwindcss";
 
 /**
- * Palette e token estetici di "Ragion di Stato".
- * Carta ingiallita, rosso ministeriale, verde militare, grigio cemento,
- * nero inchiostro. La UI deve sembrare materia analogica, non un overlay moderno.
+ * Token estetici di "Ragion di Stato" — palette ESTRATTA dagli asset di
+ * riferimento di Papers, Please (vedi docs/AESTHETIC_AUDIT.md): bruni d'archivio,
+ * legno, oliva militare, carte tenui, inchiostro bruno/blu-notte, timbri verde/rosso.
+ * Tutto desaturato. Fonte di verità dei colori; rispecchiata in globals.css.
  */
 const config: Config = {
   content: [
@@ -14,74 +15,98 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // carta
-        carta: {
-          DEFAULT: "#d8c9a6",
-          chiara: "#e7dcc0",
-          scura: "#c4b48c",
-          bruciata: "#a8956a",
+        // ambiente (booth/scrivania/console)
+        env: { 0: "#191212", 1: "#26221c", 2: "#352d29", 3: "#564e43" },
+        wood: { DEFAULT: "#46341f", hi: "#6a522f", lo: "#2c2013" },
+        tan: { DEFAULT: "#9c7f4f", hi: "#b89a64", lo: "#7a6038" },
+        olive: { DEFAULT: "#676c54", hi: "#848a6b", lo: "#3d4232" },
+        gray: { DEFAULT: "#7c796f", soft: "#a7a59a" },
+        // carte
+        paper: {
+          DEFAULT: "#e6e0c8",
+          cream: "#efeddc",
+          white: "#fffddc",
+          green: "#e0e9c7",
+          rose: "#ecd8dd",
+          edge: "#b3a37a",
+          shadow: "#9a8c66",
         },
-        // inchiostro
-        inchiostro: {
-          DEFAULT: "#1b1712",
-          tenue: "#3a332a",
+        // inchiostri
+        ink: { DEFAULT: "#574848", blu: "#201c3c", dark: "#14110d" },
+        // timbri
+        stamp: {
+          green: "#53701b",
+          greenhi: "#86b42b",
+          red: "#701b1b",
+          redhi: "#b42b2b",
         },
-        // rosso ministeriale (timbri, intestazioni RISERVATO)
-        rossomin: {
-          DEFAULT: "#7c241c",
-          chiaro: "#9c3a2e",
-          scuro: "#54160f",
-        },
-        // verde militare
-        verdemil: {
-          DEFAULT: "#3b4a37",
-          chiaro: "#55663f",
-          scuro: "#28321f",
-        },
-        // grigio cemento (scrivania, ministero)
-        cemento: {
-          DEFAULT: "#5d5b54",
-          scuro: "#403e39",
-          notte: "#26241f",
-        },
-        ocra: "#b07d3a",
-        neon: "#9fd9c0",
+        ochre: "#9a6b30",
+        neon: "#8fb9ad",
+        glass: "#5b6b66",
       },
       fontFamily: {
-        typewriter: ["var(--font-typewriter)", "Courier New", "monospace"],
-        stencil: ["var(--font-stencil)", "Impact", "sans-serif"],
-        doc: ["var(--font-doc)", "Georgia", "serif"],
-      },
-      boxShadow: {
-        carta: "0 2px 0 rgba(0,0,0,0.18), 0 10px 22px rgba(0,0,0,0.45)",
-        inset: "inset 0 0 80px rgba(0,0,0,0.35)",
-        timbro: "0 0 0 2px currentColor",
+        pixel: ["var(--font-pixel)", "monospace"],
+        read: ["var(--font-read)", "Courier New", "monospace"],
+        term: ["var(--font-term)", "monospace"],
       },
       keyframes: {
-        stampDown: {
-          "0%": { transform: "scale(1.8) rotate(var(--rot,0deg))", opacity: "0" },
-          "60%": { transform: "scale(0.92) rotate(var(--rot,0deg))", opacity: "1" },
-          "100%": { transform: "scale(1) rotate(var(--rot,0deg))", opacity: "1" },
+        stampSlam: {
+          "0%": { transform: "translateY(-150%) scale(1.5)", opacity: "0" },
+          "55%": { transform: "translateY(0) scale(0.94)", opacity: "1" },
+          "70%": { transform: "translateY(-10%) scale(1)" },
+          "100%": { transform: "translateY(0) scale(1)", opacity: "1" },
         },
-        flickr: {
-          "0%,19%,21%,23%,80%,100%": { opacity: "1" },
-          "20%,22%,55%": { opacity: "0.55" },
+        deskShake: {
+          "0%,100%": { transform: "translate(0,0)" },
+          "25%": { transform: "translate(-2px,1px)" },
+          "50%": { transform: "translate(2px,-1px)" },
+          "75%": { transform: "translate(-1px,2px)" },
         },
-        slideIn: {
-          "0%": { transform: "translateY(40px) rotate(-1deg)", opacity: "0" },
-          "100%": { transform: "translateY(0) rotate(0deg)", opacity: "1" },
+        slideUp: {
+          "0%": { transform: "translateY(70px)", opacity: "0" },
+          "75%": { transform: "translateY(-5px)", opacity: "1" },
+          "100%": { transform: "translateY(0)", opacity: "1" },
         },
-        ring: {
-          "0%,100%": { transform: "rotate(0deg)" },
-          "25%": { transform: "rotate(-8deg)" },
-          "75%": { transform: "rotate(8deg)" },
+        flicker: {
+          "0%,18%,22%,25%,53%,57%,100%": { opacity: "1" },
+          "20%,24%,55%": { opacity: "0.6" },
+        },
+        blink: { "50%": { opacity: "0.25" } },
+        npcEnter: {
+          "0%": { transform: "translateX(60px)", opacity: "0" },
+          "60%": { transform: "translateX(-4px)", opacity: "1" },
+          "100%": { transform: "translateX(0)", opacity: "1" },
+        },
+        idleBob: {
+          "0%,100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-2px)" },
+        },
+        walkby: {
+          "0%": { transform: "translateX(-40px)", opacity: "0" },
+          "10%,90%": { opacity: "0.85" },
+          "100%": { transform: "translateX(420px)", opacity: "0" },
+        },
+        lampFlick: {
+          "0%,95%,100%": { opacity: "1" },
+          "96%,98%": { opacity: "0.35" },
+          "97%,99%": { opacity: "0.85" },
+        },
+        telexFeed: {
+          "0%": { transform: "translateY(-100%)" },
+          "100%": { transform: "translateY(0)" },
         },
       },
       animation: {
-        stampDown: "stampDown 220ms cubic-bezier(.2,.9,.3,1.2) forwards",
-        flickr: "flickr 6s linear infinite",
-        slideIn: "slideIn 320ms ease-out forwards",
-        ring: "ring 0.4s ease-in-out infinite",
+        stampSlam: "stampSlam 220ms steps(5,end) forwards",
+        deskShake: "deskShake 170ms steps(4,end)",
+        slideUp: "slideUp 260ms steps(6,end) forwards",
+        flicker: "flicker 7s linear infinite",
+        blink: "blink 1.1s steps(1) infinite",
+        npcEnter: "npcEnter 460ms steps(7,end) forwards",
+        idleBob: "idleBob 3.2s steps(2,end) infinite",
+        walkby: "walkby 14s linear infinite",
+        lampFlick: "lampFlick 9s steps(1,end) infinite",
+        telexFeed: "telexFeed 500ms steps(8,end) forwards",
       },
     },
   },
